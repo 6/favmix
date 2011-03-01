@@ -1,0 +1,25 @@
+<!--
+File: Profile/index.html
+Name: Peter Graham
+Class: CS 461
+Project 1
+Date: February 16
+-->
+#{extends 'base.html' /}
+#{set title:userName /}
+<div class="subpage">
+    <h2>${name}
+      #{if isOwnProfile}
+        <a class="leftpad smallest" href="@{Profile.showEditForm()}">&{'profile.edit'} &rarr;</a>
+      #{/if}
+    </h2>
+    <div class="">${bio}</div>
+    <ol id="subscriptions">
+        #{list items:topics, as:'topic'}
+            <li><a class="subscription" href="${subscription.getFeedUrl()}">${subscription.getFeedName()}</a>
+        #{/list}
+        #{else}
+            <p class="greyish">&{'msg.none'}</p>
+        #{/else}
+    </ol>
+</div>

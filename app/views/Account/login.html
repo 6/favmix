@@ -1,0 +1,28 @@
+<!--
+File: Account/login.html
+Name: Peter Graham
+Class: CS 461
+Project 1
+Date: February 16
+-->
+#{extends 'base.html' /}
+#{set title:messages.get('login') /}
+<div class="subpage">
+    <div class="round centered bigborder">
+    <h2>&{'login'}</h2>
+    <form class="bigform default-label-form" action="@{Account.login()}" method="post">
+        <div>
+        <p>
+            <label class="default-label noJsSpacer" for="email">&{'field.email'}</label>
+            <input class="fancytext" id="email" name="email" type="text" spellcheck="false" value="${flash['email']}">
+        </p>
+        <p>
+            <label class="default-label noJsSpacer" for="password">&{'field.password'}</label>
+            <input class="fancytext" id="password" name="password" type="password">
+        </p>
+        <input class="fancybutton pointer shadow" type="submit" value="&{'login'}">
+        </div>
+    </form><br>
+    &{'login.dontHaveAnAccount'} <a href="@{Account.showRegisterForm()}">&{'register'}</a>
+    </div>
+</div>

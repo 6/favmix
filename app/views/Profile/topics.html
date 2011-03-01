@@ -1,0 +1,20 @@
+<!--
+File: Profile/topics.html
+Name: Peter Graham
+Class: CS 461
+Project 1
+Date: February 16
+-->
+#{extends 'base.html' /}
+#{set title:userName+' / '+messages.get('profile.topics') /}
+<div class="subpage">
+    <h2><a href="@{Profile.index(userId)}">${userName}</a> / &{'profile.topics'}</h2>
+    <ol id="subscriptions">
+        #{list items:subscriptions, as:'subscription'}
+            <li><a class="remove left" href="@{Subscriptions.removeSubscription(subscription.getFeedId())}">&#215;</a><a class="subscription" href="${subscription.getFeedUrl()}">${subscription.getFeedName()}</a>
+        #{/list}
+        #{else}
+            <p class="greyish">&{'msg.none'}</p>
+        #{/else}
+    </ol>
+</div>

@@ -1,0 +1,37 @@
+# File: routes
+# Name: Peter Graham
+# Class: CS 461
+# Project 1
+# Date: February 16
+
+# Routes
+# This file defines all application routes (Higher priority routes first)
+
+# Home page
+GET / Home.defaultFilters
+GET /view/{scope}/{order} Home.filter
+
+# Login, Logout, Register
+GET /settings Account.showSettingsForm
+GET /login Account.showLoginForm
+GET /register Account.showRegisterForm
+GET /logout Account.logout
+
+# Profile viewing/modifying
+GET /user/{id} Profile.index
+GET /user/{id}/topics Profile.showTopics
+GET /editprofile Profile.showEditForm
+
+# Informational
+GET /about Informational.about
+GET /contact Informational.contact
+GET /help Informational.help
+
+# Static files
+GET /static/ staticDir:public
+GET /favicon.ico StaticHandler.favicon
+GET /robots.txt StaticHandler.robots
+
+# Catch-all
+GET /{controller} {controller}.index
+* /{controller}/{action} {controller}.{action}

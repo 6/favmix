@@ -1,0 +1,61 @@
+<!--
+File: base.html
+Name: Peter Graham
+Class: CS 461
+Project 1
+Date: February 16
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>&{'websiteName'} - #{get 'title' /}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/main.css'}">
+        #{get 'moreStyles' /}
+        <script type="text/javascript" src="@{'/public/jquery.js'}"></script>
+        #{get 'moreScripts' /}
+    </head>
+   <body id="homeview">
+<div id="header">
+    <div class="wrap">
+        <h1 id="logo" class="left"><a href="@{Home.defaultFilters()}"><img src="@{'/public/logo.png'}" alt="&{'websiteName'}"></a></h1>
+        <div id="headerright">
+             <form id="search" class="left" action="#search" method="get">
+                <div><input id="searchbar" class="smalltext" name="q" type="text" value="" accesskey="s" autocomplete="off" spellcheck="false"><input id="searchsubmit" class="smallsubmit pointer" type="submit" value="&{'search'}"></div>
+            </form>
+            <div id="headerlinks" class="reddish right">
+                <a class="${request.controller == 'Home' ? 'active' : ''}" href="@{Home.defaultFilters()}">&{'home'}</a>
+                #{if loggedin}
+                    <a class="${request.controller == 'Profile' ? 'active' : ''}" href="@{Profile.index(userId)}">&{'profile'}</a><a class="${request.controller == 'Account' ? 'active' : ''}" href="@{Account.showSettingsForm()}">&{'settings'}</a><a id="lastheaderlink" href="@{Account.logout()}">&{'logout'}</a>
+                #{/if}
+                #{else}
+                    <a class="${request.actionMethod == 'showLoginForm' ? ' active' : ''}" id="lastheaderlink" href="@{Account.showLoginForm()}">&{'login'}</a></strong>
+                #{/else}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+
+<div id="main">
+    <div class="wrap">
+<!-- display error/success 'flashed' messages here if applicable -->
+#{if flash.success}
+    <p class="success smallround">${flash.success.raw()}</p>
+#{/if}
+#{if flash.error}
+    <p class="error smallround">${flash.error.raw()}</p>
+#{/if}
+
+#{doLayout /}
+    </div>
+</div>
+<div class="clear"></div>
+<div id="footer" class="wrap smaller">
+    <a href="@{Informational.about()}">&{'about'}</a><a href="@{Informational.contact()}">&{'contact'}</a><a href="@{Informational.help()}">&{'help'}</a>
+    <p>&copy; 2011 &{'websiteName'}</p>
+</div>
+<script type="text/javascript" src="@{'/public/jquery.infieldlabel.js'}"></script>
+<script src="@{'/public/main.js'}" type="text/javascript"></script>
+</body>
+</html>

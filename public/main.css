@@ -1,0 +1,154 @@
+/*
+File: main.css
+Name: Peter Graham
+Class: CS 461
+Project 1
+Date: February 14
+*/
+/* Reset browser defaults and apply some default styling to tags */
+html,body,div,p,form,input,textarea,button,ol,ul,li,h1,h2,h3{margin:0;padding:0;font:normal normal 400 100% arial,helvetica,sans-serif}
+body{min-width:830px}
+a{text-decoration:none;color:#02c}
+a:hover{text-decoration:underline}
+img{border:0}
+ol,ul{list-style:none}
+
+/* Remove button focus border. Source:
+ * http://snipplr.com/view/28964/remove-button-focus-border-in-firefox-and-ie8-with-css/
+ */
+/*for FireFox*/
+input[type="submit"]::-moz-focus-inner,
+input[type="button"]::-moz-focus-inner,
+button::-moz-focus-inner {border:0}
+/*for IE8 */
+input[type="submit"]:focus,
+input[type="button"]:focus {outline:none}
+
+/* Reusable classes */
+.wrap{max-width:1000px;margin:0 auto;padding:0 15px 0 10px}
+.left{float:left}
+.right{float:right}
+.hseparator{height:1px;margin:10px 0;background:#cde}
+.reddish{font-weight:400}
+.reddish a{padding:0 1px;color:#c33}
+.greyish{color:#666}
+/* Note: border-radius is available in CSS3 and is supported by most browsers */
+.round{border-radius:5px;-moz-border-radius:5px}
+.shadow{box-shadow:0 1px 1px #aaa;-moz-box-shadow:0 1px 1px #aaa;-webkit-box-shadow:0 1px 1px #aaa}
+.bigshadow{box-shadow:0 2px 6px #888;-moz-box-shadow:0 2px 6px #888;-webkit-box-shadow:0 2px 6px #888}
+.bigborder{border:5px solid #bbb}
+.smaller{font-size:85%}
+.smallest{font-size:80%}
+.almosthalf{width:47%}
+.righthalf{margin-left:53%}
+.leftpad{padding-left:20px}
+.subpage{margin:3px 1%}
+a.active{font-weight:700;color:#444}
+a.active:hover{text-decoration:none}
+.error,.success{margin:0 20%;padding:6px;text-align:center;color:#555;border-width:1px;border-style:solid}
+.error{background:#ffc;border-color:#ddb}
+.success{background:#def;border-color:#cde}
+.centered{margin:10px 15%;padding:15px 20px}
+
+/* Generic styling for form inputs/buttons */
+.pointer{cursor:pointer}
+.default-label{position:absolute;top:0;left:0;cursor:text;font-size:15px;color:#999}
+.default-label.small{font-size:13px}
+.default-label-form p{position:relative}
+.smalltext{height:17px;padding:3px;vertical-align:middle;font-size:13px;border:1px solid #69b;border-bottom:1px solid #cde}
+.smallselect{height:25px;padding:0 5px;vertical-align:middle;font-size:13px}
+.smallsubmit{height:25px;padding:0 5px;vertical-align:middle;font-size:13px;background:#e9e9e9 url('bglightgrey.png') repeat-x top left;border:1px solid #aaa;border-radius:3px;-moz-border-radius:3px}
+    .smallsubmit:hover{border-color:#888}
+    .smallsubmit:active{background:#ddd}
+.fancytext{height:28px;padding:0 4px;font-size:15px;border:1px solid #aaa}
+.fancybutton{color:#fff;padding:6px 13px;font-size:14px;font-weight:700;background:#78e url('bgmidblue.png') repeat-x top left;border:1px solid #25a}
+    .fancybutton:hover{border-color:#039}
+    .fancybutton:active{background:#47d}
+
+/* Clear-fix from http://960.gs/css/master.css
+ * Author: Nathan Smith */
+.clear{clear:both;display:block;overflow:hidden;visibility:hidden;width:0;height:0}
+
+/* Top section of website */
+#header{height:54px;background:#fff url('headershadow.png') repeat-x top left;border-bottom:1px solid #ccc}
+    #logo{width:175px;padding:8px 0 0 10px;line-height:42px;font-size:36px}
+    #logo a{color:#000}
+    #headerright{margin-left:185px}
+        #search{width:55%;margin-top:15px}
+            #searchbar{width:70%;max-width:350px}
+            #searchsubmit{margin:0 4px}
+        #headerlinks{width:45%;line-height:54px;text-align:right;font-size:15px}
+            #headerlinks a,#headerlinks b{padding:1px 13px;border-right:1px solid #ddd}
+            #headerlinks a#lastheaderlink,#headerlinks b#lastheaderlink{border-right:0}
+/* Bottom section of website */
+#footer{padding:22px 0 25px;text-align:center;font-size:13px}
+    #footer a{padding:0 10px}
+    #footer p{line-height:25px;color:#666}
+
+/* Filters to help sort and organize content */
+#filters{width:170px;padding-top:7px}
+    .selector{font-size:14px}
+        .selector.smaller{font-size:13px}
+        .selector li{padding:4px 0 4px 13px}
+    #filters #subscriptions li{padding:2px 0 2px 13px}
+    #subscriptions{margin-bottom:10px}
+    /* Note: text-overflow is supported by all major browsers except Firefox */
+    #subscriptions a{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#0b0}
+    #subscriptions a.active{color:#444}
+    #subsnotif{padding-left:13px;color:#555}
+
+/* Main content section and pagination */
+#main{padding-top:7px;border-top:1px solid #eee}
+#pitch,#content,#pagination{margin-left:184px}
+    #content li{border:1px solid #fff}
+    #content li:hover{background:#f3faff;border-color:#dde}
+        .like{width:53px;padding-top:11px;line-height:13px;text-align:center}
+            .votecount{margin-bottom:3px;font-weight:700;font-size:13px;color:#666}
+            .likeit{padding:10px 10px 4px;font-size:21px;font-family:helvetica,tahoma,sans;color:#d3d3d3}
+            .likeit:hover{color:#9be;text-decoration:none}
+            .likeit:active,.likeit.clicked{color:#f77}
+            .likeit:focus{outline:0}
+        .likeright{margin-left:53px;padding-top:10px}
+            .link{font-size:16px}
+            .link:active{color:#e44}
+            .link:focus{outline:none}
+            .link:visited{color:#78c}
+            .meta{padding-bottom:9px;line-height:18px;font-size:13px;color:#777}
+                .meta a{color:#0b0}
+#pagination{margin-top:10px;padding:5px 10px;font-size:13px;color:#555}
+    #pagination a{margin:0 9px;padding:4px 7px 5px;background:#def;border:1px solid #cde}
+    #pagination a:hover{background:#def;border:1px solid #9cd}
+    #pagination a:active{background:#cdf}
+#pitch{margin-top:3px;margin-bottom:10px;padding:11px 10px 11px 25px;font-size:17px;color:#458;background:#e7f2ff url('bglightblue.png') repeat-x top left;border:2px solid #cadaea}
+    #pitch h2{padding-top:2px;font-size:21px}
+    #pitch h2.noJsSpacer{padding-top:20px}
+    #pitch h3{margin-bottom:3px}
+    #pitch h3.noJsSpacer{margin-bottom:5px}
+    #pitch span{color:#78a}
+#signup{margin-left:153px;padding-left:25px;border-left:2px solid #cadaea}
+    #signup .fancytext{width:35%;margin-right:1%}
+    #signup #inbetweeninput{display:inline;width:0;height:0}
+    #signup #inbetweeninput.noJsSpacer{display:block;height:4px}
+    #signup p{display:inline}
+    #signup label.noJsSpacer{display:block;position:relative;float:left;width:120px;padding:8px 10px 0 0;text-align:right}
+
+/* Subpage specific CSS */
+.subpage h2{margin-bottom:8px;padding:5px 0 2px 2px;font-size:20px;color:#222;border-bottom:1px solid #bbb}
+    .subpage h2 span{color:#777}
+.subpage h3{margin-bottom:2px;font-size:16px}
+.section{margin-bottom:20px}
+.centered h2{border-bottom:0}
+.subpage .bigform{padding:10px}
+.subpage .bigform .fancytext{width:230px;margin-bottom:10px}
+.bigform label.noJsSpacer{display:block;position:relative}
+.bigform textarea{height:60px}
+
+/* Edit subscriptions page */
+#yoursubs a{padding:3px 0;font-size:15px}
+    #yoursubs a.remove{margin:5px 7px 0 3px;padding:0 0 1px;line-height:11px;font-size:19px;color:#67c;border:1px solid #bce}
+    #yoursubs a.remove:hover{text-decoration:none;color:#fff;background:#f66;border-color:#d00}
+#addmore p{margin-bottom:8px}
+#addmore .smalltext{width:72%}
+#addmore .smallsubmit{margin-left:6px}
+    #browse{margin-top:4px;width:85%}
+    #browse li{padding:2px 0}

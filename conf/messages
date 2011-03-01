@@ -1,0 +1,71 @@
+# File: messages
+# Name: Peter Graham
+# Class: CS 461
+# Project 1
+# Date: February 16
+
+# You can specialize this file for each language.
+# For example, for French create a messages.fr file. See following for details:
+# http://www.playframework.org/documentation/1.1.1/i18n
+websiteName = Website
+home = Home
+search = Search
+logout = Logout
+about = About
+contact = Contact
+help = Help
+
+# generic messages
+msg.none = You aren't following any topics yet.
+msg.defaultUserName = Anonymous
+msg.edit = edit
+msg.save = Save
+msg.popular = Popular
+msg.recent = Recent
+msg.previous = Previous page
+msg.next = Next page
+msg.viewing = Viewing
+
+# generic fields
+field.email = Email Address
+field.password = Password
+field.oldPassword = Old Password
+field.newPassword = New Password
+field.name = Your Name
+field.bio = Short Bio
+
+# generic form flashes
+form.emptyField = Please fill out all fields.
+form.emailUsed = Another account already uses that Email address.
+form.badPassword = Incorrect password.
+
+# generic actions
+action.addMore = Find more topics
+action.add = Find topics to follow
+action.follow = Follow
+action.saved = Your changes have been saved.
+
+home.title = All your news in one place
+home.titlePart1 = All your news
+home.titlePart2 = in one place.
+home.all = All topics
+home.you = Your topics
+home.everyone = Everyone's topics
+
+login = Login
+login.dontHaveAnAccount = Don't have an account?
+login.loginRequired = You need to login to access that.
+login.incorrect = Incorrect email or password.
+
+register = Sign Up
+register.pitch = <!--(Start personalizing|Customize) your news.-->Start <!--adding-->following your favorite topics!
+register.emptyField = Email address and password are both required.
+register.emailUsed = <b>%s</b> already has an account. Login below.
+
+profile = Profile
+profile.edit = Edit your profile
+profile.topics = Topics 
+profile.backTo = Back to profile
+
+settings = Settings
+settings.edit = Edit your settings

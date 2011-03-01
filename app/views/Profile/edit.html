@@ -1,0 +1,26 @@
+<!--
+File: Profile/edit.html
+Name: Peter Graham
+Class: CS 461
+Project 1
+Date: February 16
+-->
+#{extends 'base.html' /}
+#{set title: messages.get('profile.edit') /}
+<div class="subpage">
+    <h2><a href="@{Profile.index(userId)}">${userName}</a> &rarr; &{'profile.edit'}</h2>
+    <form class="bigform" action="@{Profile.modifyProfile()}" method="post">
+        <div>
+        <p>
+            <label for="name">&{'field.name'}</label><br>
+            <input class="fancytext" id="name" name="name" type="text" value="${editName}">
+        </p>
+        <p>
+            <label for="bio">&{'field.bio'}</label><br>
+            <textarea class="fancytext" id="bio" name="bio">${editBio}</textarea>
+        </p>
+        <input class="fancybutton pointer shadow" type="submit" value="&{'msg.save'}">
+        </div>
+    </form><br>
+     <a href="@{Profile.index(userId)}">&larr; &{'profile.backTo'}</a>
+</div>

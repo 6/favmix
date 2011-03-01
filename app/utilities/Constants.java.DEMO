@@ -1,0 +1,22 @@
+/*
+ * File: Constants.java
+ * Name: Peter Graham
+ * Class: CS 461
+ * Project 1
+ * Date: February 14
+ */
+package utilities;
+
+/**
+ * A collection of public constants used throughout code.
+ * 
+ * @author Peter Graham
+ */
+public class Constants {
+
+    /** Secret salt for password hashing */
+    public static final String salt = "INSERT_SALT_HERE";
+
+    /** Session key for logged in users */
+    public static final String sessionKey = "logged";
+}
