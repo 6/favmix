@@ -23,13 +23,17 @@ Date: February 16
                <ol id="subscriptions" class="selector smaller">
                     <li><a class="active" href="#">&{'home.all'}</a>
                      #{list items:topics, as:'topic'}
-                        <li><a href="@{Home.filter(scope,order)}?${topic.getId()}">${topic.getName()}</a>
+                        <!-- TODO: fix links:
+                        /{topicName|all}?{popular|recent}
+                        how to do everyone/you?
+                        -->
+                        <li><a href="@{TopicHandler.viewUpdates(topic.getName())}">${topic.getName()}</a>
                     #{/list}
                 </ol>
-           <div id="subsnotif" class="round smallest"><a href="@{Profile.showTopics(userId)}">&{'action.addMore'} &rsaquo;</a></div>
+           <div id="subsnotif" class="round smallest"><a href="@{Profile.showTopics(userId)}">&{'action.manage'} &rsaquo;</a></div>
             #{/if}
             #{else}
-                <div id="subsnotif" class="round smallest">&{'msg.none'}<br><a href="@{Profile.showTopics(userId)}">&{'action.add'} &rsaquo;</a></div>
+                <div id="subsnotif" class="round smallest">&{'msg.none'}<br><a href="@{Profile.showTopics(userId)}">&{'action.findTopics'} &rsaquo;</a></div>
             #{/else}
       #{/if}
 </div>

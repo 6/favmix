@@ -12,7 +12,6 @@ import java.util.List;
 import siena.Id;
 import siena.Index;
 import siena.Model;
-import siena.NotNull;
 import siena.Query;
 
 /**
@@ -27,12 +26,10 @@ public class UserTopic extends Model{
     private Long id;
 
     /** user ID associated with this UserTopic */
-    @NotNull
     @Index("user_idx")
     private Long userId;
 
     /** topic ID associated with this UserTopic */
-    @NotNull
     @Index("topic_idx")
     private Long topicId;
 
@@ -58,12 +55,12 @@ public class UserTopic extends Model{
     /**
      * Get a list of the topics followed by a given user.
      * 
-     * @param theUser the user to get the topics followed of
+     * @param user the user to get the topics followed of
      * @return list of the topics followed
      */
-    public List<Topic> getTopicsByUser(User theUser){
+    public List<Topic> getTopicsByUser(User user){
         List<UserTopic> userTopics = all()
-                .filter("userId",theUser.getId()).fetch();
+                .filter("userId",user.getId()).fetch();
         List<Topic> topics = new ArrayList<Topic>();
         Topic topicObject = new Topic();
         if(userTopics != null) {
@@ -73,6 +70,33 @@ public class UserTopic extends Model{
             }
         }
         return topics;
+    }
+
+    /**
+     * Delete a UserTopic from the database, for when a user unfollows a topic.
+     *
+     * @param user the user associated with the UserTopic to delete
+     * @param topic the topic associated with the UserTopic to delete
+     */
+    public void delete(User user, Topic topic) {
+        UserTopic toDelete = all().filter("userId", user.getId())
+                .filter("topicId", topic.getId()).get();
+        if(toDelete != null) {
+            // user is following this topic, so delete
+            toDelete.delete();
+        }
+    }
+
+    /**
+     * Determine if the given user is following the given topic.
+     *
+     * @param user the user to check
+     * @param topic the topic to check
+     * @return boolean whether or not the user is following the topic
+     */
+    public boolean isUserFollowing(User user, Topic topic) {
+        return all().filter("userId", user.getId())
+                .filter("topicId", topic.getId()).get() != null;
     }
 
     /**

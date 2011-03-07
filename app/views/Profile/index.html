@@ -14,9 +14,10 @@ Date: February 16
       #{/if}
     </h2>
     <div class="">${bio}</div>
+    &{'topic.following'}:
     <ol id="subscriptions">
         #{list items:topics, as:'topic'}
-            <li><a class="subscription" href="${subscription.getFeedUrl()}">${subscription.getFeedName()}</a>
+            <li><a class="remove left" href="@{Profile.unFollowTopic(topic.getName())}">&#215;</a><a class="subscription" href="@{TopicHandler.viewUpdates(topic.getName())}">${topic.getName()}</a>
         #{/list}
         #{else}
             <p class="greyish">&{'msg.none'}</p>

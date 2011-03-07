@@ -8,8 +8,6 @@
 package models;
 
 import java.util.Date;
-import play.data.validation.Email;
-import play.data.validation.Required;
 import play.libs.Codec;
 import siena.Id;
 import siena.Max;
@@ -29,13 +27,10 @@ public class User extends Model{
     private Long id;
 
     /** the user's email address */
-    @Email
     @Max(75)
-    @Required
     private String userEmail;
 
     /** the user's password (salted and hashed for security) */
-    @Required
     private String passwordHash;
 
     /** the user's name (not required) */
@@ -123,18 +118,14 @@ public class User extends Model{
         userTopic.insert();
     }
 
-
     /**
      * Unfollow a given topic.
      * 
      * @param topic Topic to unfollow
      */
-    public void unfollowTopic(Topic topic) {
-        UserTopic toDelete = new UserTopic(this.getId(), topic.getId());
-        if(toDelete != null) {
-            // user is following this topic, so delete
-            toDelete.delete();
-        }
+    public void unFollowTopic(Topic topic) {
+        UserTopic userTopic = new UserTopic();
+        userTopic.delete(this, topic);
     }
     
     /**
@@ -142,6 +133,7 @@ public class User extends Model{
      * 
      * @return a string of the user's email address
      */
+    @Override
     public String toString() {
         return getEmail();
     }

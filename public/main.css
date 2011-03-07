@@ -144,9 +144,9 @@ a.active:hover{text-decoration:none}
 .bigform textarea{height:60px}
 
 /* Edit subscriptions page */
-#yoursubs a{padding:3px 0;font-size:15px}
-    #yoursubs a.remove{margin:5px 7px 0 3px;padding:0 0 1px;line-height:11px;font-size:19px;color:#67c;border:1px solid #bce}
-    #yoursubs a.remove:hover{text-decoration:none;color:#fff;background:#f66;border-color:#d00}
+#subscriptions a{padding:3px 0;font-size:15px}
+    #subscriptions a.remove{margin:5px 7px 0 3px;padding:0 0 1px;line-height:11px;font-size:19px;color:#67c !important;border:1px solid #bce}
+    #subscriptions a.remove:hover{text-decoration:none;color:#fff !important;background:#f66;border-color:#d00}
 #addmore p{margin-bottom:8px}
 #addmore .smalltext{width:72%}
 #addmore .smallsubmit{margin-left:6px}

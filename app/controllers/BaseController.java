@@ -9,6 +9,7 @@ package controllers;
 
 import java.util.List;
 import models.Topic;
+import models.Update;
 import models.User;
 import models.UserTopic;
 import play.i18n.Messages;
@@ -31,6 +32,9 @@ public class BaseController extends Controller {
 
     /** the UserTopic model */
     private static UserTopic userTopicModel;
+
+    /** the Update model */
+    private static Update updateModel;
 
     /** the currently logged in user */
     private static User loggedInUser;
@@ -82,6 +86,15 @@ public class BaseController extends Controller {
     }
 
     /**
+     * Gets the Update model object.
+     *
+     * @return the Update model object
+     */
+    public static Update getUpdateModel(){
+        return updateModel;
+    }
+
+    /**
      * Get the name of the given user.
      * 
      * @param user User to get the name of
@@ -106,6 +119,8 @@ public class BaseController extends Controller {
     private static void init(){
         initModels();
         initLoggedInUser();
+
+        // initialize render arguments
         initLoginArgs();
         initTopicsArgs();
         initUserInformationArgs();
@@ -118,6 +133,7 @@ public class BaseController extends Controller {
         userModel = new User();
         topicModel = new Topic();
         userTopicModel = new UserTopic();
+        updateModel = new Update();
     }
 
     /**

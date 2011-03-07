@@ -9,7 +9,11 @@
 
 # Home page
 GET / Home.defaultFilters
-GET /view/{scope}/{order} Home.filter
+GET /home/{scope}/{order} Home.filter
+
+# Topic
+GET /topic/{topicName} TopicHandler.viewUpdates
+GET /newtopic TopicHandler.showNewTopicForm
 
 # Login, Logout, Register
 GET /settings Account.showSettingsForm
@@ -31,6 +35,9 @@ GET /help Informational.help
 GET /static/ staticDir:public
 GET /favicon.ico StaticHandler.favicon
 GET /robots.txt StaticHandler.robots
+
+# Errors
+GET /error/{errorCode} ErrorHandler.showError
 
 # Catch-all
 GET /{controller} {controller}.index

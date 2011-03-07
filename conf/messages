@@ -25,6 +25,8 @@ msg.recent = Recent
 msg.previous = Previous page
 msg.next = Next page
 msg.viewing = Viewing
+msg.404head = Not found
+msg.404 = The page you are requesting cannot be found.
 
 # generic fields
 field.email = Email Address
@@ -40,10 +42,13 @@ form.emailUsed = Another account already uses that Email address.
 form.badPassword = Incorrect password.
 
 # generic actions
-action.addMore = Find more topics
-action.add = Find topics to follow
+action.manage = Manage topics
+action.findTopics = Find topics to follow
 action.follow = Follow
+action.unFollow = Unfollow
 action.saved = Your changes have been saved.
+action.create = Create
+action.addUpdate = Add Discussion
 
 home.title = All your news in one place
 home.titlePart1 = All your news
@@ -54,7 +59,7 @@ home.everyone = Everyone's topics
 
 login = Login
 login.dontHaveAnAccount = Don't have an account?
-login.loginRequired = You need to login to access that.
+login.loginRequired = Please login to access this feature.
 login.incorrect = Incorrect email or password.
 
 register = Sign Up
@@ -69,3 +74,10 @@ profile.backTo = Back to profile
 
 settings = Settings
 settings.edit = Edit your settings
+
+topic.new = Create a new topic
+topic.name = Enter a topic name
+topic.exists = A topic with that name already exists.
+topic.noUpdates = This topic doesn't have any discussions yet.
+topic.following = Following
+topic.updateAdded = Your discussion has been added.

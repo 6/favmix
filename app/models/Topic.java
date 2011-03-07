@@ -8,10 +8,8 @@
 package models;
 
 import java.util.Date;
-import java.util.List;
 import siena.Id;
 import siena.Model;
-import siena.NotNull;
 import siena.Query;
 
 /**
@@ -26,7 +24,6 @@ public class Topic extends Model{
     private Long id;
 
     /** the topic name */
-    @NotNull
     private String name;
 
     /** Date topic is added to database */
@@ -71,9 +68,6 @@ public class Topic extends Model{
     public Topic findByName(String topicName) {
         return all().filter("name", topicName).get();
     }
-    /*public Topic findByUrl(String url, User subscriber) {
-        return all().filter("feedUrl", url).filter("user", subscriber).get();
-    }*/
 
     /**
      * Check if the given topic name is already in use.
@@ -84,17 +78,6 @@ public class Topic extends Model{
     public boolean topicExists(String topicName) {
         return findByName(topicName) != null;
     }
-
-    /**
-     * Returns a list of feeds that the given user is subscribed to in
-     * alphabetical order.
-     *
-     * @param subscriber the user to find the feeds of
-     * @return a list of feeds that the given user is subscribed to
-     */
-    /*public List<Topic> findByUser(User subscriber) {
-        return all().filter("user",subscriber).order("feedName").fetch();
-    }*/
 
     /**
      * Return the topic name.
@@ -134,9 +117,9 @@ public class Topic extends Model{
     }
 
     /**
-     * Returns a query object representing all feeds.
+     * Returns a query object representing all topics.
      *
-     * @return a query object representing all feeds
+     * @return a query object representing all topics
      */
     private Query<Topic> all() {
         return Model.all(Topic.class);

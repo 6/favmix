@@ -7,7 +7,6 @@
  */
 package controllers;
 
-import models.Topic;
 import models.User;
 import play.data.validation.Required;
 import play.i18n.Messages;
@@ -37,8 +36,12 @@ public class Profile extends BaseController{
             // viewing someone else's profile
             curUser = getUserModel().findById(id);
         }
+        if(curUser != null) {
+            renderArgs.put("bio", curUser.getBio());
+            renderArgs.put("topics",getUserTopicModel()
+                    .getTopicsByUser(curUser));
+        }
         renderArgs.put("name", getUserName(curUser));
-        renderArgs.put("bio", curUser.getBio());
         renderArgs.put("isOwnProfile",isOwnProfile);
         render();
     }
@@ -91,20 +94,36 @@ public class Profile extends BaseController{
     }
 
     /**
+     * Adds a topic from the user's followed topics.
+     *
+     * @param topicName the name of the topic to follow
+     */
+    public static void followTopic(String topicName) {
+        if(!isLoggedIn()){
+            // if not logged in, can't edit so redirect to login page
+            Account.showLoginForm();
+        }
+        if(getTopicModel().topicExists(topicName)) {
+            // topic is valid
+            getUser().followTopic(getTopicModel().findByName(topicName));
+        }
+        index(getUser().getId());
+    }
+
+    /**
      * Removes a topic from the user's followed topics.
      *
      * @param topicName the name of the topic to remove
      */
-    public static void unfollowTopic(String topicName) {
+    public static void unFollowTopic(String topicName) {
         if(!isLoggedIn()){
-            // if not logged in, can't edit so redirect to index
-            index(getUser().getId());
+            // if not logged in, can't edit so redirect to home
+            Home.defaultFilters();
         }
-        Topic topic = getTopicModel().findByName(topicName);
-        if(topic != null) {
+        if(getTopicModel().topicExists(topicName)) {
             // topic is valid
-            getUser().unfollowTopic(topic);
+            getUser().unFollowTopic(getTopicModel().findByName(topicName));
         }
-        showTopics(getUser().getId());
+        index(getUser().getId());
     }
 }
