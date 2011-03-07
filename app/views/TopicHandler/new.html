@@ -1,0 +1,21 @@
+<!--
+File: Topic/new.html
+Name: Peter Graham
+Class: CS 461
+Project 1
+Date: February 16
+-->
+#{extends 'base.html' /}
+#{set title: messages.get('topic.new') /}
+<div class="subpage">
+    <h2>&{'topic.new'}</h2>
+    <form class="bigform" action="@{TopicHandler.createNewTopic()}" method="post">
+        <div>
+        <p>
+            <label for="name">&{'topic.name'}</label><br>
+            <input class="fancytext" id="name" name="name" type="text" value="${name}">
+        </p>
+        <input class="fancybutton pointer shadow" type="submit" value="&{'action.create'}">
+        </div>
+    </form>
+</div>

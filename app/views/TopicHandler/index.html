@@ -1,0 +1,35 @@
+<!--
+File: Topic/index.html
+Name: Peter Graham
+Class: CS 461
+Project 1
+Date: February 16
+-->
+#{extends 'base.html' /}
+#{set title:topicName /}
+<div class="subpage">
+    <h2>${topicName} <a class="leftpad smallest"
+        #{if following}
+            href="@{Profile.unFollowTopic(topicName)}">&{'action.unFollow'}
+        #{/if}
+        #{else}
+            href="@{Profile.followTopic(topicName)}">&{'action.follow'}
+        #{/else}
+    </a></h2>
+    <form class="bigform" action="@{TopicHandler.addUpdate()}" method="post">
+        <div>
+        <textarea class="fancytext" name="content"#{if !loggedin} disabled#{/if}>#{if !loggedin}&{'login.loginRequired'}#{/if}</textarea><br>
+        <input class="fancybutton pointer shadow" type="submit" value="&{'action.addUpdate'}">
+        <input type="hidden" name="topicName" value="${topicName}">
+        </div>
+    </form>
+    <!-- TODO: sidebar like home -->
+    <ol id="subscriptions">
+        #{list items:updates, as:'update'}
+            <li>${update.getContent()}
+        #{/list}
+        #{else}
+            <p class="greyish">&{'topic.noUpdates'}</p>
+        #{/else}
+    </ol>
+</div>
