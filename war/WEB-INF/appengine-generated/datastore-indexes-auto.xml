@@ -1,11 +1,4 @@
-<!-- Indices written at Mon, 7 Mar 2011 08:25:52 EST -->
+<!-- Indices written at Mon, 7 Mar 2011 15:02:56 EST -->
 
-<datastore-indexes>
+<datastore-indexes/>
 
-    <!-- Used 5 times in query history -->
-    <datastore-index kind="Update" ancestor="false" source="auto">
-        <property name="topicId" direction="asc"/>
-        <property name="created" direction="desc"/>
-    </datastore-index>
-
-</datastore-indexes>

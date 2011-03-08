@@ -24,9 +24,14 @@ Date: February 16
         </div>
     </form>
     <!-- TODO: sidebar like home -->
+    <br><a class="${sortBy == 'recent' ? 'active':''}" href="@{TopicHandler.viewUpdates(topicName,'recent')}">Recent</a> | <a class="${sortBy == 'popular' ? 'active':''}" href="@{TopicHandler.viewUpdates(topicName,'popular')}">Popular, Past 24h</a><br><br>
     <ol id="subscriptions">
         #{list items:updates, as:'update'}
-            <li>${update.getContent()}
+        <!-- TODO: clean up -->
+            <li><b>${update.getContent()}</b> <span class="smaller greyish">Posted on ${update.getDateCreated()}</span>
+                <br><a href="@{TopicHandler.vote(update.getId(),'up', sortBy)}">up</a>
+                <a href="@{TopicHandler.vote(update.getId(),'down', sortBy)}">down</a>
+                vote total value: <b>${update.getVoteCount()}</b><br><br><br>
         #{/list}
         #{else}
             <p class="greyish">&{'topic.noUpdates'}</p>

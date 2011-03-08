@@ -7,10 +7,12 @@
  */
 package controllers;
 
+import java.util.Date;
 import java.util.List;
 import models.Topic;
 import models.Update;
 import models.UserTopic;
+import models.Vote;
 import play.data.validation.Required;
 import play.i18n.Messages;
 
@@ -25,8 +27,9 @@ public class TopicHandler extends BaseController{
      * View a topic and its updates.
      *
      * @param topicName the unique name of the topic to view
+     * @param sortBy how to sort the topic updates (popular/recent) -->TODO enum
      */
-    public static void viewUpdates(String topicName) {
+    public static void viewUpdates(String topicName, String sortBy) {
         // get the topic associated with this name
         Topic topic = getTopicModel().findByName(topicName);
         if(topic == null) {
@@ -38,7 +41,23 @@ public class TopicHandler extends BaseController{
             isFollowing = getUserTopicModel().isUserFollowing(getUser(), topic);
         }
 
-        List<Update> updates = getUpdateModel().findNewestByTopic(topic);
+        boolean sortByRecent = true;
+        if(sortBy != null && sortBy.equals("popular")) {
+            sortByRecent = false;
+        }
+        List<Update> updates;
+        if(sortByRecent){
+            updates = getUpdateModel().findNewestByTopic(topic);
+            renderArgs.put("sortBy", "recent");
+        }
+        else {
+            // source:
+            // http://stackoverflow.com/questions/4348525/get-date-as-of-4-hours-ago
+            Date oneDay = new Date(System.currentTimeMillis() - (24 * 60 * 60 * 1000));
+            updates = getUpdateModel().findPopularByTopic(topic, oneDay);
+            renderArgs.put("sortBy", "popular");
+        }
+        
         renderArgs.put("topicName", topicName);
         renderArgs.put("updates",updates);
         renderArgs.put("following",isFollowing);
@@ -79,7 +98,7 @@ public class TopicHandler extends BaseController{
         else {
             flash.error(Messages.get("form.emptyField"));
         }
-        viewUpdates(topicName);
+        viewUpdates(topicName, "recent");
     }
 
     /**
@@ -108,12 +127,41 @@ public class TopicHandler extends BaseController{
                 userTopic.insert();
                 
                 flash.success(Messages.get("action.saved"));
-                viewUpdates(name);
+                viewUpdates(name, "recent");
             }
         }
         else {
             flash.error(Messages.get("form.emptyField"));
         }
         showNewTopicForm();
+    }
+
+    /**
+     * Vote up the Update with the given updateId.
+     *
+     * @param updateId the ID of the Update to vote up
+     * @param voteType the type of vote to cast (up or down) --> TODO: enum
+     * @param sortBy how to sort votes by upon redirection --> TODO: enum
+     */
+    public static void vote(Long updateId, String voteType, String sortBy) {
+        if(!isLoggedIn()) {
+            flash.error(Messages.get("login.loginRequired"));
+            Account.showLoginForm();
+        }
+
+        boolean isUpVote = false;
+        if(voteType.equals("up")) {
+            isUpVote = true;
+        }
+        Update toVoteOn = getUpdateModel().findById(updateId);
+        if(toVoteOn != null) {
+            Vote vote = new Vote(getUser(), toVoteOn, isUpVote);
+            vote.insert();
+
+            // redirect back to the topic
+            Topic parentTopic = getTopicModel()
+                    .findById(toVoteOn.getParentTopicId());
+            viewUpdates(parentTopic.getName(), sortBy);
+        }
     }
 }

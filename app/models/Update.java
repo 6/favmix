@@ -98,28 +98,28 @@ public class Update extends Model{
      * @return the popular updates associated with the given topic
      */
     public List<Update> findPopularByTopic(Topic topic, Date afterDate) {
-        List<Update> updates = all().filter("topicId", topic.getId()).fetch();
+        List<Update> updates = all().filter("topicId", topic.getId())
+                .filter("created>", afterDate).fetch();
         Map<Update,Long> updatesByVotes = new HashMap<Update,Long>();
-        Vote voteModel = new Vote();
         // count vote value for each update
         for(Update update: updates) {
-            List<Vote> votes = voteModel.findByUpdate(update);
-            updatesByVotes.put(update, Long.valueOf(0));
-            for(Vote vote : votes) {
-                int valueChange = 0;
-                if(vote.isUpVote()) {
-                    valueChange = 1;
-                }
-                else {
-                    valueChange = -1;
-                }
-                Long curVoteValue = updatesByVotes.get(update);
-                curVoteValue += Long.valueOf(valueChange);
-                updatesByVotes.put(update, curVoteValue);
-            }
+            updatesByVotes.put(update, update.getVoteCount());
         }
         updatesByVotes = this.sortByValue(updatesByVotes);
-        return new ArrayList<Update>(updatesByVotes.keySet());
+        // convert Map keys to List (we don't need the values anymore)
+        List orderedUpdates = new ArrayList<Update>(updatesByVotes.keySet());
+        Collections.reverse(orderedUpdates);
+        return orderedUpdates;
+    }
+
+    /**
+     * Convenience method for getting the vote count of this update.
+     *
+     * @return the vote count of this update
+     */
+    public Long getVoteCount() {
+        Vote voteModel = new Vote();
+        return voteModel.getVoteCount(this);
     }
 
     /**
@@ -138,6 +138,15 @@ public class Update extends Model{
      */
     public Long getId() {
         return this.id;
+    }
+
+    /**
+     * Returns the parent topic ID.
+     * 
+     * @return the parent topic ID
+     */
+    public Long getParentTopicId() {
+        return this.topicId;
     }
 
     /**

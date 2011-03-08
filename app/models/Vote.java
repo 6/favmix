@@ -115,6 +115,26 @@ public class Vote extends Model{
     }
 
     /**
+     * Get the vote count of a given update.
+     *
+     * @param update the Update to get the vote count of
+     * @return the vote count of a given update
+     */
+    public Long getVoteCount(Update update) {
+        List<Vote> votes = this.findByUpdate(update);
+        Long count = Long.valueOf(0);
+        for(Vote vote : votes) {
+            if(vote.isUpVote()) {
+                count += 1;
+            }
+            else {
+                count += -1;
+            }
+        }
+        return count;
+    }
+
+    /**
      * Return whether or not this vote is an up-vote (positive).
      *
      * @return boolean representing whether or not this vote is an up-vote
