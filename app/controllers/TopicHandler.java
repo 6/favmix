@@ -1,5 +1,5 @@
 /*
- * File: Topics.java
+ * File: TopicHandler.java
  * Name: Peter Graham
  * Class: CS 461
  * Project 1
@@ -20,6 +20,7 @@ import play.i18n.Messages;
  * Controller for handling of viewing and adding updates to topics.
  *
  * @author Peter Graham
+ * @author Bauke Scholtz
  */
 public class TopicHandler extends BaseController{
 
@@ -53,8 +54,9 @@ public class TopicHandler extends BaseController{
         else {
             // source:
             // http://stackoverflow.com/questions/4348525/get-date-as-of-4-hours-ago
-            Date oneDay = new Date(System.currentTimeMillis() - (24 * 60 * 60 * 1000));
-            updates = getUpdateModel().findPopularByTopic(topic, oneDay);
+            Date day = new Date(System.currentTimeMillis() - (24*60*60*1000));
+            // TODO: different date ranges
+            updates = getUpdateModel().findPopularByTopic(topic, day);
             renderArgs.put("sortBy", "popular");
         }
         
@@ -68,9 +70,9 @@ public class TopicHandler extends BaseController{
      * Show the form for creating a new topic.
      */
     public static void showNewTopicForm(){
-        if(!isLoggedIn()){
-            // if not logged in, redirect to home
-            Home.defaultFilters();
+        if(!isLoggedIn()) {
+            flash.error(Messages.get("login.loginRequired"));
+            Account.showLoginForm();
         }
         renderTemplate("TopicHandler/new.html");
     }
@@ -83,9 +85,9 @@ public class TopicHandler extends BaseController{
      */
     public static void addUpdate(@Required String topicName,
             @Required String content) {
-        if(!isLoggedIn()){
-            // if not logged in, redirect to home
-            Home.defaultFilters();
+        if(!isLoggedIn()) {
+            flash.error(Messages.get("login.loginRequired"));
+            Account.showLoginForm();
         }
         if(!validation.hasErrors()) {
             if(getTopicModel().topicExists(topicName)) {
@@ -107,9 +109,9 @@ public class TopicHandler extends BaseController{
      * @param name String representing the topic name
      */
     public static void createNewTopic(@Required String name) {
-        if(!isLoggedIn()){
-            // if not logged in, redirect to home
-            Home.defaultFilters();
+        if(!isLoggedIn()) {
+            flash.error(Messages.get("login.loginRequired"));
+            Account.showLoginForm();
         }
         if(!validation.hasErrors()) {
             // name is valid so check if available
@@ -148,16 +150,31 @@ public class TopicHandler extends BaseController{
             flash.error(Messages.get("login.loginRequired"));
             Account.showLoginForm();
         }
-
         boolean isUpVote = false;
         if(voteType.equals("up")) {
             isUpVote = true;
         }
         Update toVoteOn = getUpdateModel().findById(updateId);
         if(toVoteOn != null) {
-            Vote vote = new Vote(getUser(), toVoteOn, isUpVote);
-            vote.insert();
-
+            boolean insertVote = true;
+            // check if user has already voted on this update
+            if(getVoteModel().voteExists(getUser(), toVoteOn)) {
+                Vote currentVote = getVoteModel().getByUserAndUpdate(getUser(),
+                        toVoteOn);
+                if(currentVote.isUpVote() == isUpVote) {
+                    // disable if voting in the same direction
+                    insertVote = false;
+                }
+                else {
+                    // delete current vote, as user is changing to opposite vote
+                    currentVote.delete();
+                }
+            }
+            if(insertVote) {
+                Vote vote = new Vote(getUser(), toVoteOn, isUpVote);
+                vote.insert();
+            }
+            
             // redirect back to the topic
             Topic parentTopic = getTopicModel()
                     .findById(toVoteOn.getParentTopicId());

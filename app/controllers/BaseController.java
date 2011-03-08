@@ -12,6 +12,7 @@ import models.Topic;
 import models.Update;
 import models.User;
 import models.UserTopic;
+import models.Vote;
 import play.i18n.Messages;
 import play.mvc.Before;
 import play.mvc.Controller;
@@ -35,6 +36,9 @@ public class BaseController extends Controller {
 
     /** the Update model */
     private static Update updateModel;
+
+    /** the Vote model */
+    private static Vote voteModel;
 
     /** the currently logged in user */
     private static User loggedInUser;
@@ -95,6 +99,15 @@ public class BaseController extends Controller {
     }
 
     /**
+     * Gets the Vote model object.
+     *
+     * @return the Vote model object
+     */
+    public static Vote getVoteModel(){
+        return voteModel;
+    }
+
+    /**
      * Get the name of the given user.
      * 
      * @param user User to get the name of
@@ -134,6 +147,7 @@ public class BaseController extends Controller {
         topicModel = new Topic();
         userTopicModel = new UserTopic();
         updateModel = new Update();
+        voteModel = new Vote();
     }
 
     /**

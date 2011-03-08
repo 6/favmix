@@ -1,5 +1,9 @@
+# auto-generated files
 nbproject
 precompiled
 tmp
+war/WEB-INF/appengine-generated
+
+# added demos with '.DEMO' extension
 app/utilities/Constants.java
 conf/application.conf
