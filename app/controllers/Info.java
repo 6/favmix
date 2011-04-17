@@ -1,5 +1,5 @@
 /*
- * File: Informational.java
+ * File: Info.java
  * Name: Peter Graham
  * Class: CS 461
  * Project 1
@@ -12,7 +12,7 @@ package controllers;
  *
  * @author Peter Graham
  */
-public class Informational extends BaseController{
+public class Info extends BaseController{
 
     /**
      * Render the About page.
@@ -39,6 +39,6 @@ public class Informational extends BaseController{
      * Temporary placeholder for the About, Contact, and Help pages.
      */
     private static void placeholder(){
-        renderTemplate("Informational/placeholder.html");
+        renderTemplate("Info/placeholder.html");
     }
 }

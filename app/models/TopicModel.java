@@ -1,5 +1,5 @@
 /*
- * File: Topic.java
+ * File: TopicModel.java
  * Name: Peter Graham
  * Class: CS 461
  * Project 1
@@ -17,7 +17,7 @@ import siena.Query;
  *
  * @author Peter Graham
  */
-public class Topic extends Model{
+public class TopicModel extends Model{
 
     /** auto-incremented unique ID for the topic */
     @Id
@@ -32,7 +32,7 @@ public class Topic extends Model{
     /**
      * Constructs a topic object.
      */
-    public Topic(){
+    public TopicModel(){
         super();
     }
 
@@ -41,7 +41,7 @@ public class Topic extends Model{
      *
      * @param name the name of the topic
      */
-    public Topic(String topicName) {
+    public TopicModel(String topicName) {
         this();
         this.name = topicName;
         this.created = new Date();
@@ -54,7 +54,7 @@ public class Topic extends Model{
      * @return topic associated with the ID, or null if no topic with that ID
      *      exists
      */
-    public Topic findById(Long topicId) {
+    public TopicModel findById(Long topicId) {
         return all().filter("id", topicId).get();
     }
 
@@ -65,7 +65,7 @@ public class Topic extends Model{
      * @return topic associated with the name, or null if no topic with that 
      *      name exists
      */
-    public Topic findByName(String topicName) {
+    public TopicModel findByName(String topicName) {
         return all().filter("name", topicName).get();
     }
 
@@ -121,7 +121,7 @@ public class Topic extends Model{
      *
      * @return a query object representing all topics
      */
-    private Query<Topic> all() {
-        return Model.all(Topic.class);
+    private Query<TopicModel> all() {
+        return Model.all(TopicModel.class);
     }
 }

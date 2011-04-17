@@ -9,14 +9,14 @@ TODO: this is incomplete, please ignore
 #{extends 'base.html' /}
 #{set title:userName+' / '+messages.get('profile.topics') /}
 <div class="subpage">
-    <h2><a href="@{Profile.index(userId)}">${userName}</a> / &{'profile.topics'}</h2>
+    <h2><a href="@{index(userId)}">${userName}</a> / &{'profile.topics'}</h2>
     <ol id="subscriptions">
         #{list items:topics, as:'topic'}
-            <li><a class="remove left" href="@{Profile.unfollowTopic(topic.getName())}">&#215;</a><a class="subscription" href="${subscription.getFeedUrl()}">${subscription.getFeedName()}</a>
+            <li><a class="remove left" href="@{unfollowTopic(topic.getName())}">&#215;</a><a class="subscription" href="${subscription.getFeedUrl()}">${subscription.getFeedName()}</a>
         #{/list}
         #{else}
             <p class="greyish">&{'msg.none'}</p>
         #{/else}
     </ol>
-    <a href="@{TopicHandler.showNewTopicForm()}">&{'topic.new'} &rarr;</a>
+    <a href="@{Topic.create()}">&{'topic.new'} &rarr;</a>
 </div>

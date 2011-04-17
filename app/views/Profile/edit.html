@@ -8,8 +8,8 @@ Date: February 16
 #{extends 'base.html' /}
 #{set title: messages.get('profile.edit') /}
 <div class="subpage">
-    <h2><a href="@{Profile.index(userId)}">${userName}</a> &rarr; &{'profile.edit'}</h2>
-    <form class="bigform" action="@{Profile.modifyProfile()}" method="post">
+    <h2><a href="@{index(userId)}">${userName}</a> &rarr; &{'profile.edit'}</h2>
+     #{form @onEditSubmit(), class:'bigform'}
         <div>
         <p>
             <label for="name">&{'field.name'}</label><br>
@@ -21,6 +21,6 @@ Date: February 16
         </p>
         <input class="fancybutton pointer shadow" type="submit" value="&{'msg.save'}">
         </div>
-    </form><br>
-     <a href="@{Profile.index(userId)}">&larr; &{'profile.backTo'}</a>
+    #{/form}<br>
+     <a href="@{index(userId)}">&larr; &{'profile.backTo'}</a>
 </div>

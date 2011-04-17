@@ -3,14 +3,14 @@ File: Account/register.html
 Name: Peter Graham
 Class: CS 461
 Project 1
-Date: February 16
+Date: April 16
 -->
 #{extends 'base.html' /}
 #{set title:messages.get('register') /}
 <div class="subpage">
     <div class="round centered bigborder">
     <h2>&{'register'}<span> &mdash; &{'register.pitch'}</span></h2>
-    <form class="bigform default-label-form" action="@{Account.register()}" method="post">
+    #{form @onRegisterSubmit(), class:'bigform default-label-form'}
         <div>
         <p>
             <label class="default-label noJsSpacer" for="email">&{'field.email'}</label>
@@ -22,6 +22,6 @@ Date: February 16
         </p>
         <input class="fancybutton pointer shadow" type="submit" value="&{'register'}">
         </div>
-    </form>
+    #{/form}
     </div>
 </div>

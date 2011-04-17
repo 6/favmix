@@ -1,5 +1,5 @@
 /*
- * File: UserTopic.java
+ * File: UserTopicModel.java
  * Name: Peter Graham
  * Class: CS 461
  * Project 1
@@ -19,7 +19,7 @@ import siena.Query;
  *
  * @author Peter Graham
  */
-public class UserTopic extends Model{
+public class UserTopicModel extends Model{
 
     /** auto-incremented unique ID for the UserTopic */
     @Id
@@ -36,7 +36,7 @@ public class UserTopic extends Model{
     /**
      * Constructs the UserTopic object.
      */
-    public UserTopic(){
+    public UserTopicModel(){
         super();
     }
 
@@ -46,7 +46,7 @@ public class UserTopic extends Model{
      * @param theUserId user ID to associate with this UserTopic
      * @param theTopicId topic ID to associate with this UserTopic
      */
-    public UserTopic(Long theUserId, Long theTopicId) {
+    public UserTopicModel(Long theUserId, Long theTopicId) {
         this();
         this.userId = theUserId;
         this.topicId = theTopicId;
@@ -58,13 +58,13 @@ public class UserTopic extends Model{
      * @param user the user to get the topics followed of
      * @return list of the topics followed
      */
-    public List<Topic> getTopicsByUser(User user){
-        List<UserTopic> userTopics = all()
+    public List<TopicModel> getTopicsByUser(UserModel user){
+        List<UserTopicModel> userTopics = all()
                 .filter("userId",user.getId()).fetch();
-        List<Topic> topics = new ArrayList<Topic>();
-        Topic topicObject = new Topic();
+        List<TopicModel> topics = new ArrayList<TopicModel>();
+        TopicModel topicObject = new TopicModel();
         if(userTopics != null) {
-            for(UserTopic userTopic : userTopics) {
+            for(UserTopicModel userTopic : userTopics) {
                 Long curTopicId = userTopic.getTopicId();
                 topics.add(topicObject.findById(curTopicId));
             }
@@ -78,8 +78,8 @@ public class UserTopic extends Model{
      * @param user the user associated with the UserTopic to delete
      * @param topic the topic associated with the UserTopic to delete
      */
-    public void delete(User user, Topic topic) {
-        UserTopic toDelete = all().filter("userId", user.getId())
+    public void delete(UserModel user, TopicModel topic) {
+        UserTopicModel toDelete = all().filter("userId", user.getId())
                 .filter("topicId", topic.getId()).get();
         if(toDelete != null) {
             // user is following this topic, so delete
@@ -94,7 +94,7 @@ public class UserTopic extends Model{
      * @param topic the topic to check
      * @return boolean whether or not the user is following the topic
      */
-    public boolean isUserFollowing(User user, Topic topic) {
+    public boolean isUserFollowing(UserModel user, TopicModel topic) {
         return all().filter("userId", user.getId())
                 .filter("topicId", topic.getId()).get() != null;
     }
@@ -131,7 +131,7 @@ public class UserTopic extends Model{
      *
      * @return a query object representing all UserTopics
      */
-    private Query<UserTopic> all() {
-        return Model.all(UserTopic.class);
+    private Query<UserTopicModel> all() {
+        return Model.all(UserTopicModel.class);
     }
 }

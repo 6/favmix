@@ -3,20 +3,36 @@
  * Name: Peter Graham
  * Class: CS 461
  * Project 1
- * Date: February 14
+ * Date: April 16
  */
 package utilities;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * A collection of public constants used throughout code.
- * 
+ *
  * @author Peter Graham
  */
 public class Constants {
 
     /** Secret salt for password hashing */
-    public static final String salt = "INSERT_SALT_HERE";
+    public static final String PASSWORD_SALT = "INSERT_SECRET_SALT_HERE";
 
     /** Session key for logged in users */
-    public static final String sessionKey = "logged";
+    public static final String SESSION_KEY = "logged";
+
+    /** name of the "Remember me" cookie */
+    public static final String REMEMBER_ME = "rememberme";
+
+    /** name of the original URL flash param */
+    public static final String ORIGINAL_URL = "originalurl";
+
+    /** the default ordering of content */
+    public static final String DEFAULT_ORDER = "popular";
+
+    /** list of valid order for filtering */
+    public static final List<String> VALID_ORDERS = Arrays.asList(
+        "popular", "recent");
 }

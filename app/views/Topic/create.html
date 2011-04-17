@@ -1,15 +1,15 @@
 <!--
-File: Topic/new.html
+File: Topic/create.html
 Name: Peter Graham
 Class: CS 461
 Project 1
-Date: February 16
+Date: April 17
 -->
 #{extends 'base.html' /}
 #{set title: messages.get('topic.new') /}
 <div class="subpage">
     <h2>&{'topic.new'}</h2>
-    <form class="bigform" action="@{TopicHandler.createNewTopic()}" method="post">
+    #{form @onCreateSubmit(), class:'bigform'}
         <div>
         <p>
             <label for="name">&{'topic.name'}</label><br>
@@ -17,5 +17,5 @@ Date: February 16
         </p>
         <input class="fancybutton pointer shadow" type="submit" value="&{'action.create'}">
         </div>
-    </form>
+    #{/form}
 </div>

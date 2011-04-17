@@ -3,44 +3,46 @@ File: Home/index.html
 Name: Peter Graham
 Class: CS 461
 Project 1
-Date: February 16
+Date: April 16
 -->
 #{extends 'base.html' /}
 #{set title:messages.get('home.title') /}
 <div id="filters" class="left">
     <ul class="selector">
-        <li><a class="${scope == 'you' ? 'active':''}" href="@{Home.filter('you',order)}">&{'home.you'}</a>#{if loggedin} <span class="reddish smaller"><a href="@{Profile.showTopics(userId)}">&{'msg.edit'}</a></span>#{/if}
-        <li><a class="${scope == 'everyone' ? 'active':''}" href="@{Home.filter('everyone',order)}">&{'home.everyone'}</a>
+        <li><a class="${scope == 'you' ? 'active':''}" href="@{youFilter(order)}">&{'home.you'}</a>#{if loggedin} <span class="reddish smaller"><a href="@{Profile.topics(userId)}">&{'msg.edit'}</a></span>#{/if}
+        <li><a class="${scope == 'everyone' ? 'active':''}" href="@{everyoneFilter(order)}">&{'home.everyone'}</a>
     </ul>
     <div class="hseparator">&nbsp;</div>
     <ul class="selector">
-        <li><a class="${order == 'popular' ? 'active':''}" href="@{Home.filter(scope,'popular')}">&{'msg.popular'}</a>
-        <li><a class="${order == 'recent' ? 'active':''}" href="@{Home.filter(scope,'recent')}">&{'msg.recent'}</a>
+        <li><a class="${order == 'popular' ? 'active':''}" href="#{if scope=='you'}@{Home.youFilter('popular')}#{/if}#{else}@{Home.everyoneFilter('popular')}#{/else}">&{'msg.popular'}</a>
+        <li><a class="${order == 'recent' ? 'active':''}" href="#{if scope=='you'}@{Home.youFilter('recent')}#{/if}#{else}@{Home.everyoneFilter('recent')}#{/else}">&{'msg.recent'}</a>
     </ul>
     #{if loggedin}
         <div class="hseparator">&nbsp;</div>
            #{if topics}
                <ol id="subscriptions" class="selector smaller">
                     <li><a class="active" href="#">&{'home.all'}</a>
-                     #{list items:topics, as:'topic'}
                         <!-- TODO: fix links:
                         /{topicName|all}?{popular|recent}
                         how to do everyone/you?
                         -->
-                        <li><a href="@{TopicHandler.viewUpdates(topic.getName())}">${topic.getName()}</a>
+                     #{list items:topics, as:'topic'}
+                        <li><a href="@{Topic.index(topic.getName())}">${topic.getName()}</a>
                     #{/list}
                 </ol>
-           <div id="subsnotif" class="round smallest"><a href="@{Profile.showTopics(userId)}">&{'action.manage'} &rsaquo;</a></div>
+           <div id="subsnotif" class="round smallest"><a href="@{Profile.topics(userId)}">&{'action.manage'} &rsaquo;</a></div>
             #{/if}
             #{else}
-                <div id="subsnotif" class="round smallest">&{'msg.none'}<br><a href="@{Profile.showTopics(userId)}">&{'action.findTopics'} &rsaquo;</a></div>
+                <div id="subsnotif" class="round smallest">&{'msg.none'}<br><a href="@{Profile.topics(userId)}">&{'action.findTopics'} &rsaquo;</a></div>
             #{/else}
       #{/if}
 </div>
 #{if !loggedin}
 <div id="pitch" class="round">
     <div class="left"><h2 class="noJsSpacer">&{'home.titlePart1'} <br><span>&{'home.titlePart2'}</span></h2></div>
-    <form id="signup" class="default-label-form" action="@{Account.register()}" method="post"><h3 class="noJsSpacer">Sign Up <span>&mdash; &{'register.pitch'}</span></h3><p><label class="default-label noJsSpacer" for="email">&{'field.email'}</label><input id="email" class="fancytext" name="email" type="text" value="" spellcheck="false"></p><div id="inbetweeninput" class="noJsSpacer">&nbsp;</div><p><label class="default-label noJsSpacer" for="password">&{'field.password'}</label><input id="password" class="fancytext" name="password" type="password"></p><input class="fancybutton shadow pointer" type="submit" value="&{'register'}"></form>
+    #{form action:@Account.onRegisterSubmit(), id: 'signup', class:'default-label-form'}
+        <h3 class="noJsSpacer">Sign Up <span>&mdash; &{'register.pitch'}</span></h3><p><label class="default-label noJsSpacer" for="email">&{'field.email'}</label><input id="email" class="fancytext" name="email" type="text" value="" spellcheck="false"></p><div id="inbetweeninput" class="noJsSpacer">&nbsp;</div><p><label class="default-label noJsSpacer" for="password">&{'field.password'}</label><input id="password" class="fancytext" name="password" type="password"></p><input class="fancybutton shadow pointer" type="submit" value="&{'register'}">
+    #{/form}
 </div>
 #{/if}
 <ol id="content">

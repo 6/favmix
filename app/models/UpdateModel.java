@@ -1,5 +1,5 @@
 /*
- * File: Update.java
+ * File: UpdateModel.java
  * Name: Peter Graham
  * Class: CS 461
  * Project 1
@@ -27,7 +27,7 @@ import siena.Query;
  *
  * @author Peter Graham
  */
-public class Update extends Model{
+public class UpdateModel extends Model{
 
     /** auto-incremented unique ID for the update */
     @Id
@@ -50,7 +50,7 @@ public class Update extends Model{
     /**
      * Constructs an update object.
      */
-    public Update(){
+    public UpdateModel(){
         super();
     }
 
@@ -61,7 +61,7 @@ public class Update extends Model{
      * @param topic the Topic this update was posted to
      * @param updateContent the content of the update
      */
-    public Update(User user, Topic topic, String updateContent) {
+    public UpdateModel(UserModel user, TopicModel topic, String updateContent) {
         this();
         this.userId = user.getId();
         this.topicId = topic.getId();
@@ -76,7 +76,7 @@ public class Update extends Model{
      * @return update associated with the ID, or null if no update with that ID
      *      exists
      */
-    public Update findById(Long updateId) {
+    public UpdateModel findById(Long updateId) {
         return all().filter("id", updateId).get();
     }
 
@@ -86,7 +86,7 @@ public class Update extends Model{
      * @param topic the topic to find newest updates of
      * @return the recent updates associated with the given topic
      */
-    public List<Update> findNewestByTopic(Topic topic) {
+    public List<UpdateModel> findNewestByTopic(TopicModel topic) {
         return all().filter("topicId", topic.getId()).order("-created").fetch();
     }
 
@@ -97,17 +97,17 @@ public class Update extends Model{
      * @param afterDate the date after which to include topics
      * @return the popular updates associated with the given topic
      */
-    public List<Update> findPopularByTopic(Topic topic, Date afterDate) {
-        List<Update> updates = all().filter("topicId", topic.getId())
+    public List<UpdateModel> findPopularByTopic(TopicModel topic, Date afterDate) {
+        List<UpdateModel> updates = all().filter("topicId", topic.getId())
                 .filter("created>", afterDate).fetch();
-        Map<Update,Long> updatesByVotes = new HashMap<Update,Long>();
+        Map<UpdateModel,Long> updatesByVotes = new HashMap<UpdateModel,Long>();
         // count vote value for each update
-        for(Update update: updates) {
+        for(UpdateModel update: updates) {
             updatesByVotes.put(update, update.getVoteCount());
         }
         updatesByVotes = this.sortByValue(updatesByVotes);
         // convert Map keys to List (we don't need the values anymore)
-        List orderedUpdates = new ArrayList<Update>(updatesByVotes.keySet());
+        List orderedUpdates = new ArrayList<UpdateModel>(updatesByVotes.keySet());
         Collections.reverse(orderedUpdates);
         return orderedUpdates;
     }
@@ -118,7 +118,7 @@ public class Update extends Model{
      * @return the vote count of this update
      */
     public Long getVoteCount() {
-        Vote voteModel = new Vote();
+        VoteModel voteModel = new VoteModel();
         return voteModel.getVoteCount(this);
     }
 
@@ -173,17 +173,17 @@ public class Update extends Model{
      *
      * @return a query object representing all updates
      */
-    private Query<Update> all() {
-        return Model.all(Update.class);
+    private Query<UpdateModel> all() {
+        return Model.all(UpdateModel.class);
     }
 
     /**
-     * Sort a given map by value. Based off code from:
+     * Sort a given map by value in ascending order. Based off code from:
      * http://stackoverflow.com/questions/109383/how-to-sort-a-mapkey-value-on-
      *      the-values-in-java
      * 
      * @param map the map to sort by value
-     * @return the sorted map by value
+     * @return the sorted map by value in ascending order
      */
     private Map sortByValue(Map map) {
          List list = new LinkedList(map.entrySet());

@@ -1,13 +1,14 @@
 /*
- * File: User.java
+ * File: UserModel.java
  * Name: Peter Graham
  * Class: CS 461
  * Project 1
- * Date: February 14
+ * Date: April 16
  */
 package models;
 
 import java.util.Date;
+import play.i18n.Messages;
 import play.libs.Codec;
 import siena.Id;
 import siena.Max;
@@ -20,7 +21,7 @@ import utilities.Constants;
  *
  * @author Peter Graham
  */
-public class User extends Model{
+public class UserModel extends Model{
 
     /** auto-incremented unique ID for the user */
     @Id
@@ -47,7 +48,7 @@ public class User extends Model{
     /**
      * Constructs the user object.
      */
-    public User(){
+    public UserModel(){
         super();
     }
 
@@ -57,7 +58,7 @@ public class User extends Model{
      * @param emailAddress the email address associated with the user account
      * @param password the plaintext password associated with the user account
      */
-    public User(String emailAddress, String password) {
+    public UserModel(String emailAddress, String password) {
         this();
         this.setEmail(emailAddress);
         this.setPassword(password);
@@ -72,7 +73,7 @@ public class User extends Model{
      * @return true if the passwords match, or false if they don't match
      */
     public boolean isValidPassword(String password) {
-        return passwordHash.equals(Codec.hexSHA1(Constants.salt+password));
+        return passwordHash.equals(Codec.hexSHA1(Constants.PASSWORD_SALT+password));
     }
 
     /**
@@ -82,8 +83,48 @@ public class User extends Model{
      * @return the user associated with the email address, or null if no user is
      *      associated with that email address
      */
-    public User findByEmail(String email) {
+    public UserModel findByEmail(String email) {
         return all().filter("userEmail", email).get();
+    }
+
+    /**
+     * TODO
+     * @param email
+     * @param password
+     * @return
+     */
+    public boolean isValidLogin(String email, String password) {
+        // TODO required
+        UserModel user = this.findByEmail(email);
+        if(user != null) {
+            if(user.isValidPassword(password)) {
+                // email/password combination is valid
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * TODO
+     * @param email
+     * @param password
+     */
+    public void createUser(String email, String password) {
+        UserModel user = new UserModel(email, password);
+        user.insert();
+    }
+
+    /**
+     * Modify the user's profile.
+     * 
+     * @param newName string of the user's new name
+     * @param newBio string if the user's new biography
+     */
+    public void modifyProfile(String newName, String newBio) {
+        this.setName(newName);
+        this.setBio(newBio);
+        this.update();
     }
 
     /**
@@ -93,7 +134,7 @@ public class User extends Model{
      * @return the user associated with the ID, or null if no user is associated
      *      with that ID
      */
-    public User findById(Long id) {
+    public UserModel findById(Long id) {
         return all().filter("id", id).get();
     }
 
@@ -113,8 +154,8 @@ public class User extends Model{
      *
      * @param topic the Topic to follow
      */
-    public void followTopic(Topic topic) {
-        UserTopic userTopic = new UserTopic(this.getId(), topic.getId());
+    public void followTopic(TopicModel topic) {
+        UserTopicModel userTopic = new UserTopicModel(this.getId(), topic.getId());
         userTopic.insert();
     }
 
@@ -123,8 +164,8 @@ public class User extends Model{
      * 
      * @param topic Topic to unfollow
      */
-    public void unFollowTopic(Topic topic) {
-        UserTopic userTopic = new UserTopic();
+    public void unFollowTopic(TopicModel topic) {
+        UserTopicModel userTopic = new UserTopicModel();
         userTopic.delete(this, topic);
     }
     
@@ -166,12 +207,16 @@ public class User extends Model{
     }
 
     /**
-     * Returns a string of the user's name.
+     * Returns a string of the user's name, or the default name if no name is
+     * specified
      * 
      * @return a string of the user's name
      */
     public String getName() {
-        return this.name;
+        if(this.name != null) {
+            return this.name;
+        }
+        return Messages.get("msg.defaultUserName");
     }
 
     /**
@@ -193,12 +238,12 @@ public class User extends Model{
     }
 
     /**
-     * Sets a new password for the user.
+     * Sets a new password for the user, and salts and hashes it.
      *
      * @param password the password to set user's password to
      */
     public void setPassword(String password) {
-        this.passwordHash = Codec.hexSHA1(Constants.salt+password);
+        this.passwordHash = Codec.hexSHA1(Constants.PASSWORD_SALT+password);
     }
 
     /**
@@ -224,7 +269,7 @@ public class User extends Model{
      *
      * @return a query object representing all users
      */
-    private Query<User> all() {
-        return Model.all(User.class);
+    private Query<UserModel> all() {
+        return Model.all(UserModel.class);
     }
 }

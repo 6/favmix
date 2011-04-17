@@ -33,6 +33,7 @@ field.email = Email Address
 field.password = Password
 field.oldPassword = Old Password
 field.newPassword = New Password
+field.remember = Remember me
 field.name = Your Name
 field.bio = Short Bio
 
@@ -59,18 +60,18 @@ home.everyone = Everyone's topics
 
 login = Login
 login.dontHaveAnAccount = Don't have an account?
-login.loginRequired = Please login to access this feature.
+login.loginRequired = Please login to access this page.
 login.incorrect = Incorrect email or password.
 
 register = Sign Up
 register.pitch = <!--(Start personalizing|Customize) your news.-->Start <!--adding-->following your favorite topics!
-register.emptyField = Email address and password are both required.
-register.emailUsed = <b>%s</b> already has an account. Login below.
+register.emailUsed = <b>%s</b> already has an account. Try a different e-mail address.
 
 profile = Profile
 profile.edit = Edit your profile
 profile.topics = Topics 
 profile.backTo = Back to profile
+profile.notFound = User not found.
 
 settings = Settings
 settings.edit = Edit your settings
@@ -81,3 +82,4 @@ topic.exists = A topic with that name already exists.
 topic.noUpdates = This topic doesn't have any discussions yet.
 topic.following = Following
 topic.updateAdded = Your discussion has been added.
+topic.notFound = Topic not found.

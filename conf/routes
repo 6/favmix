@@ -2,42 +2,28 @@
 # Name: Peter Graham
 # Class: CS 461
 # Project 1
-# Date: February 16
+# Date: April 16
 
 # Routes
 # This file defines all application routes (Higher priority routes first)
 
 # Home page
 GET / Home.defaultFilters
-GET /home/{scope}/{order} Home.filter
+GET /you/{order} Home.youFilter
+GET /everyone/{order} Home.everyoneFilter
 
 # Topic
-GET /topic/{topicName} TopicHandler.viewUpdates
-GET /newtopic TopicHandler.showNewTopicForm
-
-# Login, Logout, Register
-GET /settings Account.showSettingsForm
-GET /login Account.showLoginForm
-GET /register Account.showRegisterForm
-GET /logout Account.logout
+GET /createtopic Topic.create
+GET /topic/{topicName} Topic.index
 
 # Profile viewing/modifying
 GET /user/{id} Profile.index
-GET /user/{id}/topics Profile.showTopics
-GET /editprofile Profile.showEditForm
-
-# Informational
-GET /about Informational.about
-GET /contact Informational.contact
-GET /help Informational.help
+GET /user/{id}/topics Profile.topics
 
 # Static files
 GET /static/ staticDir:public
-GET /favicon.ico StaticHandler.favicon
-GET /robots.txt StaticHandler.robots
-
-# Errors
-GET /error/{errorCode} ErrorHandler.showError
+GET /favicon.ico StaticContent.favicon
+GET /robots.txt StaticContent.robots
 
 # Catch-all
 GET /{controller} {controller}.index

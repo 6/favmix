@@ -1,5 +1,5 @@
 /*
- * File: StaticHandler.java
+ * File: StaticContent.java
  * Name: Peter Graham
  * Class: CS 461
  * Project 1
@@ -23,7 +23,7 @@ import play.mvc.Controller;
  * @author Peter Graham
  * @author Guillaume Bort
  */
-public class StaticHandler extends Controller {
+public class StaticContent extends Controller {
 
     /**
      * Render the robots.txt file.

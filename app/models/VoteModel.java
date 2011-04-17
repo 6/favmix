@@ -1,5 +1,5 @@
 /*
- * File: Vote.java
+ * File: VoteModel.java
  * Name: Peter Graham
  * Class: CS 461
  * Project 1
@@ -19,14 +19,11 @@ import siena.Query;
  *
  * @author Peter Graham
  */
-public class Vote extends Model{
+public class VoteModel extends Model{
 
     /** auto-incremented unique ID for the vote */
     @Id
     private Long id;
-
-    /** whether or not the vote is up (positive) or down (negative) */
-    private boolean isUpVote;
 
     /** Date vote is added to database */
     private Date created;
@@ -42,7 +39,7 @@ public class Vote extends Model{
     /**
      * Constructs a Vote object.
      */
-    public Vote(){
+    public VoteModel(){
         super();
     }
 
@@ -51,11 +48,10 @@ public class Vote extends Model{
      *
      * @param name the name of the topic
      */
-    public Vote(User user, Update update, boolean isUp) {
+    public VoteModel(UserModel user, UpdateModel update) {
         this();
         this.userId = user.getId();
         this.updateId = update.getId();
-        this.isUpVote = isUp;
         this.created = new Date();
     }
 
@@ -66,7 +62,7 @@ public class Vote extends Model{
      * @return update associated with the ID, or null if no update with that ID
      *      exists
      */
-    public Vote findById(Long updateId) {
+    public VoteModel findById(Long updateId) {
         return all().filter("id", updateId).get();
     }
 
@@ -76,7 +72,7 @@ public class Vote extends Model{
      * @param user the user to find votes of
      * @return the votes associated with the given user
      */
-    public List<Vote> findByUser(User user) {
+    public List<VoteModel> findByUser(UserModel user) {
         return all().filter("userId", user.getId()).fetch();
     }
 
@@ -86,7 +82,7 @@ public class Vote extends Model{
      * @param user the user to find votes of
      * @return the votes associated with the given user
      */
-    public List<Vote> findByUpdate(Update update) {
+    public List<VoteModel> findByUpdate(UpdateModel update) {
         return all().filter("updateId", update.getId()).fetch();
     }
 
@@ -97,7 +93,7 @@ public class Vote extends Model{
      * @param update the update to get the vote of
      * @return Vote of a specific user and update
      */
-    public Vote getByUserAndUpdate(User user, Update update) {
+    public VoteModel getByUserAndUpdate(UserModel user, UpdateModel update) {
         return all().filter("userId", user.getId())
                 .filter("updateId", update.getId()).get();
     }
@@ -110,7 +106,7 @@ public class Vote extends Model{
      * @return boolean representing whether or not given user has voted on
      *      given update
      */
-    public boolean voteExists(User user, Update update) {
+    public boolean voteExists(UserModel user, UpdateModel update) {
         return getByUserAndUpdate(user, update) != null;
     }
 
@@ -120,27 +116,13 @@ public class Vote extends Model{
      * @param update the Update to get the vote count of
      * @return the vote count of a given update
      */
-    public Long getVoteCount(Update update) {
-        List<Vote> votes = this.findByUpdate(update);
+    public Long getVoteCount(UpdateModel update) {
+        List<VoteModel> votes = this.findByUpdate(update);
         Long count = Long.valueOf(0);
-        for(Vote vote : votes) {
-            if(vote.isUpVote()) {
-                count += 1;
-            }
-            else {
-                count += -1;
-            }
+        if(votes != null) {
+            count = Long.valueOf(votes.size());
         }
         return count;
-    }
-
-    /**
-     * Return whether or not this vote is an up-vote (positive).
-     *
-     * @return boolean representing whether or not this vote is an up-vote
-     */
-    public boolean isUpVote() {
-        return this.isUpVote;
     }
 
     /**
@@ -166,7 +148,7 @@ public class Vote extends Model{
      *
      * @return a query object representing all votes
      */
-    private Query<Vote> all() {
-        return Model.all(Vote.class);
+    private Query<VoteModel> all() {
+        return Model.all(VoteModel.class);
     }
 }

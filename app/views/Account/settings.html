@@ -9,7 +9,7 @@ Date: February 16
 #{set title: messages.get('settings.edit') /}
 <div class="subpage">
     <h2><a href="@{Profile.index(userId)}">${userName}</a> &rarr; &{'settings.edit'}</h2>
-    <form class="bigform" action="@{Account.modifySettings()}" method="post">
+    #{form @onSettingsSubmit(), class:'bigform'}
         <div>
         <p>
             <label for="email">&{'field.email'}</label><br>
@@ -25,5 +25,5 @@ Date: February 16
         </p>
         <input class="fancybutton pointer shadow" type="submit" value="&{'msg.save'}">
         </div>
-    </form>
+    #{/form}
 </div>

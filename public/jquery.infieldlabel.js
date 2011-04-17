@@ -124,7 +124,7 @@ Date: February 16
     
     $.InFieldLabels.defaultOptions = {
         fadeOpacity: 0.5, // Once a field has focus, how transparent should the label be
-        fadeDuration: 200, // How long should it take to animate from 1.0 opacity to the fadeOpacity
+        fadeDuration: 100, // How long should it take to animate from 1.0 opacity to the fadeOpacity
         labelClass: 'infield' // Class to be applied to label when positioned over form field
     };
     

@@ -3,20 +3,22 @@
  * Name: Peter Graham
  * Class: CS 461
  * Project 1
- * Date: February 14
+ * Date: April 17
  */
 package controllers;
 
-import models.User;
+import models.UserModel;
 import play.data.validation.Required;
 import play.i18n.Messages;
+import utilities.AllowGuest;
 
 /**
  * Controller for handling of viewing and modifying user profiles.
  *
  * @author Peter Graham
  */
-public class Profile extends BaseController{
+@AllowGuest({"index", "topics"})
+public class Profile extends BaseController {
 
     /**
      * View a user's profile.
@@ -25,38 +27,32 @@ public class Profile extends BaseController{
      */
     public static void index(Long id) {
         // check if this profile is the logged in user's profile
-        String name = null;
-        boolean isOwnProfile = false;
-        User curUser;
+        UserModel user;
         if(isLoggedIn() && id.equals(getUser().getId())) {
-            isOwnProfile = true;
-            curUser = getUser();
+            user = getUser();
+            renderArgs.put("isOwnProfile", true);
         }
         else {
             // viewing someone else's profile
-            curUser = getUserModel().findById(id);
+            user = getUserModel().findById(id);
+            renderArgs.put("isOwnProfile", false);
         }
-        if(curUser != null) {
-            renderArgs.put("bio", curUser.getBio());
-            renderArgs.put("topics",getUserTopicModel()
-                    .getTopicsByUser(curUser));
+        if(user == null) {
+            Error.index(404, Messages.get("profile.notFound"));
         }
-        renderArgs.put("name", getUserName(curUser));
-        renderArgs.put("isOwnProfile",isOwnProfile);
+        renderArgs.put("bio", user.getBio());
+        renderArgs.put("topics", getUserTopicModel().getTopicsByUser(user));
+        renderArgs.put("name", user.getName());
         render();
     }
 
     /**
      * Show the profile edit form.
      */
-    public static void showEditForm(){
-        if(!isLoggedIn()){
-            // if not logged in, redirect to home
-            Home.defaultFilters();
-        }
-        renderArgs.put("editName", getUserName(getUser()));
+    public static void edit(){
+        renderArgs.put("editName", getUser().getName());
         renderArgs.put("editBio", getUser().getBio());
-        renderTemplate("Profile/edit.html");
+        render();
     }
 
     /**
@@ -65,23 +61,16 @@ public class Profile extends BaseController{
      * @param name String representing the user's name
      * @param bio String representing the user's short biography
      */
-    public static void modifyProfile(@Required String name, String bio) {
-        if(!isLoggedIn()){
-            // if not logged in, redirect to home
-            Home.defaultFilters();
-        }
+    public static void onEditSubmit(@Required String name, String bio) {
         if(!validation.hasErrors()) {
             // name is valid, so update
-            User user = getUser();
-            user.setName(name);
-            user.setBio(bio);
-            user.update();
+            getUser().modifyProfile(name, bio);
             flash.success(Messages.get("action.saved"));
         }
         else{
             flash.error(Messages.get("form.emptyField"));
         }
-        showEditForm();
+        edit();
     }
 
     /**
@@ -89,41 +78,31 @@ public class Profile extends BaseController{
      *
      * @param id the unique user ID of the user whose followed topics to view
      */
-    public static void showTopics(Long id){
-        renderTemplate("Profile/topics.html");
+    public static void topics(Long id){
+        render();
     }
 
     /**
      * Adds a topic from the user's followed topics.
      *
      * @param topicName the name of the topic to follow
+     * @param sortBy how the user had sorted the updates
      */
-    public static void followTopic(String topicName) {
-        if(!isLoggedIn()){
-            // if not logged in, can't edit so redirect to login page
-            Account.showLoginForm();
-        }
-        if(getTopicModel().topicExists(topicName)) {
-            // topic is valid
-            getUser().followTopic(getTopicModel().findByName(topicName));
-        }
-        index(getUser().getId());
+    public static void followTopic(String topicName, String sortBy) {
+        getUser().followTopic(getTopicModel().findByName(topicName));
+        // go to that topic page
+        Topic.index(topicName, sortBy);
     }
 
     /**
      * Removes a topic from the user's followed topics.
      *
      * @param topicName the name of the topic to remove
+     * @param sortBy how the user had sorted the updates
      */
-    public static void unFollowTopic(String topicName) {
-        if(!isLoggedIn()){
-            // if not logged in, can't edit so redirect to home
-            Home.defaultFilters();
-        }
-        if(getTopicModel().topicExists(topicName)) {
-            // topic is valid
-            getUser().unFollowTopic(getTopicModel().findByName(topicName));
-        }
+    public static void unFollowTopic(String topicName, String sortBy) {
+        getUser().unFollowTopic(getTopicModel().findByName(topicName));
+        // go back to user profile
         index(getUser().getId());
     }
 }

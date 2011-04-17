@@ -26,10 +26,10 @@ Date: February 16
             <div id="headerlinks" class="reddish right">
                 <a class="${request.controller == 'Home' ? 'active' : ''}" href="@{Home.defaultFilters()}">&{'home'}</a>
                 #{if loggedin}
-                    <a class="${request.controller == 'Profile' ? 'active' : ''}" href="@{Profile.index(userId)}">&{'profile'}</a><a class="${request.controller == 'Account' ? 'active' : ''}" href="@{Account.showSettingsForm()}">&{'settings'}</a><a id="lastheaderlink" href="@{Account.logout()}">&{'logout'}</a>
+                    <a class="${request.controller == 'Profile' ? 'active' : ''}" href="@{Profile.index(userId)}">&{'profile'}</a><a class="${request.controller == 'Account' ? 'active' : ''}" href="@{Account.settings()}">&{'settings'}</a><a id="lastheaderlink" href="@{Account.logout()}">&{'logout'}</a>
                 #{/if}
                 #{else}
-                    <a class="${request.actionMethod == 'showLoginForm' ? ' active' : ''}" id="lastheaderlink" href="@{Account.showLoginForm()}">&{'login'}</a></strong>
+                    <a class="${request.actionMethod == 'login' ? ' active' : ''}" id="lastheaderlink" href="@{Account.login()}">&{'login'}</a></strong>
                 #{/else}
             </div>
         </div>
@@ -52,10 +52,10 @@ Date: February 16
 </div>
 <div class="clear"></div>
 <div id="footer" class="wrap smaller">
-    <a href="@{Informational.about()}">&{'about'}</a><a href="@{Informational.contact()}">&{'contact'}</a><a href="@{Informational.help()}">&{'help'}</a>
+    <a href="@{Info.about()}">&{'about'}</a><a href="@{Info.contact()}">&{'contact'}</a><a href="@{Info.help()}">&{'help'}</a>
     <p>&copy; 2011 &{'websiteName'}</p>
 </div>
 <script type="text/javascript" src="@{'/public/jquery.infieldlabel.js'}"></script>
-<script src="@{'/public/main.js'}" type="text/javascript"></script>
+<script type="text/javascript" src="@{'/public/main.js'}"></script>
 </body>
 </html>
