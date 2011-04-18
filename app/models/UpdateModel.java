@@ -29,6 +29,7 @@ import utilities.Validator;
  * Model for accessing and modifying topic/user updates.
  *
  * @author Peter Graham
+ * @author Bauke Scholtz
  */
 public class UpdateModel extends Model{
 
@@ -96,26 +97,34 @@ public class UpdateModel extends Model{
     /**
      * Find updates associated with the given topic, and sort them.
      *
-     * Note: Date code adapted from:
+     * Note: Date code adapted from code by Bauke Scholtz:
      * http://stackoverflow.com/questions/4348525/get-date-as-of-4-hours-ago
      * 
      * @param topic the topic to find updates of
-     * @param sortBy how to sort topics (popular, recent)
+     * @param sortBy how to sort topics
+     * // TODO pagination
      * @return List of updates
      */
     public List<UpdateModel> findByTopic(TopicModel topic, String sortBy) {
-        boolean sortByRecent = true;
-        if(sortBy != null && sortBy.equals("popular")) {
-            sortByRecent = false;
+        boolean sortByRecent = false;
+        if(Validator.isEmpty(sortBy) || sortBy.equals("recent")) {
+            sortByRecent = true;
         }
         List<UpdateModel> updates;
         if(sortByRecent){
             updates = this.findNewestByTopic(topic);
-
         }
         else {
-            Date day = new Date(System.currentTimeMillis() - (24*60*60*1000));
-            // TODO: different date ranges
+            Date day;
+            if(sortBy.equals("popular24h")){
+                day = new Date(System.currentTimeMillis() - (24*60*60*1000));
+            }
+            else if(sortBy.equals("popular7d")) {
+                day = new Date(System.currentTimeMillis() - (7*24*60*60*1000));
+            }
+            else {
+                day = null;
+            }
             updates = this.findPopularByTopic(topic, day);
         }
         return updates;
@@ -146,20 +155,29 @@ public class UpdateModel extends Model{
      * Return a list of the popular updates associated with the given topic.
      *
      * @param topic the topic to find popular updates of
-     * @param afterDate the date after which to include topics
+     * @param afterDate the date after which to include topics. If null, ignore.
      * @return the popular updates associated with the given topic
      */
-    public List<UpdateModel> findPopularByTopic(TopicModel topic, Date afterDate) {
-        List<UpdateModel> updates = all().filter("topicId", topic.getId())
+    public List<UpdateModel> findPopularByTopic(TopicModel topic,
+            Date afterDate) {
+        List<UpdateModel> updates;
+        if(afterDate != null) {
+            updates = all().filter("topicId", topic.getId())
                 .filter("created>", afterDate).fetch();
-        Map<UpdateModel,Long> updatesByVotes = new HashMap<UpdateModel,Long>();
+        }
+        else {
+            updates = all().filter("topicId", topic.getId()).fetch();
+        }
+        Map<UpdateModel,Integer> updatesByVotes =
+                new HashMap<UpdateModel,Integer>();
         // count vote value for each update
         for(UpdateModel update: updates) {
             updatesByVotes.put(update, update.getVoteCount());
         }
         updatesByVotes = this.sortByValue(updatesByVotes);
         // convert Map keys to List (we don't need the values anymore)
-        List orderedUpdates = new ArrayList<UpdateModel>(updatesByVotes.keySet());
+        List orderedUpdates =
+                new ArrayList<UpdateModel>(updatesByVotes.keySet());
         Collections.reverse(orderedUpdates);
         return orderedUpdates;
     }
@@ -169,7 +187,7 @@ public class UpdateModel extends Model{
      *
      * @return the vote count of this update
      */
-    public Long getVoteCount() {
+    public int getVoteCount() {
         VoteModel voteModel = new VoteModel();
         return voteModel.getVoteCount(this);
     }

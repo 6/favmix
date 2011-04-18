@@ -3,59 +3,27 @@ File: base.html
 Name: Peter Graham
 Class: CS 461
 Project 1
-Date: February 16
+Date: April 16
 -->
 <!DOCTYPE html>
 <html>
     <head>
         <title>&{'websiteName'} - #{get 'title' /}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/main.css'}">
-        #{get 'moreStyles' /}
-        <script type="text/javascript" src="@{'/public/jquery.js'}"></script>
-        #{get 'moreScripts' /}
-    </head>
-   <body id="homeview">
-<div id="header">
-    <div class="wrap">
-        <h1 id="logo" class="left"><a href="@{Home.defaultFilters()}"><img src="@{'/public/logo.png'}" alt="&{'websiteName'}"></a></h1>
-        <div id="headerright">
-             <form id="search" class="left" action="#search" method="get">
-                <div><input id="searchbar" class="smalltext" name="q" type="text" value="" accesskey="s" autocomplete="off" spellcheck="false"><input id="searchsubmit" class="smallsubmit pointer" type="submit" value="&{'search'}"></div>
-            </form>
-            <div id="headerlinks" class="reddish right">
-                <a class="${request.controller == 'Home' ? 'active' : ''}" href="@{Home.defaultFilters()}">&{'home'}</a>
-                #{if loggedin}
-                    <a class="${request.controller == 'Profile' ? 'active' : ''}" href="@{Profile.index(userId)}">&{'profile'}</a><a class="${request.controller == 'Account' ? 'active' : ''}" href="@{Account.settings()}">&{'settings'}</a><a id="lastheaderlink" href="@{Account.logout()}">&{'logout'}</a>
-                #{/if}
-                #{else}
-                    <a class="${request.actionMethod == 'login' ? ' active' : ''}" id="lastheaderlink" href="@{Account.login()}">&{'login'}</a></strong>
-                #{/else}
-            </div>
-        </div>
-    </div>
-</div>
-<div class="clear"></div>
+ #{get 'moreStyles' /}
+ #{get 'moreScripts' /}
 
-<div id="main">
-    <div class="wrap">
-<!-- display error/success 'flashed' messages here if applicable -->
-#{if flash.success}
-    <p class="success smallround">${flash.success.raw()}</p>
-#{/if}
-#{if flash.error}
-    <p class="error smallround">${flash.error.raw()}</p>
-#{/if}
+    #{if isMobile}
+        #{include 'base.mobile.html' /}
+    #{/if}
+    #{else}
+        #{include 'base.default.html' /}
+    #{/else}
+        
 
-#{doLayout /}
-    </div>
-</div>
-<div class="clear"></div>
-<div id="footer" class="wrap smaller">
-    <a href="@{Info.about()}">&{'about'}</a><a href="@{Info.contact()}">&{'contact'}</a><a href="@{Info.help()}">&{'help'}</a>
+<div id="footer" class="smaller">
+    <a href="@{BaseController.toggleMobileEnabled}">#{if isMobile}Non-mobile site#{/if}#{else}Mobile#{/else}</a>
+    <a href="@{Info.about()}">&{'about'}</a>
+    <a href="@{Info.contact()}">&{'contact'}</a>
     <p>&copy; 2011 &{'websiteName'}</p>
 </div>
-<script type="text/javascript" src="@{'/public/jquery.infieldlabel.js'}"></script>
-<script type="text/javascript" src="@{'/public/main.js'}"></script>
-</body>
-</html>

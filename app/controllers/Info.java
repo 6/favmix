@@ -29,13 +29,6 @@ public class Info extends BaseController{
     }
 
     /**
-     * Render the Help page.
-     */
-    public static void help() {
-        placeholder();
-    }
-
-    /**
      * Temporary placeholder for the About, Contact, and Help pages.
      */
     private static void placeholder(){

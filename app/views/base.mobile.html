@@ -1,0 +1,28 @@
+<!--
+File: base.mobile.html
+Name: Peter Graham
+Class: CS 461
+Project 1
+Date: April 16
+-->
+        <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+	<link rel="stylesheet"  href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" />
+	<link rel="stylesheet" href="docs/_assets/css/jqm-docs.css" />
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.5.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script>
+	<script type="text/javascript" src="experiments/themeswitcher/jquery.mobile.themeswitcher.js"></script>
+	<script type="text/javascript" src="docs/_assets/js/jqm-docs.js"></script> 
+    </head>
+   <body id="homeview">
+<div data-role="page" data-theme="b" id="jqm-home">
+MOBILE VERSION<br><br>
+<!-- display error/success 'flashed' messages here if applicable -->
+#{if flash.success}
+    <p class="success smallround">${flash.success.raw()}</p>
+#{/if}
+#{if flash.error}
+    <p class="error smallround">${flash.error.raw()}</p>
+#{/if}
+
+#{doLayout /}
+</div>

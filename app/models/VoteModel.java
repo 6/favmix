@@ -137,11 +137,11 @@ public class VoteModel extends Model{
      * @param update the Update to get the vote count of
      * @return the vote count of a given update
      */
-    public Long getVoteCount(UpdateModel update) {
+    public int getVoteCount(UpdateModel update) {
         List<VoteModel> votes = this.findByUpdate(update);
-        Long count = Long.valueOf(0);
+        int count = 0;
         if(votes != null) {
-            count = Long.valueOf(votes.size());
+            count = votes.size();
         }
         return count;
     }

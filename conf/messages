@@ -20,7 +20,7 @@ msg.none = You aren't following any topics yet.
 msg.defaultUserName = Anonymous
 msg.edit = edit
 msg.save = Save
-msg.popular = Popular
+msg.popular = Popular Today
 msg.recent = Recent
 msg.previous = Previous page
 msg.next = Next page
@@ -73,6 +73,10 @@ profile.edit = Edit your profile
 profile.topics = Topics 
 profile.backTo = Back to profile
 profile.notFound = User not found.
+
+search = Search
+search.results = Search results
+search.none = No results for <b>%s</b>.
 
 settings = Settings
 settings.edit = Edit your settings

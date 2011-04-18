@@ -11,14 +11,13 @@ import models.TopicModel;
 import models.UpdateModel;
 import play.i18n.Messages;
 import utilities.AllowGuest;
+import utilities.Constants;
 import utilities.ValidationException;
 
 /**
  * Controller for handling of viewing and adding updates to topics.
  *
- * TODO clean up all methods --> model
  * @author Peter Graham
- * @author Bauke Scholtz
  */
 @AllowGuest({"index"})
 public class Topic extends BaseController {
@@ -34,6 +33,10 @@ public class Topic extends BaseController {
         if(topic == null) {
             Error.index(404, Messages.get("topic.notFound"));
         }
+        if(!Constants.VALID_ORDERS.contains(sortBy)) {
+            sortBy = Constants.DEFAULT_ORDER;
+        }
+        
         renderArgs.put("sortBy", sortBy);
         renderArgs.put("topicName", topicName);
         renderArgs.put("updates", getUpdateModel().findByTopic(topic, sortBy));
@@ -88,7 +91,7 @@ public class Topic extends BaseController {
      * for when Javascript/AJAX doesn't work or is disabled.
      *
      * @param updateId the ID of the Update to vote up
-     * @param sortBy how to sort votes by upon redirection --> TODO: enum
+     * @param sortBy how to sort votes by upon redirection
      */
     public static void onVoteSubmit(Long updateId, String sortBy) {
         UpdateModel update = getUpdateModel().findById(updateId);

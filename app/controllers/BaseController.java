@@ -61,6 +61,15 @@ public class BaseController extends Controller {
     }
 
     /**
+     * Checks if mobile site is enabled.
+     *
+     * @return true if mobile site is enabled, otherwise false
+     */
+    public static boolean isMobileEnabled() {
+        return "enabled".equals(session.get(Constants.MOBILE_KEY));
+    }
+
+    /**
      * Gets the currently logged in user.
      *
      * @return the currently logged in user
@@ -143,14 +152,28 @@ public class BaseController extends Controller {
     }
 
     /**
+     * Toggle whether or not mobile is enabled, and redirect to homepage.
+     */
+    public static void toggleMobileEnabled() {
+        if(isMobileEnabled()) {
+            session.put(Constants.MOBILE_KEY,"disabled");
+        }
+        else {
+            session.put(Constants.MOBILE_KEY,"enabled");
+        }
+        Home.defaultFilters();
+    }
+
+    /**
      * Dispatcher method used to initialize fields and do user authentication
      * checks before each request.
      */
     @Before
-    private static void dispatcher(){
+    private static void dispatcher() {
         initModels();
         initLoginArgs();
         initLoggedInUser();
+        initMobile();
         if(isLoggedIn()) {
             checkUserAccess();
             initTopicsArgs();
@@ -229,6 +252,27 @@ public class BaseController extends Controller {
         userTopicModel = new UserTopicModel();
         updateModel = new UpdateModel();
         voteModel = new VoteModel();
+    }
+
+    /**
+     * Initializes the mobile session cookie for tracking whether or not the
+     * mobile site is enabled.
+     */
+    private static void initMobile() {
+        if(session.get(Constants.MOBILE_KEY) == null) {
+            // check user agent for mobile match
+            String userAgent = request.headers.get("user-agent").value();
+            for(String mobileAgent : Constants.MOBILE_USER_AGENTS) {
+                if(userAgent.contains(mobileAgent)){
+                    session.put(Constants.MOBILE_KEY,"enabled");
+                    break;
+                }
+            }
+            if(!isMobileEnabled()) {
+                session.put(Constants.MOBILE_KEY,"disabled");
+            }
+        }
+        renderArgs.put("isMobile", isMobileEnabled());
     }
 
     /**

@@ -73,6 +73,26 @@ public class UserTopicModel extends Model{
     }
 
     /**
+     * Get a list of the users that follow a given topic.
+     *
+     * @param topic the topic to get the followers of
+     * @return list of the users following the topic
+     */
+    public List<UserModel> getUsersByTopic(TopicModel topic){
+        List<UserTopicModel> userTopics = all()
+                .filter("topicId",topic.getId()).fetch();
+        List<UserModel> users = new ArrayList<UserModel>();
+        UserModel userObject = new UserModel();
+        if(userTopics != null) {
+            for(UserTopicModel userTopic : userTopics) {
+                Long curUserId = userTopic.getUserId();
+                users.add(userObject.findById(curUserId));
+            }
+        }
+        return users;
+    }
+
+    /**
      * Delete a UserTopic from the database, for when a user unfollows a topic.
      *
      * @param user the user associated with the UserTopic to delete

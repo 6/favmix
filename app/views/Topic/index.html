@@ -16,6 +16,11 @@ Date: February 16
             href="@{Profile.followTopic(topicName)}">&{'action.follow'}
         #{/else}
     </a></h2>
+    <a class="${sortBy == 'recent' ? 'active':''}" href="@{index(topicName,'recent')}">Recent</a> |
+    <a class="#{if sortBy == 'popular24h' || sortBy == 'popular7d' || sortBy == 'popularall'}active#{/if}" href="@{index(topicName,'popular24h')}">Popular</a>
+
+    (<a class="${sortBy == 'popular24h' ? 'active':''}" href="@{index(topicName,'popular24h')}">Today</a> or <a class="${sortBy == 'popular7d' ? 'active':''}" href="@{index(topicName,'popular7d')}">Week</a> or <a class="${sortBy == 'popularall' ? 'active':''}" href="@{index(topicName,'popularall')}">All Time</a>)<br>
+    
     #{form @onUpdateSubmit(), class:'bigform'}
         <div>
         <textarea class="fancytext" name="content"#{if !loggedin} disabled#{/if}>#{if !loggedin}&{'login.loginRequired'}#{/if}</textarea><br>
@@ -23,8 +28,8 @@ Date: February 16
         <input type="hidden" name="topicName" value="${topicName}">
         </div>
     #{/form}
+
     <!-- TODO: sidebar like home -->
-    <br><a class="${sortBy == 'recent' ? 'active':''}" href="@{index(topicName,'recent')}">Recent</a> | <a class="${sortBy == 'popular' ? 'active':''}" href="@{index(topicName,'popular')}">Popular, Past 24h</a><br><br>
     <ol id="subscriptions">
         #{list items:updates, as:'update'}
         <!-- TODO: clean up -->

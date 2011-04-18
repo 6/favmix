@@ -8,6 +8,7 @@
 package models;
 
 import java.util.Date;
+import java.util.List;
 import play.i18n.Messages;
 import siena.Id;
 import siena.Model;
@@ -105,6 +106,21 @@ public class TopicModel extends Model{
         UserTopicModel userTopic = new UserTopicModel(creator.getId(),
                 newTopic.getId());
         userTopic.insert();
+    }
+
+    /**
+     * Gets the number of followers for a given topic.
+     *
+     * @return the number of followers
+     */
+    public int getFollowerCount() {
+        UserTopicModel userTopicModel = new UserTopicModel();
+        List<UserModel> followers = userTopicModel.getUsersByTopic(this);
+        int count = 0;
+        if(followers != null) {
+            count = followers.size();
+        }
+        return count;
     }
 
     /**
