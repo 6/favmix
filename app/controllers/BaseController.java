@@ -150,9 +150,9 @@ public class BaseController extends Controller {
     private static void dispatcher(){
         initModels();
         initLoginArgs();
+        initLoggedInUser();
         if(isLoggedIn()) {
             checkUserAccess();
-            initLoggedInUser();
             initTopicsArgs();
             initUserInformationArgs();
         }
@@ -235,9 +235,12 @@ public class BaseController extends Controller {
      * Initialize logged in user field, so we can reuse this in various methods.
      */
     private static void initLoggedInUser() {
-        Long userId = Long.valueOf(session.get(Constants.SESSION_KEY));
-        if(userId != null){
+        if(isLoggedIn()) {
+            Long userId = Long.valueOf(session.get(Constants.SESSION_KEY));
             loggedInUser = userModel.findById(userId);
+        }
+        else {
+            loggedInUser = null;
         }
     }
 

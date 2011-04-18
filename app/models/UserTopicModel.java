@@ -94,8 +94,8 @@ public class UserTopicModel extends Model{
      * @param topic the topic to check
      * @return boolean whether or not the user is following the topic
      */
-    public boolean isUserFollowing(UserModel user, TopicModel topic) {
-        return all().filter("userId", user.getId())
+    public boolean isFollowing(UserModel user, TopicModel topic) {
+        return user != null && all().filter("userId", user.getId())
                 .filter("topicId", topic.getId()).get() != null;
     }
 

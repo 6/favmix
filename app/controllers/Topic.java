@@ -7,13 +7,8 @@
  */
 package controllers;
 
-import java.util.Date;
-import java.util.List;
 import models.TopicModel;
 import models.UpdateModel;
-import models.UserTopicModel;
-import models.VoteModel;
-import play.data.validation.Required;
 import play.i18n.Messages;
 import utilities.AllowGuest;
 import utilities.ValidationException;
@@ -35,38 +30,15 @@ public class Topic extends BaseController {
      * @param sortBy how to sort the topic updates (popular/recent) -->TODO enum
      */
     public static void index(String topicName, String sortBy) {
-        // get the topic associated with this name
         TopicModel topic = getTopicModel().findByName(topicName);
         if(topic == null) {
             Error.index(404, Messages.get("topic.notFound"));
         }
-        boolean isFollowing = false;
-        if(isLoggedIn()){
-            // see if user is following this topic
-            isFollowing = getUserTopicModel().isUserFollowing(getUser(), topic);
-        }
-
-        boolean sortByRecent = true;
-        if(sortBy != null && sortBy.equals("popular")) {
-            sortByRecent = false;
-        }
-        List<UpdateModel> updates;
-        if(sortByRecent){
-            updates = getUpdateModel().findNewestByTopic(topic);
-            renderArgs.put("sortBy", "recent");
-        }
-        else {
-            // source:
-            // http://stackoverflow.com/questions/4348525/get-date-as-of-4-hours-ago
-            Date day = new Date(System.currentTimeMillis() - (24*60*60*1000));
-            // TODO: different date ranges
-            updates = getUpdateModel().findPopularByTopic(topic, day);
-            renderArgs.put("sortBy", "popular");
-        }
-        
+        renderArgs.put("sortBy", sortBy);
         renderArgs.put("topicName", topicName);
-        renderArgs.put("updates",updates);
-        renderArgs.put("following",isFollowing);
+        renderArgs.put("updates", getUpdateModel().findByTopic(topic, sortBy));
+        renderArgs.put("following", 
+                getUserTopicModel().isFollowing(getUser(), topic));
         render();
     }
 
@@ -114,35 +86,16 @@ public class Topic extends BaseController {
     /**
      * Vote up the Update with the given updateId. This acts as the fallback
      * for when Javascript/AJAX doesn't work or is disabled.
-     * TODO: only "up"vote?
      *
      * @param updateId the ID of the Update to vote up
      * @param sortBy how to sort votes by upon redirection --> TODO: enum
      */
     public static void onVoteSubmit(Long updateId, String sortBy) {
-        getVoteModel().createVote(updateId, getUser());
-        // redirect back to the topic TODO using flash keep
-        /*TopicModel parentTopic = getTopicModel()
-                .findById(toVoteOn.getParentTopicId());
-        index(parentTopic.getName(), sortBy);*/
-
-        /*UpdateModel toVoteOn = getUpdateModel().findById(updateId);
-        if(toVoteOn != null) {
-            // check if user has already voted on this update
-            if(getVoteModel().voteExists(getUser(), toVoteOn)) {                
-                // delete current vote, as user is un-voting
-                getVoteModel().getByUserAndUpdate(getUser(), toVoteOn).delete();
-            }
-            else {
-                // cast the vote
-                VoteModel vote = new VoteModel(getUser(), toVoteOn);
-                vote.insert();
-            }
-            
-            // redirect back to the topic
-            TopicModel parentTopic = getTopicModel()
-                    .findById(toVoteOn.getParentTopicId());
-            index(parentTopic.getName(), sortBy);
-        }*/
+        UpdateModel update = getUpdateModel().findById(updateId);
+        getVoteModel().createVote(update, getUser());
+        // redirect back to the topic
+        TopicModel parentTopic = getTopicModel().findById(
+                update.getParentTopicId());
+        index(parentTopic.getName(), sortBy);
     }
 }

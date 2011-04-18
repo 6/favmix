@@ -94,6 +94,34 @@ public class UpdateModel extends Model{
     }
 
     /**
+     * Find updates associated with the given topic, and sort them.
+     *
+     * Note: Date code adapted from:
+     * http://stackoverflow.com/questions/4348525/get-date-as-of-4-hours-ago
+     * 
+     * @param topic the topic to find updates of
+     * @param sortBy how to sort topics (popular, recent)
+     * @return List of updates
+     */
+    public List<UpdateModel> findByTopic(TopicModel topic, String sortBy) {
+        boolean sortByRecent = true;
+        if(sortBy != null && sortBy.equals("popular")) {
+            sortByRecent = false;
+        }
+        List<UpdateModel> updates;
+        if(sortByRecent){
+            updates = this.findNewestByTopic(topic);
+
+        }
+        else {
+            Date day = new Date(System.currentTimeMillis() - (24*60*60*1000));
+            // TODO: different date ranges
+            updates = this.findPopularByTopic(topic, day);
+        }
+        return updates;
+    }
+
+    /**
      * Find a update associated with the given unique topic ID.
      *
      * @param updateId the unique ID of the topic

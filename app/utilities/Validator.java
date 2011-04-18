@@ -1,5 +1,5 @@
 /*
- * File: ValidationHelper.java
+ * File: Validator.java
  * Name: Peter Graham
  * Class: CS 461
  * Project 1
