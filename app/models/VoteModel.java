@@ -56,6 +56,29 @@ public class VoteModel extends Model{
     }
 
     /**
+     * Create a new vote for the given update.
+     *
+     * @param updateId the ID of the update to vote on
+     * @param creator the user who creates this
+     */
+    public void createVote(Long updateId, UserModel creator) {
+        UpdateModel updateModel = new UpdateModel();
+        UpdateModel toVoteOn = updateModel.findById(updateId);
+        if(toVoteOn != null) {
+            // check if user has already voted on this update
+            if(this.voteExists(creator, toVoteOn)) {
+                // delete current vote, as user is un-voting
+                this.getByUserAndUpdate(creator, toVoteOn).delete();
+            }
+            else {
+                // cast the vote
+                VoteModel vote = new VoteModel(creator, toVoteOn);
+                vote.insert();
+            }
+        }
+    }
+
+    /**
      * Find a update associated with the given unique topic ID.
      *
      * @param updateId the unique ID of the topic

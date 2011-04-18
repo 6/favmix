@@ -39,7 +39,8 @@ field.bio = Short Bio
 
 # generic form flashes
 form.emptyField = Please fill out all fields.
-form.emailUsed = Another account already uses that Email address.
+form.badEmail = Please use a valid e-mail address.
+form.emailUsed = Another account already uses that e-mail address.
 form.badPassword = Incorrect password.
 
 # generic actions

@@ -3,14 +3,17 @@
  * Name: Peter Graham
  * Class: CS 461
  * Project 1
- * Date: February 14
+ * Date: April 17
  */
 package models;
 
 import java.util.Date;
+import play.i18n.Messages;
 import siena.Id;
 import siena.Model;
 import siena.Query;
+import utilities.ValidationException;
+import utilities.Validator;
 
 /**
  * Model for accessing and modifying topics.
@@ -77,6 +80,31 @@ public class TopicModel extends Model{
      */
     public boolean topicExists(String topicName) {
         return findByName(topicName) != null;
+    }
+
+    /**
+     * Creates a new topic with the given name if that name is valid.
+     * 
+     * @param topicName the name if the topic to create
+     * @param creator the user who creates this topic
+     * @throws ValidationException if topic name is empty or already in use
+     */
+    public void createTopic(String topicName, UserModel creator)
+            throws ValidationException {
+        if(Validator.isEmpty(topicName)) {
+            throw new ValidationException(Messages.get("form.emptyField"));
+        }
+        if(this.topicExists(topicName)) {
+            throw new ValidationException(Messages.get("topic.exists"));
+        }
+        // insert the new topic
+        TopicModel newTopic = new TopicModel(topicName);
+        newTopic.insert();
+
+        // make user follow that topic
+        UserTopicModel userTopic = new UserTopicModel(creator.getId(),
+                newTopic.getId());
+        userTopic.insert();
     }
 
     /**

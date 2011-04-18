@@ -3,7 +3,7 @@ File: Profile/topics.html
 Name: Peter Graham
 Class: CS 461
 Project 1
-Date: February 16
+Date: April 16
 TODO: this is incomplete, please ignore
 -->
 #{extends 'base.html' /}
@@ -12,7 +12,7 @@ TODO: this is incomplete, please ignore
     <h2><a href="@{index(userId)}">${userName}</a> / &{'profile.topics'}</h2>
     <ol id="subscriptions">
         #{list items:topics, as:'topic'}
-            <li><a class="remove left" href="@{unfollowTopic(topic.getName())}">&#215;</a><a class="subscription" href="${subscription.getFeedUrl()}">${subscription.getFeedName()}</a>
+            <li><a class="remove left" href="@{unfollowTopic(topic.getName())}">&#215;</a><a class="subscription" href="@{Topic.index(topic.getName(),'recent')}">${topic.getName()}</a>
         #{/list}
         #{else}
             <p class="greyish">&{'msg.none'}</p>

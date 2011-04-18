@@ -8,7 +8,6 @@
 package controllers;
 
 import models.UserModel;
-import play.data.validation.Required;
 import play.i18n.Messages;
 import utilities.AllowGuest;
 
@@ -28,7 +27,7 @@ public class Profile extends BaseController {
     public static void index(Long id) {
         // check if this profile is the logged in user's profile
         UserModel user;
-        if(isLoggedIn() && id.equals(getUser().getId())) {
+        if(isLoggedIn() && getUser().getId().equals(id)) {
             user = getUser();
             renderArgs.put("isOwnProfile", true);
         }
@@ -56,21 +55,15 @@ public class Profile extends BaseController {
     }
 
     /**
-     * Validate and modify user's profile.
+     * Modify user's profile.
      *
      * @param name String representing the user's name
      * @param bio String representing the user's short biography
      */
-    public static void onEditSubmit(@Required String name, String bio) {
-        if(!validation.hasErrors()) {
-            // name is valid, so update
-            getUser().modifyProfile(name, bio);
-            flash.success(Messages.get("action.saved"));
-        }
-        else{
-            flash.error(Messages.get("form.emptyField"));
-        }
-        edit();
+    public static void onEditSubmit(String name, String bio) {
+        getUser().modifyProfile(name, bio);
+        flash.success(Messages.get("action.saved"));
+        index(getUser().getId());
     }
 
     /**

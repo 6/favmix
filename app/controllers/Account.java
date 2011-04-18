@@ -8,12 +8,12 @@
 package controllers;
 
 import models.UserModel;
-import play.data.validation.Required;
 import play.i18n.Messages;
 import play.libs.Crypto;
 import utilities.AllowGuest;
 import utilities.Constants;
 import utilities.DenyUser;
+import utilities.ValidationException;
 
 /**
  * Controller for handling of user login/logout/registration and user settings
@@ -21,9 +21,18 @@ import utilities.DenyUser;
  *
  * @author Peter Graham
  */
-@AllowGuest({"login", "register", "onLoginSubmit", "onRegisterSubmit"})
+@AllowGuest({"login","logout", "register", "onLoginSubmit", "onRegisterSubmit"})
 @DenyUser({"login", "register", "onLoginSubmit", "onRegisterSubmit"})
 public class Account extends BaseController {
+
+    /**
+     * Render the login form.
+     */
+    public static void login() {
+        // save this original URL
+        flash.keep(Constants.ORIGINAL_URL);
+        render();
+    }
 
     /**
      * Render the registration form.
@@ -39,15 +48,6 @@ public class Account extends BaseController {
         renderArgs.put("editEmail", getUser().getEmail());
         render();
     }
-    
-    /**
-     * Render the login form.
-     */
-    public static void login() {
-        // persist this original URL
-        flash.keep(Constants.ORIGINAL_URL);
-        render();
-    }
 
     /**
      * Validate login information and login user if valid.
@@ -56,25 +56,25 @@ public class Account extends BaseController {
      * @param password the submitted password
      * @param remember true if "Remember me" cookie is checked
      */
-    public static void onLoginSubmit(@Required String email,
-            @Required String password, boolean remember) {
-        if(!validation.hasErrors()) {
-            // check against database
-            if(getUserModel().isValidLogin(email, password)) {
-                // create Remember me cookie if needed
-                if(remember) {
-                    response.setCookie(Constants.REMEMBER_ME, 
-                            Crypto.sign(email) + "-" + email, "30d");
-                }
-                session.put(Constants.SESSION_KEY, email);
-                redirect(getOriginalUrl());
+    public static void onLoginSubmit(String email, String password,
+            boolean remember) {
+        try {
+            getUserModel().validateLogin(email, password);
+            if(remember) {
+                // create a "Remember me" cookie
+                response.setCookie(Constants.REMEMBER_ME,
+                        Crypto.sign(email) + "-" + email, "30d");
             }
+            UserModel user = getUserModel().findByEmail(email);
+            session.put(Constants.SESSION_KEY, user.getId());
+            redirect(getOriginalUrl());
         }
-        flash.error(Messages.get("login.incorrect"));
-        params.flash();
-        flash.keep(Constants.ORIGINAL_URL);
-        // redisplay the login page
-        login();
+        catch(ValidationException e) {
+            flash.error(e.getMessage());
+            params.flash();
+            flash.keep(Constants.ORIGINAL_URL);
+            login();
+        }
     }
 
     /**
@@ -83,61 +83,35 @@ public class Account extends BaseController {
      * @param email the submitted email address
      * @param password the submitted password
      */
-    public static void onRegisterSubmit(@Required String email,
-            @Required String password) {
-        if(!validation.hasErrors()) {
-            if(getUserModel().isEmailAvailable(email)) {
-                getUserModel().createUser(email, password);
-                session.put(Constants.SESSION_KEY, email);
-                Home.defaultFilters();
-            }
-            else {
-                // email is in database
-                flash.error(Messages.get("register.emailUsed", email));
-            }
+    public static void onRegisterSubmit(String email, String password) {
+        try {
+            getUserModel().createUser(email, password);
+            UserModel user = getUserModel().findByEmail(email);
+            session.put(Constants.SESSION_KEY, user.getId());
+            Home.defaultFilters();
         }
-        else {
-            flash.error(Messages.get("form.emptyField"));
+        catch(ValidationException e) {
+            flash.error(e.getMessage());
+            params.flash();
+            register();
         }
-        params.flash();
-        // redisplay the register page
-        register();
     }
 
     /**
-     * Validate and modify user's settings. TODO lean
+     * Modify user's settings.
      *
      * @param email String representing the user's email
-     * @param oldPassword String representing the user's old password
-     * @param newPassword String representing the user's new password
+     * @param oldpass String representing the user's old password
+     * @param newpass String representing the user's new password
      */
-    public static void onSettingsSubmit(@Required String email,
-            String oldPassword, String newPassword) {
-        boolean hasError = validation.hasErrors();
-        if(hasError) {
-            flash.error(Messages.get("form.emptyField"));
-        }
-        // validate email
-        if(!hasError && !email.equals(getUser().getEmail())
-                && !getUserModel().isEmailAvailable(email)) {
-            // email is invalid
-            hasError = true;
-            flash.error(Messages.get("form.emailUsed", email));
-        }
-        // valid new password if filled out
-        if(!hasError && !oldPassword.equals("") &&
-                !getUser().isValidPassword(oldPassword)) {
-            hasError = true;
-            flash.error(Messages.get("form.badPassword"));
-        }
-        if(!hasError) {
-            UserModel user = getUser();
-            user.setEmail(email);
-            if(!newPassword.equals("")) {
-                user.setPassword(newPassword);
-            }
-            user.update();
+    public static void onSettingsSubmit(String email, String oldpass,
+            String newpass) {
+        try {
+            getUser().modifySettings(email, oldpass, newpass);
             flash.success(Messages.get("action.saved"));
+        }
+        catch(ValidationException e) {
+            flash.error(e.getMessage());
         }
         settings();
     }

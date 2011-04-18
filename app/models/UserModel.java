@@ -8,6 +8,7 @@
 package models;
 
 import java.util.Date;
+import play.data.validation.Validation;
 import play.i18n.Messages;
 import play.libs.Codec;
 import siena.Id;
@@ -15,6 +16,8 @@ import siena.Max;
 import siena.Model;
 import siena.Query;
 import utilities.Constants;
+import utilities.ValidationException;
+import utilities.Validator;
 
 /**
  * Model for accessing and modifying user data.
@@ -72,8 +75,9 @@ public class UserModel extends Model{
      * @param password the plaintext password to check.
      * @return true if the passwords match, or false if they don't match
      */
-    public boolean isValidPassword(String password) {
-        return passwordHash.equals(Codec.hexSHA1(Constants.PASSWORD_SALT+password));
+    public boolean isCorrectPassword(String password) {
+        return passwordHash.equals(Codec.hexSHA1(
+                Constants.PASSWORD_SALT+password));
     }
 
     /**
@@ -88,43 +92,93 @@ public class UserModel extends Model{
     }
 
     /**
-     * TODO
-     * @param email
-     * @param password
-     * @return
+     * Checks whether or not the given email and password combination are
+     * associated with a user.
+     *
+     * @param email String of the email to check
+     * @param password String of the password to check
+     * @throws ValidationException if an email/password validation error occurs
+     * @return true if valid login info, or false otherwise
      */
-    public boolean isValidLogin(String email, String password) {
-        // TODO required
-        UserModel user = this.findByEmail(email);
-        if(user != null) {
-            if(user.isValidPassword(password)) {
-                // email/password combination is valid
-                return true;
-            }
+    public void validateLogin(String email,
+            String password) throws ValidationException {
+        if(Validator.isEmpty(email) || Validator.isEmpty(password)) {
+            throw new ValidationException(Messages.get("form.emptyField"));
         }
-        return false;
+        UserModel user = this.findByEmail(email);
+        if(user == null || !user.isCorrectPassword(password)) {
+            // email/password combination is invalid
+            throw new ValidationException(Messages.get("login.incorrect"));
+        }
     }
 
     /**
-     * TODO
-     * @param email
-     * @param password
+     * Create a new user with the given email and password.
+     *
+     * @param email String of the email of the user
+     * @param password String of the password of the user
+     * @throws ValidationException if email or password is invalid
      */
-    public void createUser(String email, String password) {
+    public void createUser(String email, String password) 
+            throws ValidationException {
+        if(Validator.isEmpty(password) || Validator.isEmpty(email)) {
+            throw new ValidationException(Messages.get("form.emptyField"));
+        }
+        if(!Validator.isEmail(email)) {
+            throw new ValidationException(Messages.get("form.badEmail",email));
+        }
+        if(!this.isEmailAvailable(email)) {
+            throw new ValidationException(Messages.get("form.emailUsed",email));
+        }
         UserModel user = new UserModel(email, password);
         user.insert();
     }
 
     /**
-     * Modify the user's profile.
+     * Modify the user's profile. Set the name to null if it's empty, as this
+     * will be shown in the view as the default name.
      * 
      * @param newName string of the user's new name
      * @param newBio string if the user's new biography
      */
     public void modifyProfile(String newName, String newBio) {
+        if(Validator.isEmpty(newName)) {
+            newName = null;
+        }
         this.setName(newName);
         this.setBio(newBio);
         this.update();
+    }
+
+    /**
+     * Modify the email and/or password of this user.
+     * 
+     * @param email the new email of the user
+     * @param oldPass the old password of the user
+     * @param newPass the new password of the user
+     * @throws ValidationException if email or passwords are invalid
+     */
+    public void modifySettings(String email, String oldPass, String newPass)
+            throws ValidationException {
+        if(!Validator.isEmail(email)) {
+            throw new ValidationException(Messages.get("form.badEmail",email));
+        }
+        if(!email.equals(this.getEmail())) {
+            if(!this.isEmailAvailable(email)) {
+                throw new ValidationException(Messages.get("form.emailUsed",
+                        email));
+            }
+            this.setEmail(email);
+            this.update();
+        }
+        if(!Validator.isEmpty(newPass) && !Validator.isEmpty(oldPass)) {
+            if(!this.isCorrectPassword(oldPass)) {
+                // invalid old password
+                throw new ValidationException(Messages.get("form.badPassword"));
+            }
+            this.setPassword(newPass);
+            this.update();
+        }
     }
 
     /**
@@ -155,7 +209,8 @@ public class UserModel extends Model{
      * @param topic the Topic to follow
      */
     public void followTopic(TopicModel topic) {
-        UserTopicModel userTopic = new UserTopicModel(this.getId(), topic.getId());
+        UserTopicModel userTopic = new UserTopicModel(this.getId(),
+                topic.getId());
         userTopic.insert();
     }
 
@@ -208,7 +263,7 @@ public class UserModel extends Model{
 
     /**
      * Returns a string of the user's name, or the default name if no name is
-     * specified
+     * specified.
      * 
      * @return a string of the user's name
      */

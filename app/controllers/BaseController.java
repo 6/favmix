@@ -213,7 +213,8 @@ public class BaseController extends Controller {
                     + 1);
             if(Crypto.sign(email).equals(sign)) {
                 // start login session and refresh the current page
-                session.put(Constants.SESSION_KEY, email);
+                UserModel user = getUserModel().findByEmail(email);
+                session.put(Constants.SESSION_KEY, user.getId());
                 redirect(getCurrentUrl());
             }
         }
@@ -234,9 +235,9 @@ public class BaseController extends Controller {
      * Initialize logged in user field, so we can reuse this in various methods.
      */
     private static void initLoggedInUser() {
-        String email = session.get(Constants.SESSION_KEY);
-        if(email != null){
-            loggedInUser = userModel.findByEmail(email);
+        Long userId = Long.valueOf(session.get(Constants.SESSION_KEY));
+        if(userId != null){
+            loggedInUser = userModel.findById(userId);
         }
     }
 

@@ -17,10 +17,13 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import play.i18n.Messages;
 import siena.Id;
 import siena.Index;
 import siena.Model;
 import siena.Query;
+import utilities.ValidationException;
+import utilities.Validator;
 
 /**
  * Model for accessing and modifying topic/user updates.
@@ -67,6 +70,27 @@ public class UpdateModel extends Model{
         this.topicId = topic.getId();
         this.content = updateContent;
         this.created = new Date();
+    }
+
+    /**
+     * Create a new update for the given topic.
+     *
+     * @param content String of the content of update
+     * @param topicName String of the name of the topic to post to
+     * @param  creator the user who creates this
+     * @throws ValidationException if content is empty
+     */
+    public void createUpdate(String content, String topicName, 
+            UserModel creator) throws ValidationException {
+        if(Validator.isEmpty(content)) {
+            throw new ValidationException(Messages.get("form.emptyField"));
+        }
+        TopicModel topicModel = new TopicModel();
+        if(topicModel.topicExists(topicName)) {
+            UpdateModel update = new UpdateModel(creator,
+                    topicModel.findByName(topicName), content);
+            update.insert();
+        }
     }
 
     /**

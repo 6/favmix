@@ -21,6 +21,7 @@ public class Error extends BaseController {
      * @param message the message to display
      */
     public static void index(int errorCode, String message) {
+        // XSS not possible here, since string is escaped
         renderArgs.put("errorMessage", message);
         response.status = errorCode;
         render();

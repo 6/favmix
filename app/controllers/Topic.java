@@ -3,7 +3,7 @@
  * Name: Peter Graham
  * Class: CS 461
  * Project 1
- * Date: April 16
+ * Date: April 17
  */
 package controllers;
 
@@ -16,6 +16,7 @@ import models.VoteModel;
 import play.data.validation.Required;
 import play.i18n.Messages;
 import utilities.AllowGuest;
+import utilities.ValidationException;
 
 /**
  * Controller for handling of viewing and adding updates to topics.
@@ -76,35 +77,21 @@ public class Topic extends BaseController {
         render();
     }
 
-        /**
-     * Validate and create a new topic.
+    /**
+     * Create a new topic.
      *
      * @param name String representing the topic name
      */
-    public static void onCreateSubmit(@Required String name) {
-        if(!validation.hasErrors()) {
-            // name is valid so check if available
-            if(getTopicModel().topicExists(name)) {
-                flash.error(Messages.get("topic.exists"));
-            }
-            else{
-                // insert the new topic
-                TopicModel newTopic = new TopicModel(name);
-                newTopic.insert();
-
-                // make user follow that topic
-                UserTopicModel userTopic = new UserTopicModel(getUser().getId(),
-                        newTopic.getId());
-                userTopic.insert();
-
-                flash.success(Messages.get("action.saved"));
-                index(name, "recent");
-            }
+    public static void onCreateSubmit(String name) {
+        try {
+            getTopicModel().createTopic(name, getUser());
+            flash.success(Messages.get("action.saved")); // TODO better message
+            index(name, "recent");
         }
-        else {
-            flash.error(Messages.get("form.emptyField"));
+        catch(ValidationException e) {
+            flash.error(e.getMessage());
+            create();
         }
-        create();
     }
 
     /**
@@ -113,31 +100,33 @@ public class Topic extends BaseController {
      * @param topicName the name of the topic to add an update to
      * @param content String representing the update to add
      */
-    public static void addUpdate(@Required String topicName,
-            @Required String content) {
-        if(!validation.hasErrors()) {
-            if(getTopicModel().topicExists(topicName)) {
-                UpdateModel update = new UpdateModel(getUser(),
-                        getTopicModel().findByName(topicName), content);
-                update.insert();
-                flash.success(Messages.get("topic.updateAdded"));
-            }
+    public static void onUpdateSubmit(String topicName, String content) {
+        try {
+            getUpdateModel().createUpdate(content, topicName, getUser());
+            flash.success(Messages.get("topic.updateAdded"));
         }
-        else {
-            flash.error(Messages.get("form.emptyField"));
+        catch(ValidationException e) {
+            flash.error(e.getMessage());
         }
         index(topicName, "recent");
     }
 
     /**
-     * Vote up the Update with the given updateId.
+     * Vote up the Update with the given updateId. This acts as the fallback
+     * for when Javascript/AJAX doesn't work or is disabled.
      * TODO: only "up"vote?
      *
      * @param updateId the ID of the Update to vote up
      * @param sortBy how to sort votes by upon redirection --> TODO: enum
      */
-    public static void vote(Long updateId, String sortBy) {
-        UpdateModel toVoteOn = getUpdateModel().findById(updateId);
+    public static void onVoteSubmit(Long updateId, String sortBy) {
+        getVoteModel().createVote(updateId, getUser());
+        // redirect back to the topic TODO using flash keep
+        /*TopicModel parentTopic = getTopicModel()
+                .findById(toVoteOn.getParentTopicId());
+        index(parentTopic.getName(), sortBy);*/
+
+        /*UpdateModel toVoteOn = getUpdateModel().findById(updateId);
         if(toVoteOn != null) {
             // check if user has already voted on this update
             if(getVoteModel().voteExists(getUser(), toVoteOn)) {                
@@ -154,6 +143,6 @@ public class Topic extends BaseController {
             TopicModel parentTopic = getTopicModel()
                     .findById(toVoteOn.getParentTopicId());
             index(parentTopic.getName(), sortBy);
-        }
+        }*/
     }
 }

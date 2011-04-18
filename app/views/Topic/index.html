@@ -16,20 +16,20 @@ Date: February 16
             href="@{Profile.followTopic(topicName)}">&{'action.follow'}
         #{/else}
     </a></h2>
-    <form class="bigform" action="@{Topic.addUpdate()}" method="post">
+    #{form @onUpdateSubmit(), class:'bigform'}
         <div>
         <textarea class="fancytext" name="content"#{if !loggedin} disabled#{/if}>#{if !loggedin}&{'login.loginRequired'}#{/if}</textarea><br>
         <input class="fancybutton pointer shadow" type="submit" value="&{'action.addUpdate'}">
         <input type="hidden" name="topicName" value="${topicName}">
         </div>
-    </form>
+    #{/form}
     <!-- TODO: sidebar like home -->
-    <br><a class="${sortBy == 'recent' ? 'active':''}" href="@{Topic.index(topicName,'recent')}">Recent</a> | <a class="${sortBy == 'popular' ? 'active':''}" href="@{Topic.index(topicName,'popular')}">Popular, Past 24h</a><br><br>
+    <br><a class="${sortBy == 'recent' ? 'active':''}" href="@{index(topicName,'recent')}">Recent</a> | <a class="${sortBy == 'popular' ? 'active':''}" href="@{index(topicName,'popular')}">Popular, Past 24h</a><br><br>
     <ol id="subscriptions">
         #{list items:updates, as:'update'}
         <!-- TODO: clean up -->
             <li><b>${update.getContent()}</b> <span class="smaller greyish">Posted on ${update.getDateCreated()}</span>
-                <br><a href="@{Topic.vote(update.getId(), sortBy)}">up</a>
+                <br><a href="@{onVoteSubmit(update.getId(), sortBy)}">up</a>
                 vote total value: <b>${update.getVoteCount()}</b><br><br><br>
         #{/list}
         #{else}
