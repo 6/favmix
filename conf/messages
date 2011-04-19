@@ -21,12 +21,14 @@ msg.defaultUserName = Anonymous
 msg.edit = edit
 msg.save = Save
 msg.popular = Popular Today
-msg.recent = Recent
+msg.popularWeek = Popular Past Week
+msg.recent = Recently added
 msg.previous = Previous page
 msg.next = Next page
 msg.viewing = Viewing
 msg.404head = Not found
 msg.404 = The page you are requesting cannot be found.
+msg.noUpdates = No updates found.
 
 # generic fields
 field.email = Email Address
@@ -42,9 +44,10 @@ form.emptyField = Please fill out all fields.
 form.badEmail = Please use a valid e-mail address.
 form.emailUsed = Another account already uses that e-mail address.
 form.badPassword = Incorrect password.
+form.badUrl = Please enter a valid URL.
 
 # generic actions
-action.manage = Manage topics
+action.manage = Manage your topics
 action.findTopics = Find topics to follow
 action.follow = Follow
 action.unFollow = Unfollow
@@ -55,7 +58,6 @@ action.addUpdate = Add Discussion
 home.title = All your news in one place
 home.titlePart1 = All your news
 home.titlePart2 = in one place.
-home.all = All topics
 home.you = Your topics
 home.everyone = Everyone's topics
 
@@ -84,7 +86,15 @@ settings.edit = Edit your settings
 topic.new = Create a new topic
 topic.name = Enter a topic name
 topic.exists = A topic with that name already exists.
-topic.noUpdates = This topic doesn't have any discussions yet.
 topic.following = Following
 topic.updateAdded = Your discussion has been added.
 topic.notFound = Topic not found.
+
+time = %s %s ago
+time.now = just now
+time.min = minute
+time.mins = minutes
+time.hour = hour
+time.hours = hours
+time.day = day
+time.days = days

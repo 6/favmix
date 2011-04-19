@@ -25,7 +25,7 @@ public class Search extends BaseController {
         String searchQuery = params.get("q");
         TopicModel topic = getTopicModel().findByName(searchQuery);
         if(topic != null){
-            Topic.index(topic.getName(), Constants.DEFAULT_ORDER);
+            Topic.showUpdates(topic.getName(), Constants.DEFAULT_ORDER, 0);
         }
         renderArgs.put("searchQuery", searchQuery);
         render();

@@ -14,13 +14,13 @@ Date: April 16
    <body id="homeview">
 <div id="header">
     <div class="wrap">
-        <h1 id="logo" class="left"><a href="@{Home.defaultFilters()}"><img src="@{'/public/logo.png'}" alt="&{'websiteName'}"></a></h1>
+        <h1 id="logo" class="left"><a href="@{Topic.defaultFilters()}"><img src="@{'/public/logo.png'}" alt="&{'websiteName'}"></a></h1>
         <div id="headerright">
             <form id="search" class="left" action="@{Search.index()}" method="get">
                 <div><input id="searchbar" class="smalltext" name="q" type="text" value="${searchQuery}" accesskey="s" autocomplete="off" spellcheck="false"><input id="searchsubmit" class="smallsubmit pointer" type="submit" value="&{'search'}"></div>
             </form>
             <div id="headerlinks" class="reddish right">
-                <a class="${request.controller == 'Home' ? 'active' : ''}" href="@{Home.defaultFilters()}">&{'home'}</a>
+                <a class="${request.controller == 'Topic' ? 'active' : ''}" href="@{Topic.defaultFilters()}">&{'home'}</a>
                 #{if loggedin}
                     <a class="${request.controller == 'Profile' ? 'active' : ''}" href="@{Profile.index(userId)}">&{'profile'}</a><a class="${request.controller == 'Account' ? 'active' : ''}" href="@{Account.settings()}">&{'settings'}</a><a id="lastheaderlink" href="@{Account.logout()}">&{'logout'}</a>
                 #{/if}

@@ -74,28 +74,4 @@ public class Profile extends BaseController {
     public static void topics(Long id){
         render();
     }
-
-    /**
-     * Adds a topic from the user's followed topics.
-     *
-     * @param topicName the name of the topic to follow
-     * @param sortBy how the user had sorted the updates
-     */
-    public static void followTopic(String topicName, String sortBy) {
-        getUser().followTopic(getTopicModel().findByName(topicName));
-        // go to that topic page
-        Topic.index(topicName, sortBy);
-    }
-
-    /**
-     * Removes a topic from the user's followed topics.
-     *
-     * @param topicName the name of the topic to remove
-     * @param sortBy how the user had sorted the updates
-     */
-    public static void unFollowTopic(String topicName, String sortBy) {
-        getUser().unFollowTopic(getTopicModel().findByName(topicName));
-        // go back to user profile
-        index(getUser().getId());
-    }
 }

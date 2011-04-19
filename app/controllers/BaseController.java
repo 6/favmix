@@ -161,7 +161,7 @@ public class BaseController extends Controller {
         else {
             session.put(Constants.MOBILE_KEY,"enabled");
         }
-        Home.defaultFilters();
+        Topic.defaultFilters();
     }
 
     /**
@@ -196,7 +196,7 @@ public class BaseController extends Controller {
             for(String action : actions.value()) {
                 if(action.equals(request.actionMethod)) {
                     // users are denied for this requested method
-                    Home.defaultFilters();
+                    Topic.defaultFilters();
                 }
             }
         }

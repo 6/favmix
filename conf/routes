@@ -8,14 +8,12 @@
 # This file defines all application routes (Higher priority routes first)
 
 # Home page
-GET / Home.defaultFilters
-GET /you/{order} Home.youFilter
-GET /everyone/{order} Home.everyoneFilter
+GET / Topic.defaultFilters
+GET /view/{scope}/{order}/{offset} Topic.showUpdates
 
 # Topic
 GET /createtopic Topic.create
 GET /vote Topic.onVoteSubmit
-GET /topic/{topicName} Topic.index
 
 # Profile viewing/modifying
 GET /user/{id} Profile.index

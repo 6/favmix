@@ -88,7 +88,7 @@ public class Account extends BaseController {
             getUserModel().createUser(email, password);
             UserModel user = getUserModel().findByEmail(email);
             session.put(Constants.SESSION_KEY, user.getId());
-            Home.defaultFilters();
+            Topic.defaultFilters();
         }
         catch(ValidationException e) {
             flash.error(e.getMessage());
@@ -122,6 +122,6 @@ public class Account extends BaseController {
     public static void logout() {
         session.clear();
         response.removeCookie(Constants.REMEMBER_ME);
-        Home.defaultFilters();
+        Topic.defaultFilters();
     }
 }

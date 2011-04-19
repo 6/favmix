@@ -28,6 +28,17 @@ public class Validator {
     }
 
     /**
+     * Validate a URL.
+     *
+     * @param email String of URL to check
+     * @return true if valid URL, otherwise false
+     */
+    public static boolean isUrl(String url) {
+        Matcher match = Constants.REGEX_URL.matcher(url);
+        return url != null && match.find();
+    }
+
+    /**
      * Check if a string is empty or null.
      *
      * @param toCheck String to check

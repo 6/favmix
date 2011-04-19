@@ -9,11 +9,21 @@ package utilities;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * A collection of public constants used throughout code.
  *
+ * URL regex from:
+ * http://stackoverflow.com/questions/32637/easiest-way-to-convert-a-url-to-a-
+ *      hyperlink-in-a-c-string
+ *
+ * E-mail regex from:
+ * http://www.regular-expressions.info/email.html
+ *
  * @author Peter Graham
+ * @author Jan Goyvaerts
+ * @author Sam Judson
  */
 public class Constants {
 
@@ -23,6 +33,9 @@ public class Constants {
     /** Session key for logged in users */
     public static final String SESSION_KEY = "logged";
 
+    /** Session key for mobile site enabled/disabled */
+    public static final String MOBILE_KEY = "moblie";
+
     /** name of the "Remember me" cookie */
     public static final String REMEMBER_ME = "rememberme";
 
@@ -30,9 +43,24 @@ public class Constants {
     public static final String ORIGINAL_URL = "originalurl";
 
     /** the default ordering of content */
-    public static final String DEFAULT_ORDER = "popular";
+    public static final String DEFAULT_ORDER = "popular24h";
 
     /** list of valid order for filtering */
     public static final List<String> VALID_ORDERS = Arrays.asList(
-        "popular", "recent");
+        "popular24h","popular7d", "recent");
+
+    /** Mobile user-agent substrings for identifying major mobile browsers */
+    public static final List<String> MOBILE_USER_AGENTS = Arrays.asList(
+            "Android","BlackBerry","iPhone","iPod","Windows Phone");
+
+    /** Regular expression for basic (not perfect) e-mail matching */
+    public static final Pattern REGEX_EMAIL = Pattern.compile("^[A-Z0-9._%+-]+"
+            + "@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    /** Regular expression for basic (not perfect) URL matching */
+    public static final Pattern REGEX_URL = Pattern.compile("^https?://[^ ]+$",
+            Pattern.CASE_INSENSITIVE);
+
+    /** number of updates to show per page */
+    public static final int UPDATES_PER_PAGE = 10;
 }

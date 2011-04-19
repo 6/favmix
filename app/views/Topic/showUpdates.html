@@ -1,33 +1,35 @@
 <!--
-File: Home/index.html
+File: Topic/index.html
 Name: Peter Graham
 Class: CS 461
 Project 1
 Date: April 16
 -->
 #{extends 'base.html' /}
-#{set title:messages.get('home.title') /}
+#{if scope != 'you' && scope != 'everyone'}
+    #{set title:scope /}
+#{/if}
+#{else}
+    #{set title:messages.get('home.title') /}
+#{/else}
 <div id="filters" class="left">
+
     <ul class="selector">
-        <li><a class="${scope == 'you' ? 'active':''}" href="@{youFilter(order)}">&{'home.you'}</a>#{if loggedin} <span class="reddish smaller"><a href="@{Profile.topics(userId)}">&{'msg.edit'}</a></span>#{/if}
-        <li><a class="${scope == 'everyone' ? 'active':''}" href="@{everyoneFilter(order)}">&{'home.everyone'}</a>
+         <li><a class="${order == 'recent' ? 'active':''}" href="@{Topic.showUpdates(scope,'recent',0)}">&{'msg.recent'}</a>
+        <li><a class="${order == 'popular24h' ? 'active':''}" href="@{Topic.showUpdates(scope,'popular24h',0)}">&{'msg.popular'}</a>
+            <li><a class="${order == 'popular7d' ? 'active':''}" href="@{Topic.showUpdates(scope,'popular7d',0)}">&{'msg.popularWeek'}</a>
     </ul>
     <div class="hseparator">&nbsp;</div>
     <ul class="selector">
-        <li><a class="${order == 'popular' ? 'active':''}" href="#{if scope=='you'}@{Home.youFilter('popular')}#{/if}#{else}@{Home.everyoneFilter('popular')}#{/else}">&{'msg.popular'}</a>
-        <li><a class="${order == 'recent' ? 'active':''}" href="#{if scope=='you'}@{Home.youFilter('recent')}#{/if}#{else}@{Home.everyoneFilter('recent')}#{/else}">&{'msg.recent'}</a>
+        <li><a class="${scope == 'everyone' ? 'active':''}" href="@{Topic.showUpdates('everyone',order,0)}">&{'home.everyone'}</a>
+        <li><a class="${scope == 'you' ? 'active':''}" href="@{Topic.showUpdates('you',order,0)}">&{'home.you'}</a>
     </ul>
     #{if loggedin}
-        <div class="hseparator">&nbsp;</div>
+
            #{if topics}
                <ol id="subscriptions" class="selector smaller">
-                    <li><a class="active" href="#">&{'home.all'}</a>
-                        <!-- TODO: fix links:
-                        /{topicName|all}?{popular|recent}
-                        how to do everyone/you?
-                        -->
                      #{list items:topics, as:'topic'}
-                        <li><a href="@{Topic.index(topic.getName())}">${topic.getName()}</a>
+                        <li><a class="${scope == topic.getName() ? 'active':''}" href="@{Topic.showUpdates(topic.getName(),order,0)}">${topic.getName()}</a>
                     #{/list}
                 </ol>
            <div id="subsnotif" class="round smallest"><a href="@{Profile.topics(userId)}">&{'action.manage'} &rsaquo;</a></div>
@@ -45,8 +47,39 @@ Date: April 16
     #{/form}
 </div>
 #{/if}
+
+#{if scope != 'you' && scope != 'everyone'}
+<!-- viewing a topic so display topic name and update submission form -->
+    <h2>${scope} <a class="leftpad smallest"
+        #{if isFollowing}
+            href="@{Topic.unFollowTopic(scope)}">&{'action.unFollow'}
+        #{/if}
+        #{else}
+            href="@{Topic.followTopic(scope,order)}">&{'action.follow'}
+        #{/else}
+    </a></h2>
+
+    #{form @onUpdateSubmit(), class:'bigform'}
+        <div>
+        <textarea class="fancytext" name="content"#{if !loggedin} disabled#{/if}>#{if !loggedin}&{'login.loginRequired'}#{/if}#{else}${content}#{/else}</textarea><br>
+        #{if loggedin}
+            <p>Attach a Link (optional):</p>
+            <input type="text" class="fancytext" name="url" value="${url}"><br>
+         #{/if}
+        <input class="fancybutton pointer shadow" type="submit" value="&{'action.addUpdate'}">
+        <input type="hidden" name="topicName" value="${scope}">
+        <input type="hidden" name="sortBy" value="${sortBy}">
+        </div>
+    #{/form}
+#{/if}
 <ol id="content">
-    <li id="u0" class="round"><div class="left like"><div class="votecount">5234</div><a class="likeit" href="#vote0">&hearts;</a></div><div class="likeright"><a class="link" href="http://www.youtube.com/watch?v=XcT4yYu_TTs&amp;feature=youtube_gdata" rel="nofollow">How to Write Clean, Testable Code</a><div class="meta">16 hours ago in <a href="#">Programming</a>, <a href="#">Google</a></div></div>
+    #{list items:updates, as:'update'}
+        <li id="u0" class="round"><div class="left like"><div class="votecount">${update.getVoteCount()}</div><a class="likeit" href="@{onVoteSubmit(update.getId(), scope, order, offset)}">&hearts;</a></div><div class="likeright">#{if update.hasUrl()}<a class="link" href="${update.getUrl()}" rel="nofollow">#{/if}${update.getContent()}#{if update.hasUrl()}</a>#{/if}<div class="meta">${update.getHowLongAgo()} in <a href="@{Topic.showUpdates(update.getParentTopicName(),order,0)}">${update.getParentTopicName()}</a></div></div>
+    #{/list}
+    #{else}
+       &{'msg.noUpdates'}
+    #{/else}
+<!--    <li id="u0" class="round"><div class="left like"><div class="votecount">5234</div><a class="likeit" href="#vote0">&hearts;</a></div><div class="likeright"><a class="link" href="http://www.youtube.com/watch?v=XcT4yYu_TTs&amp;feature=youtube_gdata" rel="nofollow">How to Write Clean, Testable Code</a><div class="meta">16 hours ago in <a href="#">Programming</a>, <a href="#">Google</a></div></div>
     <li id="u1" class="round"><div class="left like"><div class="votecount">3130</div><a class="likeit" href="#vote1">&hearts;</a></div><div class="likeright"><a class="link" href="http://twitter.com/colbycollege/statuses/30981029535682560">colbycollege: Jan Plan officially ended Thursday, but images of formulas, food, and fun remain -- in this week's Student Lens: http://clby.me/3LwI</a><div class="meta">10 hours ago in <a href="#">Colby College</a></div></div>
     <li id="u2" class="round"><div class="left like"><div class="votecount">1909</div><a class="likeit" href="#vote2">&hearts;</a></div><div class="likeright"><a class="link" href="http://xkcd.com/844/">Good Code</a><div class="meta">3 hours ago in <a href="#">xkcd</a>, <a href="#">Comics</a></div></div>
     <li id="u3" class="round"><div class="left like"><div class="votecount">1384</div><a class="likeit" href="#vote3">&hearts;</a></div><div class="likeright"><a class="link" href="http://asiajin.com/blog/2011/02/03/groupon-slows-down-after-new-year-osechi-incident-in-japan/">Groupon Slows Down After New Year Osechi Incident In Japan</a><div class="meta">12 hours ago in <a href="#">Groupon</a>, <a href="#">Tech News Asia</a></div></div>
@@ -61,5 +94,7 @@ Date: April 16
     <li id="u12" class="round"><div class="left like"><div class="votecount">489</div><a class="likeit" href="#vote12">&hearts;</a></div><div class="likeright"><a class="link" href="http://framethink.wordpress.com/2011/01/17/how-facebook-ships-code/">How Facebook Ships Code</a><div class="meta">1 hour ago, <a href="#">FrameThink</a></div></div>
     <li id="u13" class="round"><div class="left like"><div class="votecount">301</div><a class="likeit" href="#vote13">&hearts;</a></div><div class="likeright"><a class="link" href="http://www.colby.edu/news_events/_dept_news/events/2385156">Wednesday, February 16, 12:30 p.m. - Artist Talk: Scott Reed</a><div class="meta">23 hours ago, <a href="#">Featured Events | Colby College</a></div></div>
     <li id="u14" class="round"><div class="left like"><div class="votecount">300</div><a class="likeit" href="#vote14">&hearts;</a></div><div class="likeright"><a class="link" href="http://www.youtube.com/watch?v=M47-FGvVJx0&amp;feature=youtube_gdata">Web Testing at Google: Infrastructure for the World's Most Demanding Web Developers</a><div class="meta">38 minutes ago, <a href="#">Uploads by GoogleTechTalks</a></div></div>
-</ol>
-<div id="pagination"><a class="round" href="#prev">&lsaquo; &{'msg.previous'}</a> &{'msg.viewing'} <b>15-30</b> <a class="round" href="#next">&{'msg.next'} &rsaquo;</a></div>
+--></ol>
+<div id="pagination"><a class="round"#{if prevOffset >= 0} href="@{Topic.showUpdates(scope,order,prevOffset)}"#{/if}>&lsaquo; &{'msg.previous'}</a>
+    &{'msg.viewing'} <b>${lower}-#{if numUpdates == defaultNumUpdates}${upper}#{/if}#{else}${numUpdates+lower-1}#{/else}</b>
+    <a class="round"#{if numUpdates == defaultNumUpdates} href="@{Topic.showUpdates(scope,order,upper)}"#{/if}>&{'msg.next'} &rsaquo;</a></div>

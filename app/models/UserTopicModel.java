@@ -53,21 +53,34 @@ public class UserTopicModel extends Model{
     }
 
     /**
+     * Get a list of the topic IDs of the topics followed by a given user.
+     *
+     * @param user the user to get the IDs of the topics followed of
+     * @return list of the IDs of the topics followed
+     */
+    public List<Long> getTopicIdsByUser(UserModel user) {
+        List<UserTopicModel> userTopics = all()
+                .filter("userId",user.getId()).fetch();
+        List<Long> topicIds = new ArrayList<Long>();
+        if(userTopics != null) {
+            for(UserTopicModel userTopic : userTopics) {
+                topicIds.add(userTopic.getTopicId());
+            }
+        }
+        return topicIds;
+    }
+
+    /**
      * Get a list of the topics followed by a given user.
      * 
      * @param user the user to get the topics followed of
      * @return list of the topics followed
      */
     public List<TopicModel> getTopicsByUser(UserModel user){
-        List<UserTopicModel> userTopics = all()
-                .filter("userId",user.getId()).fetch();
         List<TopicModel> topics = new ArrayList<TopicModel>();
         TopicModel topicObject = new TopicModel();
-        if(userTopics != null) {
-            for(UserTopicModel userTopic : userTopics) {
-                Long curTopicId = userTopic.getTopicId();
-                topics.add(topicObject.findById(curTopicId));
-            }
+        for(Long curTopicId : this.getTopicIdsByUser(user)) {
+            topics.add(topicObject.findById(curTopicId));
         }
         return topics;
     }
