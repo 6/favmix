@@ -8,7 +8,6 @@
 package models;
 
 import java.util.Date;
-import play.data.validation.Validation;
 import play.i18n.Messages;
 import play.libs.Codec;
 import siena.Id;
@@ -24,7 +23,7 @@ import utilities.Validator;
  *
  * @author Peter Graham
  */
-public class UserModel extends Model{
+public class UserModel extends BaseModel{
 
     /** auto-incremented unique ID for the user */
     @Id

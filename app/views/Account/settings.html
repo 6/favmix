@@ -8,12 +8,12 @@ Date: February 16
 #{extends 'base.html' /}
 #{set title: messages.get('settings.edit') /}
 <div class="subpage">
-    <h2><a href="@{Profile.index(userId)}">${userName}</a> &rarr; &{'settings.edit'}</h2>
+    <h2><a href="@{Profile.index(user.id)}">${user.name}</a> &rarr; &{'settings.edit'}</h2>
     #{form @onSettingsSubmit(), class:'bigform'}
         <div>
         <p>
             <label for="email">&{'field.email'}</label><br>
-            <input class="fancytext" id="email" name="email" type="text" spellcheck="false" value="${editEmail}">
+            <input class="fancytext" id="email" name="email" type="text" spellcheck="false" value="${user.email}">
         </p>
         <p>
             <label for="oldpass">&{'field.oldPassword'}</label><br>

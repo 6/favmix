@@ -43,9 +43,16 @@ $(document).ready(function() {
     }
 });
 
+function promptLogin() {
+    alert("You must be logged in to perform this action.");
+}
 
 /* Vote up the update with the given update ID */
 function voteUp(updateId) {
+    if($("#isloggedin").text() != "true") {
+        promptLogin();
+        return;
+    }
     // the container of the voting section
     var voteContainer = $("#"+updateId).children(".like");
     
@@ -57,7 +64,8 @@ function voteUp(updateId) {
     var voteButton = voteContainer.children(".likeit");
     if(voteButton.hasClass("clicked")) {
         // undo their vote
-        newCount -= 1;
+      var voteButton = voteContainer.children(".likeit");
+      newCount -= 1;
         voteButton.removeClass("clicked");
     }
     else {
@@ -67,5 +75,6 @@ function voteUp(updateId) {
     }
     // set the new count text
     curCount.text(newCount);
-    //TODO: insert some ajax here, check vote again on server-side
+    //ajax vote submit
+    $.ajax({url:'/vote/'+updateId.substr(1)+'?ajax=1'});
 }

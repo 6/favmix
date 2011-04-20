@@ -7,11 +7,14 @@
  */
 package controllers;
 
+import utilities.AllowGuest;
+
 /**
  * Controller for the About, Contact, and Help pages.
  *
  * @author Peter Graham
  */
+@AllowGuest({"about","contact"})
 public class Info extends BaseController{
 
     /**

@@ -20,7 +20,7 @@ import utilities.ValidationException;
  *
  * @author Peter Graham
  */
-@AllowGuest({"defaultFilters", "showUpdates"})
+@AllowGuest({"defaultFilters", "browse", "showUpdates"})
 public class Topic extends BaseController {
 
     /**
@@ -48,9 +48,13 @@ public class Topic extends BaseController {
         if(!Constants.VALID_ORDERS.contains(order)) {
             order = Constants.DEFAULT_ORDER;
         }
+        // get the list of updates to show
         List<UpdateModel> updates;
         if("you".equals(scope)) {
             if(!isLoggedIn()) {
+                // can't access "you" if not logged in
+                flash.put(Constants.ORIGINAL_URL, getCurrentUrl());
+                flash.error(Messages.get("login.loginRequired"));
                 Account.login();
             }
             updates = getUpdateModel().getUpdates(getUser(),null,order,offset);
@@ -91,16 +95,18 @@ public class Topic extends BaseController {
     /**
      * Create a new topic.
      *
-     * @param name String representing the topic name
+     * @param topicName String representing the topic name
      */
-    public static void onCreateSubmit(String name) {
+    public static void onCreateSubmit(String topicName) {
         try {
-            getTopicModel().createTopic(name, getUser());
-            flash.success(Messages.get("action.saved")); // TODO better message
-            showUpdates(name, "recent", 0);
+            getTopicModel().createTopic(topicName, getUser());
+            flash.success(Messages.get("topic.created"));
+            // redirect to the newly created topic
+            showUpdates(topicName, "recent", 0);
         }
         catch(ValidationException e) {
             flash.error(e.getMessage());
+            params.flash();
             create();
         }
     }
@@ -118,29 +124,28 @@ public class Topic extends BaseController {
         try {
             getUpdateModel().createUpdate(content, url, topicName, getUser());
             flash.success(Messages.get("topic.updateAdded"));
+            // redirect to recent updates, so your update appears on the top
+            showUpdates(topicName, "recent", 0);
         }
         catch(ValidationException e) {
             flash.error(e.getMessage());
             params.flash();
+            redirect(getPreviousUrl());
         }
-        showUpdates(topicName, "recent", 0);
     }
 
     /**
-     * Vote up the Update with the given updateId. This acts as the fallback
-     * for when Javascript/AJAX doesn't work or is disabled.
-     *
+     * Vote up the Update with the given updateId.
+     * 
      * @param updateId the ID of the Update to vote up
-     * @param scope the scope to redirect back to
-     * @param order how to sort votes by upon redirection
-     * @param offset what offset to go to upon redirection
      */
-    public static void onVoteSubmit(Long updateId, String scope, String order,
-            int offset) {
+    public static void onVoteSubmit(Long updateId) {
         UpdateModel update = getUpdateModel().findById(updateId);
         getVoteModel().createVote(update, getUser());
-        // redirect back to the original page
-        showUpdates(scope, order, offset);
+        // redirect back to the original page if not AJAX
+        if(!params._contains("ajax")) {
+            redirect(getPreviousUrl());
+        }
     }
 
     /**
@@ -164,5 +169,27 @@ public class Topic extends BaseController {
         getUser().unFollowTopic(getTopicModel().findByName(topicName));
         // go back to user profile
         Profile.index(getUser().getId());
+    }
+
+    /**
+     * Browse topics by popularity or recency.
+     *
+     * @param order how to order topics (popular or recent)
+     * @param offset int used to determine how much to offset topics by
+     */
+    public static void browse(String order, int offset) {
+        List<TopicModel> topics;
+        if("recent".equals(order)) {
+            topics = getTopicModel().getNewest(Constants.TOPICS_PER_PAGE,
+                    offset);
+        }
+        else {
+            topics = getTopicModel().getPopular(Constants.TOPICS_PER_PAGE,
+                    offset);
+            order = "popular";
+        }
+        renderArgs.put("topics",topics);
+        renderArgs.put("order", order);
+        render();
     }
 }

@@ -7,12 +7,17 @@
  */
 package models;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import play.i18n.Messages;
 import siena.Id;
 import siena.Model;
 import siena.Query;
+import utilities.Constants;
 import utilities.ValidationException;
 import utilities.Validator;
 
@@ -21,7 +26,7 @@ import utilities.Validator;
  *
  * @author Peter Graham
  */
-public class TopicModel extends Model{
+public class TopicModel extends BaseModel{
 
     /** auto-incremented unique ID for the topic */
     @Id
@@ -95,6 +100,9 @@ public class TopicModel extends Model{
         if(Validator.isEmpty(topicName)) {
             throw new ValidationException(Messages.get("form.emptyField"));
         }
+        if(Constants.RESERVED_TOPIC_NAMES.contains(topicName)) {
+            throw new ValidationException(Messages.get("topic.exists"));
+        }
         if(this.topicExists(topicName)) {
             throw new ValidationException(Messages.get("topic.exists"));
         }
@@ -124,6 +132,46 @@ public class TopicModel extends Model{
     }
 
     /**
+     * Get popular topics based on the number of followers.
+     *
+     * @param howMany how many topics to return
+     * @param offset int used for pagination
+     * @return List of the popular topics with the given offset
+     */
+    public List<TopicModel> getPopular(int howMany, int offset) {
+        Map<TopicModel,Integer> topicsByFollowers =
+                new HashMap<TopicModel,Integer>();
+        // count vote value for each update
+        for(TopicModel topic : all().fetch()) {
+            topicsByFollowers.put(topic, topic.getFollowerCount());
+        }
+        topicsByFollowers = this.sortByValue(topicsByFollowers);
+        // convert Map keys to List (we don't need the values anymore)
+        List orderedUpdates =
+                new ArrayList<TopicModel>(topicsByFollowers.keySet());
+        Collections.reverse(orderedUpdates);
+
+        // return the specified number of updates with offset unless it exceeds
+        // the total number of possible updates to return
+        int finalIndex = offset + howMany;
+        if(finalIndex > orderedUpdates.size()) {
+            finalIndex = orderedUpdates.size();
+        }
+        return orderedUpdates.subList(offset, finalIndex);
+    }
+
+    /**
+     * Fetches the most recently created topics overall.
+     *
+     * @param howMany how many topics to return
+     * @param offset the offset used for pagination
+     * @return List if the most recent topics
+     */
+    public List<TopicModel> getNewest(int howMany, int offset) {
+        return all().order("-created").fetch(howMany, offset);
+    }
+
+    /**
      * Return the topic name.
      *
      * @return a string of the topic name
@@ -148,6 +196,15 @@ public class TopicModel extends Model{
      */
     public Date getDateCreated() {
         return this.created;
+    }
+
+    /**
+     * Convenience method for seeing how long ago a topic was created.
+     *
+     * @return how long ago this topic was created
+     */
+    public String getHowLongAgo() {
+        return this.getHowLongAgo(this.getDateCreated());
     }
 
     /**

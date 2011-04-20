@@ -1,0 +1,18 @@
+<!--
+File: Topic/browse.html
+Name: Peter Graham
+Class: CS 461
+Project 1
+Date: April 17
+-->
+#{extends 'base.html' /}
+#{set title: messages.get('topic.new') /}
+<div class="subpage">
+   Order by: <a class="${order == 'popular'? 'active' : ''}" href="@{Topic.browse('popular', 0)}">&{'msg.popular'}</a> or <a class="${order == 'recent'? 'active' : ''}" href="@{Topic.browse('recent',0)}">&{'msg.recent'}</a>
+   <ol>
+#{list items:topics, as:'topic'}
+    <li><a href="@{Topic.showUpdates(topic.name,'popular24h',0)}">${topic.name}</a>&nbsp;
+        #{if order == 'popular'}${topic.getFollowerCount()}#{/if}#{else}${topic.getHowLongAgo()}#{/else}
+#{/list}
+</ol>
+</div>

@@ -32,7 +32,7 @@ import utilities.Validator;
  * @author Peter Graham
  * @author Bauke Scholtz
  */
-public class UpdateModel extends Model{
+public class UpdateModel extends BaseModel{
 
     /** auto-incremented unique ID for the update */
     @Id
@@ -44,9 +44,6 @@ public class UpdateModel extends Model{
     /** the URL associated with this update (optional) */
     private String url;
 
-    /** Date update is added to database */
-    private Date created;
-
     /** user ID associated with this Update */
     @Index("user_idx")
     private Long userId;
@@ -55,10 +52,13 @@ public class UpdateModel extends Model{
     @Index("topic_idx")
     private Long topicId;
 
+    /** Date update is added to database */
+    private Date created;
+
     /**
      * Constructs an update object.
      */
-    public UpdateModel(){
+    public UpdateModel() {
         super();
     }
 
@@ -106,43 +106,11 @@ public class UpdateModel extends Model{
             UpdateModel update = new UpdateModel(creator,
                     topicModel.findByName(topicName), content, url);
             update.insert();
+            // insert a vote automatically for user--seems like a good default
+            VoteModel voteModel = new VoteModel();
+            voteModel.createVote(update, creator);
         }
     }
-
-    /**
-     * Find updates associated with the given topic, and sort them.
-     *
-     * Note: Date code adapted from code by Bauke Scholtz:
-     * http://stackoverflow.com/questions/4348525/get-date-as-of-4-hours-ago
-     * 
-     * @param topic the topic to find updates of
-     * @param sortBy how to sort topics
-     * // TODO pagination
-     * @return List of updates
-     */
-    /*public List<UpdateModel> findByTopic(TopicModel topic, String sortBy) {
-        boolean sortByRecent = false;
-        if(Validator.isEmpty(sortBy) || "recent".equals(sortBy)) {
-            sortByRecent = true;
-        }
-        List<UpdateModel> updates;
-        if(sortByRecent){
-            updates = this.findNewestByTopic(topic);
-        }
-        else {
-            Date date;
-            if(sortBy.equals("popular24h")){
-                date = new Date(System.currentTimeMillis() - (24*60*60*1000));
-            }
-            else {
-                date = new Date(System.currentTimeMillis() - (7*24*60*60*1000));
-            }
-            List<Long> topicIds = new ArrayList<Long>();
-            topicIds.add(topic.getId());
-            updates = this.findPopular(topicIds, date);
-        }
-        return updates;
-    }*/
 
     /**
      * Find a update associated with the given unique topic ID.
@@ -237,6 +205,9 @@ public class UpdateModel extends Model{
 
     /**
      * Get updates for the given user, order and offset.
+     *
+     * Note: Date code adapted from code by Bauke Scholtz:
+     * http://stackoverflow.com/questions/4348525/get-date-as-of-4-hours-ago
      *
      * @param topic the topic to get updates of. If null, ignore.
      * @param user the user to get updates of. If null, ignore.
@@ -347,48 +318,35 @@ public class UpdateModel extends Model{
     }
 
     /**
-     * Returns how long ago this update was posted in minutes, hours, or days.
-     *
-     * Note: many Java programmers recommend the Joda-Time library for this, 
-     * since this library handles many date-related things automatically, such
-     * as daylight savings time.
-     *
-     * @return a String of how long ago this update was posted
-     */
-    public String getHowLongAgo() {
-        Date curDate = new Date(System.currentTimeMillis());
-        long diffms = curDate.getTime() - getDateCreated().getTime();
-        long diffmin = diffms / (60*1000);
-        if(diffmin < 1) {
-            return Messages.get("time.now");
-        }
-        if(diffmin < 2) {
-            return Messages.get("time", diffmin, Messages.get("time.min"));
-        }
-        if(diffmin < 60) {
-            return Messages.get("time", diffmin, Messages.get("time.mins"));
-        }
-        long diffhour = diffmin / 60;
-        if(diffhour < 2) {
-            return Messages.get("time", diffhour, Messages.get("time.hour"));
-        }
-        if(diffhour < 24) {
-            return Messages.get("time", diffhour, Messages.get("time.hours"));
-        }
-        long diffday = diffhour / 24;
-        if(diffday < 2) {
-            return Messages.get("time", diffday, Messages.get("time.day"));
-        }
-        return Messages.get("time", diffday, Messages.get("time.days"));
-    }
-
-    /**
      * Checks whether or not this update has a URL associated with it.
      *
      * @return true if it has a URL, otherwise false
      */
     public boolean hasUrl() {
         return this.getUrl() != null;
+    }
+
+    /**
+     * Convenience method for seeing if a given user has voted on this update.
+     *
+     * @param user the user to check if they voted on this update
+     * @return true if user voted on this update, otherwise false
+     */
+    public boolean votedOnBy(UserModel user) {
+        if(user == null) {
+            return false;
+        }
+        VoteModel voteModel = new VoteModel();
+        return voteModel.voteExists(user, this);
+    }
+
+    /**
+     * Convenience method for seeing how long ago an update was posted.
+     *
+     * @return how long ago this update was posted
+     */
+    public String getHowLongAgo() {
+        return this.getHowLongAgo(this.getDateCreated());
     }
 
     /**
@@ -436,6 +394,7 @@ public class UpdateModel extends Model{
         return this.created;
     }
 
+
     /**
      * Returns string representation of the update.
      *
@@ -453,30 +412,5 @@ public class UpdateModel extends Model{
      */
     private Query<UpdateModel> all() {
         return Model.all(UpdateModel.class);
-    }
-
-    /**
-     * Sort a given map by value in ascending order. Based off code from:
-     * http://stackoverflow.com/questions/109383/how-to-sort-a-mapkey-value-on-
-     *      the-values-in-java
-     * 
-     * @param map the map to sort by value
-     * @return the sorted map by value in ascending order
-     */
-    private Map sortByValue(Map map) {
-         List list = new LinkedList(map.entrySet());
-         Collections.sort(list, new Comparator() {
-              public int compare(Object o1, Object o2) {
-                   return ((Comparable) ((Map.Entry) (o1)).getValue())
-                  .compareTo(((Map.Entry) (o2)).getValue());
-              }
-         });
-
-        Map result = new LinkedHashMap();
-        for (Iterator it = list.iterator(); it.hasNext();) {
-            Map.Entry entry = (Map.Entry)it.next();
-            result.put(entry.getKey(), entry.getValue());
-        }
-        return result;
     }
 }

@@ -1,5 +1,5 @@
 <!--
-File: Topic/index.html
+File: Topic/showUpdates.html
 Name: Peter Graham
 Class: CS 461
 Project 1
@@ -16,7 +16,7 @@ Date: April 16
 
     <ul class="selector">
          <li><a class="${order == 'recent' ? 'active':''}" href="@{Topic.showUpdates(scope,'recent',0)}">&{'msg.recent'}</a>
-        <li><a class="${order == 'popular24h' ? 'active':''}" href="@{Topic.showUpdates(scope,'popular24h',0)}">&{'msg.popular'}</a>
+        <li><a class="${order == 'popular24h' ? 'active':''}" href="@{Topic.showUpdates(scope,'popular24h',0)}">&{'msg.popularToday'}</a>
             <li><a class="${order == 'popular7d' ? 'active':''}" href="@{Topic.showUpdates(scope,'popular7d',0)}">&{'msg.popularWeek'}</a>
     </ul>
     <div class="hseparator">&nbsp;</div>
@@ -29,21 +29,21 @@ Date: April 16
            #{if topics}
                <ol id="subscriptions" class="selector smaller">
                      #{list items:topics, as:'topic'}
-                        <li><a class="${scope == topic.getName() ? 'active':''}" href="@{Topic.showUpdates(topic.getName(),order,0)}">${topic.getName()}</a>
+                        <li><a class="${scope == topic.name ? 'active':''}" href="@{Topic.showUpdates(topic.name,order,0)}">${topic.name}</a>
                     #{/list}
                 </ol>
-           <div id="subsnotif" class="round smallest"><a href="@{Profile.topics(userId)}">&{'action.manage'} &rsaquo;</a></div>
+           <div id="subsnotif" class="round smallest"><a href="@{Profile.index(user.id)}">&{'action.manage'} &rsaquo;</a></div>
             #{/if}
             #{else}
-                <div id="subsnotif" class="round smallest">&{'msg.none'}<br><a href="@{Profile.topics(userId)}">&{'action.findTopics'} &rsaquo;</a></div>
+                <div id="subsnotif" class="round smallest">&{'msg.none'}<br><a href="@{Profile.index(user.id)}">&{'action.findTopics'} &rsaquo;</a></div>
             #{/else}
       #{/if}
 </div>
-#{if !loggedin}
+#{if !loggedin && (scope == 'you' || scope == 'everyone')}
 <div id="pitch" class="round">
     <div class="left"><h2 class="noJsSpacer">&{'home.titlePart1'} <br><span>&{'home.titlePart2'}</span></h2></div>
     #{form action:@Account.onRegisterSubmit(), id: 'signup', class:'default-label-form'}
-        <h3 class="noJsSpacer">Sign Up <span>&mdash; &{'register.pitch'}</span></h3><p><label class="default-label noJsSpacer" for="email">&{'field.email'}</label><input id="email" class="fancytext" name="email" type="text" value="" spellcheck="false"></p><div id="inbetweeninput" class="noJsSpacer">&nbsp;</div><p><label class="default-label noJsSpacer" for="password">&{'field.password'}</label><input id="password" class="fancytext" name="password" type="password"></p><input class="fancybutton shadow pointer" type="submit" value="&{'register'}">
+        <h3 class="noJsSpacer">&{'register'} <span>&mdash; &{'register.pitch'}</span></h3><p><label class="default-label noJsSpacer" for="email">&{'field.email'}</label><input id="email" class="fancytext" name="email" type="text" value="" spellcheck="false"></p><div id="inbetweeninput" class="noJsSpacer">&nbsp;</div><p><label class="default-label noJsSpacer" for="password">&{'field.password'}</label><input id="password" class="fancytext" name="password" type="password"></p><input class="fancybutton shadow pointer" type="submit" value="&{'register'}">
     #{/form}
 </div>
 #{/if}
@@ -61,10 +61,10 @@ Date: April 16
 
     #{form @onUpdateSubmit(), class:'bigform'}
         <div>
-        <textarea class="fancytext" name="content"#{if !loggedin} disabled#{/if}>#{if !loggedin}&{'login.loginRequired'}#{/if}#{else}${content}#{/else}</textarea><br>
+        <textarea class="fancytext" name="content"#{if !loggedin} disabled#{/if}>#{if !loggedin}&{'login.loginRequired'}#{/if}#{else}${flash.content}#{/else}</textarea><br>
         #{if loggedin}
             <p>Attach a Link (optional):</p>
-            <input type="text" class="fancytext" name="url" value="${url}"><br>
+            <input type="text" class="fancytext" name="url" value="${flash.url}"><br>
          #{/if}
         <input class="fancybutton pointer shadow" type="submit" value="&{'action.addUpdate'}">
         <input type="hidden" name="topicName" value="${scope}">
@@ -74,27 +74,12 @@ Date: April 16
 #{/if}
 <ol id="content">
     #{list items:updates, as:'update'}
-        <li id="u0" class="round"><div class="left like"><div class="votecount">${update.getVoteCount()}</div><a class="likeit" href="@{onVoteSubmit(update.getId(), scope, order, offset)}">&hearts;</a></div><div class="likeright">#{if update.hasUrl()}<a class="link" href="${update.getUrl()}" rel="nofollow">#{/if}${update.getContent()}#{if update.hasUrl()}</a>#{/if}<div class="meta">${update.getHowLongAgo()} in <a href="@{Topic.showUpdates(update.getParentTopicName(),order,0)}">${update.getParentTopicName()}</a></div></div>
+        <li id="u${update.id}" class="round"><div class="left like"><div class="votecount">${update.getVoteCount()}</div><a class="likeit#{if update.votedOnBy(user)} clicked#{/if}" href="@{onVoteSubmit(update.id)}">&hearts;</a></div><div class="likeright">#{if update.hasUrl()}<a class="link" href="${update.url}" rel="nofollow">#{/if}${update.content}#{if update.hasUrl()}</a>#{/if}<div class="meta">${update.getHowLongAgo()} in <a href="@{Topic.showUpdates(update.getParentTopicName(),order,0)}">${update.getParentTopicName()}</a></div></div>
     #{/list}
     #{else}
        &{'msg.noUpdates'}
     #{/else}
-<!--    <li id="u0" class="round"><div class="left like"><div class="votecount">5234</div><a class="likeit" href="#vote0">&hearts;</a></div><div class="likeright"><a class="link" href="http://www.youtube.com/watch?v=XcT4yYu_TTs&amp;feature=youtube_gdata" rel="nofollow">How to Write Clean, Testable Code</a><div class="meta">16 hours ago in <a href="#">Programming</a>, <a href="#">Google</a></div></div>
-    <li id="u1" class="round"><div class="left like"><div class="votecount">3130</div><a class="likeit" href="#vote1">&hearts;</a></div><div class="likeright"><a class="link" href="http://twitter.com/colbycollege/statuses/30981029535682560">colbycollege: Jan Plan officially ended Thursday, but images of formulas, food, and fun remain -- in this week's Student Lens: http://clby.me/3LwI</a><div class="meta">10 hours ago in <a href="#">Colby College</a></div></div>
-    <li id="u2" class="round"><div class="left like"><div class="votecount">1909</div><a class="likeit" href="#vote2">&hearts;</a></div><div class="likeright"><a class="link" href="http://xkcd.com/844/">Good Code</a><div class="meta">3 hours ago in <a href="#">xkcd</a>, <a href="#">Comics</a></div></div>
-    <li id="u3" class="round"><div class="left like"><div class="votecount">1384</div><a class="likeit" href="#vote3">&hearts;</a></div><div class="likeright"><a class="link" href="http://asiajin.com/blog/2011/02/03/groupon-slows-down-after-new-year-osechi-incident-in-japan/">Groupon Slows Down After New Year Osechi Incident In Japan</a><div class="meta">12 hours ago in <a href="#">Groupon</a>, <a href="#">Tech News Asia</a></div></div>
-    <li id="u4" class="round"><div class="left like"><div class="votecount">956</div><a class="likeit" href="#vote4">&hearts;</a></div><div class="likeright"><a class="link" href="http://feedproxy.google.com/~r/Techcrunch/~3/5d9YsDYvE18/">Rainbird: The Way Twitter Counts Tweets In Realtime (Which Will Be Open Sourced)</a><div class="meta">5 hours ago, <a href="#">TechCrunch</a></div></div>
-    <li id="u5" class="round"><div class="left like"><div class="votecount">920</div><a class="likeit" href="#vote5">&hearts;</a></div><div class="likeright"><a class="link" href="http://www.japantoday.com/category/technology/view/ntts-group-net-profit-climbs-9-in-april-dec">Technology â€º NTT's group net profit climbs 9% in April-Dec</a><div class="meta">30 minutes ago, <a href="#">Japan Today Tech</a></div></div>
-    <li id="u6" class="round"><div class="left like"><div class="votecount">876</div><a class="likeit" href="#vote6">&hearts;</a></div><div class="likeright"><a class="link" href="http://www.codinghorror.com/blog/2010/11/breaking-the-webs-cookie-jar.html">Breaking the Web's Cookie Jar</a><div class="meta">22 hours ago, <a href="#">Coding Horror</a></div></div>
-    <li id="u7" class="round"><div class="left like"><div class="votecount">811</div><a class="likeit" href="#vote7">&hearts;</a></div><div class="likeright"><a class="link" href="http://www.engadget.com/2011/02/04/nissan-delivers-190-leaf-evs-to-rental-companies-in-japan-pre-o/">Nissan delivers 190 Leaf EVs to rental companies in Japan, pre-orderers still get none</a><div class="meta">10 minutes ago, <a href="#">Engadget</a></div></div>
-    <li id="u8" class="round"><div class="left like"><div class="votecount">602</div><a class="likeit" href="#vote8">&hearts;</a></div><div class="likeright"><a class="link" href="http://www.mobinode.com/2011/01/23/believe-in-android-bet-on-htc/">Believe in Android? Bet on HTC</a><div class="meta">23 hours ago, <a href="#">China Web 2.0 and Asia Tech News, Open Web Asia</a></div></div>
-    <li id="u9" class="round"><div class="left like"><div class="votecount">578</div><a class="likeit" href="#vote9">&hearts;</a></div><div class="likeright"><a class="link" href="http://www.robgo.org/post/2827376145">Why I Like Crummy New England Winters</a><div class="meta">5 hours ago, <a href="#">Rob Go's Tumblelog</a></div></div>
-    <li id="u10" class="round"><div class="left like"><div class="votecount">521</div><a class="likeit" href="#vote10">&hearts;</a></div><div class="likeright"><a class="link" href="http://feedproxy.google.com/~r/Techcrunch/~3/CoQnNJYWMDM/">Skypeâ€™s VP Of Consumer Products On Mobile Video; The Cloud And Monetization</a><div class="meta">22 hours ago, <a href="#">TechCrunch</a></div></div>
-    <li id="u11" class="round"><div class="left like"><div class="votecount">519</div><a class="likeit" href="#vote11">&hearts;</a></div><div class="likeright"><a class="link" href="http://twitter.com/colbycollege/statuses/30981029535682560">Google's Eric Schmidt on the future of technology, his role change and Apple's turn toward consumers</a><div class="meta">19 minutes ago, <a href="#">Engadget</a></div></div>
-    <li id="u12" class="round"><div class="left like"><div class="votecount">489</div><a class="likeit" href="#vote12">&hearts;</a></div><div class="likeright"><a class="link" href="http://framethink.wordpress.com/2011/01/17/how-facebook-ships-code/">How Facebook Ships Code</a><div class="meta">1 hour ago, <a href="#">FrameThink</a></div></div>
-    <li id="u13" class="round"><div class="left like"><div class="votecount">301</div><a class="likeit" href="#vote13">&hearts;</a></div><div class="likeright"><a class="link" href="http://www.colby.edu/news_events/_dept_news/events/2385156">Wednesday, February 16, 12:30 p.m. - Artist Talk: Scott Reed</a><div class="meta">23 hours ago, <a href="#">Featured Events | Colby College</a></div></div>
-    <li id="u14" class="round"><div class="left like"><div class="votecount">300</div><a class="likeit" href="#vote14">&hearts;</a></div><div class="likeright"><a class="link" href="http://www.youtube.com/watch?v=M47-FGvVJx0&amp;feature=youtube_gdata">Web Testing at Google: Infrastructure for the World's Most Demanding Web Developers</a><div class="meta">38 minutes ago, <a href="#">Uploads by GoogleTechTalks</a></div></div>
---></ol>
+</ol>
 <div id="pagination"><a class="round"#{if prevOffset >= 0} href="@{Topic.showUpdates(scope,order,prevOffset)}"#{/if}>&lsaquo; &{'msg.previous'}</a>
-    &{'msg.viewing'} <b>${lower}-#{if numUpdates == defaultNumUpdates}${upper}#{/if}#{else}${numUpdates+lower-1}#{/else}</b>
+    #{if numUpdates+lower-1 > 0}&{'msg.viewing'} <b>${lower}-#{if numUpdates == defaultNumUpdates}${upper}#{/if}#{else}${numUpdates+lower-1}#{/else}</b>#{/if}
     <a class="round"#{if numUpdates == defaultNumUpdates} href="@{Topic.showUpdates(scope,order,upper)}"#{/if}>&{'msg.next'} &rsaquo;</a></div>

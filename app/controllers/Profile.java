@@ -16,7 +16,7 @@ import utilities.AllowGuest;
  *
  * @author Peter Graham
  */
-@AllowGuest({"index", "topics"})
+@AllowGuest({"index"})
 public class Profile extends BaseController {
 
     /**
@@ -39,18 +39,14 @@ public class Profile extends BaseController {
         if(user == null) {
             Error.index(404, Messages.get("profile.notFound"));
         }
-        renderArgs.put("bio", user.getBio());
         renderArgs.put("topics", getUserTopicModel().getTopicsByUser(user));
-        renderArgs.put("name", user.getName());
         render();
     }
 
     /**
      * Show the profile edit form.
      */
-    public static void edit(){
-        renderArgs.put("editName", getUser().getName());
-        renderArgs.put("editBio", getUser().getBio());
+    public static void edit() {
         render();
     }
 
@@ -64,14 +60,5 @@ public class Profile extends BaseController {
         getUser().modifyProfile(name, bio);
         flash.success(Messages.get("action.saved"));
         index(getUser().getId());
-    }
-
-    /**
-     * View a user's followed topics.
-     *
-     * @param id the unique user ID of the user whose followed topics to view
-     */
-    public static void topics(Long id){
-        render();
     }
 }

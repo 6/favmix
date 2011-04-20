@@ -13,8 +13,10 @@ import models.UpdateModel;
 import models.UserModel;
 import models.UserTopicModel;
 import models.VoteModel;
+import play.i18n.Lang;
 import play.i18n.Messages;
 import play.libs.Crypto;
+import play.mvc.After;
 import play.mvc.Before;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -31,6 +33,7 @@ import utilities.Constants;
  * @author Peter Graham
  * @author Guillaume Bort
  */
+@AllowGuest({"toggleMobileEnabled","changeLanguage"})
 public class BaseController extends Controller {
 
     /** the User model */
@@ -138,17 +141,38 @@ public class BaseController extends Controller {
     }
 
     /**
+     * Returns the URL that has been saved through requests using the flash
+     * param cookie.
+     *
+     * @param sessionKey the session key for the flash param
+     * @return a String of the original URL, or homepage URL if no original URL
+     */
+    public static String getUrlFromSession(String sessionKey) {
+        String url = flash.get(sessionKey);
+        if(url == null) {
+            url = "/";
+        }
+        return url;
+    }
+
+    /**
+     * Returns the original URL that has been saved through requests using the
+     * flash param cookie.
+     *
+     * @return a String of the original URL, or homepage URL if no original URL
+     */
+    public static String getPreviousUrl() {
+        return getUrlFromSession(Constants.PREVIOUS_URL);
+    }
+
+    /**
      * Returns the original URL that has been saved through requests using the
      * flash param cookie.
      * 
      * @return a String of the original URL, or homepage URL if no original URL
      */
     public static String getOriginalUrl() {
-        String url = flash.get(Constants.ORIGINAL_URL);
-        if(url == null) {
-            url = "/";
-        }
-        return url;
+        return getUrlFromSession(Constants.ORIGINAL_URL);
     }
 
     /**
@@ -160,6 +184,18 @@ public class BaseController extends Controller {
         }
         else {
             session.put(Constants.MOBILE_KEY,"enabled");
+        }
+        Topic.defaultFilters();
+    }
+
+    /**
+     * Changes interface language to the given language.
+     *
+     * @param languageCode the ISO language code
+     */
+    public static void changeLanguage(String languageCode) {
+        if(Constants.VALID_LANGUAGE_CODES.contains(languageCode)) {
+            Lang.change(languageCode);
         }
         Topic.defaultFilters();
     }
@@ -304,9 +340,9 @@ public class BaseController extends Controller {
      * Initialize topic arguments so we can render view accordingly.
      */
     private static void initTopicsArgs() {
-        UserModel curUser = getUser();
         // add list of topics that user follows
-        List<TopicModel> topics = getUserTopicModel().getTopicsByUser(curUser);
+        List<TopicModel> topics = getUserTopicModel().getTopicsByUser(
+                getUser());
         renderArgs.put("topics", false);
         if(topics != null) {
             renderArgs.put("topics", topics);
@@ -317,8 +353,14 @@ public class BaseController extends Controller {
      * Initialize user information arguments so we can render view accordingly.
      */
     private static void initUserInformationArgs(){
-        // add the user's unique ID and name
-        renderArgs.put("userId", getUser().getId());
-        renderArgs.put("userName", getUser().getName());
+        renderArgs.put("user", getUser());
+    }
+
+    /**
+     * Store the current URL in case we need it for the next request.
+     */
+    @After
+    private static void storeCurrentUrl() {
+        flash.put(Constants.PREVIOUS_URL, getCurrentUrl());
     }
 }

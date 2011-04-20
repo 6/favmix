@@ -13,11 +13,10 @@ GET /view/{scope}/{order}/{offset} Topic.showUpdates
 
 # Topic
 GET /createtopic Topic.create
-GET /vote Topic.onVoteSubmit
+GET /vote/{updateId} Topic.onVoteSubmit
 
-# Profile viewing/modifying
+# Profile
 GET /user/{id} Profile.index
-GET /user/{id}/topics Profile.topics
 
 # Static files
 GET /static/ staticDir:public

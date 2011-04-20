@@ -19,7 +19,7 @@ import siena.Query;
  *
  * @author Peter Graham
  */
-public class VoteModel extends Model{
+public class VoteModel extends BaseModel{
 
     /** auto-incremented unique ID for the vote */
     @Id

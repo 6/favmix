@@ -8,6 +8,7 @@
 package controllers;
 
 import models.TopicModel;
+import utilities.AllowGuest;
 import utilities.Constants;
 
 /**
@@ -15,6 +16,7 @@ import utilities.Constants;
  *
  * @author Peter Graham
  */
+@AllowGuest({"index"})
 public class Search extends BaseController {
 
     /**

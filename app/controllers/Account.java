@@ -21,7 +21,7 @@ import utilities.ValidationException;
  *
  * @author Peter Graham
  */
-@AllowGuest({"login","logout", "register", "onLoginSubmit", "onRegisterSubmit"})
+@AllowGuest({"login", "register", "onLoginSubmit", "onRegisterSubmit"})
 @DenyUser({"login", "register", "onLoginSubmit", "onRegisterSubmit"})
 public class Account extends BaseController {
 
@@ -29,7 +29,7 @@ public class Account extends BaseController {
      * Render the login form.
      */
     public static void login() {
-        // save this original URL
+        // save this original URL to redirect to it on successful login
         flash.keep(Constants.ORIGINAL_URL);
         render();
     }
@@ -45,7 +45,6 @@ public class Account extends BaseController {
      * Render the settings form.
      */
     public static void settings() {
-        renderArgs.put("editEmail", getUser().getEmail());
         render();
     }
 
@@ -65,11 +64,13 @@ public class Account extends BaseController {
                 response.setCookie(Constants.REMEMBER_ME,
                         Crypto.sign(email) + "-" + email, "30d");
             }
+            // log user in and redirect them to the original URL
             UserModel user = getUserModel().findByEmail(email);
             session.put(Constants.SESSION_KEY, user.getId());
             redirect(getOriginalUrl());
         }
         catch(ValidationException e) {
+            // store error to show next and redirect back to login form
             flash.error(e.getMessage());
             params.flash();
             flash.keep(Constants.ORIGINAL_URL);
@@ -85,12 +86,14 @@ public class Account extends BaseController {
      */
     public static void onRegisterSubmit(String email, String password) {
         try {
+            // create user, log them in, and redirect to topics
             getUserModel().createUser(email, password);
             UserModel user = getUserModel().findByEmail(email);
             session.put(Constants.SESSION_KEY, user.getId());
             Topic.defaultFilters();
         }
         catch(ValidationException e) {
+            // store error to show next and redirect back to registration form
             flash.error(e.getMessage());
             params.flash();
             register();
@@ -107,6 +110,7 @@ public class Account extends BaseController {
     public static void onSettingsSubmit(String email, String oldpass,
             String newpass) {
         try {
+            // modify settings and display a success message
             getUser().modifySettings(email, oldpass, newpass);
             flash.success(Messages.get("action.saved"));
         }
@@ -117,7 +121,7 @@ public class Account extends BaseController {
     }
 
     /**
-     * Logout and return to homepage. Delete "Remember me" cookie if applicable.
+     * Logout and return to homepage. Delete "Remember me" cookie if it exists.
      */
     public static void logout() {
         session.clear();

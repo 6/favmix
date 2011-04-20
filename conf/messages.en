@@ -1,0 +1,100 @@
+# File: messages.en
+# Name: Peter Graham
+# Class: CS 461
+# Project 1
+# Date: February 16
+
+websiteName = Website
+home = Home
+search = Search
+topics = Topics
+logout = Logout
+about = About
+contact = Contact
+mobile = Mobile
+nonmobile = Non-mobile site
+language = Language
+
+# generic messages
+msg.none = You aren't following any topics yet.
+msg.defaultUserName = Anonymous
+msg.edit = edit
+msg.save = Save
+msg.popular = Popular
+msg.popularToday = Popular Today
+msg.popularWeek = Popular Past Week
+msg.recent = Recently added
+msg.previous = Previous page
+msg.next = Next page
+msg.viewing = Viewing
+msg.404head = Not found
+msg.404 = The page you are requesting cannot be found.
+msg.noUpdates = No updates found.
+
+# generic fields
+field.email = Email Address
+field.password = Password
+field.oldPassword = Old Password
+field.newPassword = New Password
+field.remember = Remember me
+field.name = Your Name
+field.bio = Short Bio
+
+# generic form flashes
+form.emptyField = Please fill out all fields.
+form.badEmail = Please use a valid e-mail address.
+form.emailUsed = Another account already uses that e-mail address.
+form.badPassword = Incorrect password.
+form.badUrl = Please enter a valid URL.
+
+# generic actions
+action.manage = Manage your topics
+action.findTopics = Find topics to follow
+action.follow = Follow
+action.unFollow = Unfollow
+action.saved = Your changes have been saved.
+action.create = Create
+action.addUpdate = Add Discussion
+
+home.title = All your news in one place
+home.titlePart1 = All your news
+home.titlePart2 = in one place.
+home.you = Your topics
+home.everyone = Everyone's topics
+
+login = Login
+login.dontHaveAnAccount = Don't have an account?
+login.loginRequired = Please login to access this page.
+login.incorrect = Incorrect email or password.
+
+register = Sign Up
+register.pitch = <!--(Start personalizing|Customize) your news.-->Start <!--adding-->following your favorite topics!
+register.emailUsed = <b>%s</b> already has an account. Try a different e-mail address.
+
+profile = Profile
+profile.edit = Edit your profile
+profile.backTo = Back to profile
+profile.notFound = User not found.
+
+search.results = Search results
+search.none = No results for <b>%s</b>.
+
+settings = Settings
+settings.edit = Edit your settings
+
+topic.new = Create a new topic
+topic.name = Enter a topic name
+topic.exists = A topic with that name already exists.
+topic.following = Following
+topic.updateAdded = Your update has been added.
+topic.created = Your topic has been created.
+topic.notFound = Topic not found.
+
+time = %s %s ago
+time.now = just now
+time.min = minute
+time.mins = minutes
+time.hour = hour
+time.hours = hours
+time.day = day
+time.days = days

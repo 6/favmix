@@ -37,7 +37,7 @@ module.siena=${play.path}/modules/siena-1.4
 # ~~~~~
 # Define locales used by your application.
 # You can then place localized messages in conf/messages.{locale} files
-# application.langs=fr,en,ja
+application.langs=en,ja
 
 # Date format
 # ~~~~~

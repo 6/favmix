@@ -6,21 +6,22 @@ Project 1
 Date: April 17
 -->
 #{extends 'base.html' /}
-#{set title:userName /}
+#{set title:user.name /}
 <div class="subpage">
-    <h2>${name}
+    <h2>${user.name}
       #{if isOwnProfile}
         <a class="leftpad smallest" href="@{edit()}">&{'profile.edit'} &rarr;</a>
       #{/if}
     </h2>
-    <div class="">${bio}</div>
+    <div class="">${user.bio}</div>
     &{'topic.following'}:
     <ol id="subscriptions">
         #{list items:topics, as:'topic'}
-            <li><a class="remove left" href="@{Topic.unFollowTopic(topic.getName())}">&#215;</a><a class="subscription" href="@{Topic.showUpdates(topic.getName(),'popular24h',0)}">${topic.getName()}</a>
+            <li><a class="remove left" href="@{Topic.unFollowTopic(topic.name)}">&#215;</a><a class="subscription" href="@{Topic.showUpdates(topic.name,'popular24h',0)}">${topic.name}</a>
         #{/list}
         #{else}
             <p class="greyish">&{'msg.none'}</p>
         #{/else}
     </ol>
+    <a href="@{Topic.create()}">&{'topic.new'} &rarr;</a>
 </div>

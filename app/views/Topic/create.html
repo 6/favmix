@@ -12,8 +12,8 @@ Date: April 17
     #{form @onCreateSubmit(), class:'bigform'}
         <div>
         <p>
-            <label for="name">&{'topic.name'}</label><br>
-            <input class="fancytext" id="name" name="name" type="text" value="${name}">
+            <label for="topicName">&{'topic.name'}</label><br>
+            <input class="fancytext" id="name" name="topicName" type="text" value="${flash.topicName}">
         </p>
         <input class="fancybutton pointer shadow" type="submit" value="&{'action.create'}">
         </div>

@@ -22,8 +22,15 @@ Date: April 16
         
 
 <div id="footer" class="smaller">
-    <a href="@{BaseController.toggleMobileEnabled}">#{if isMobile}Non-mobile site#{/if}#{else}Mobile#{/else}</a>
+    <a href="@{BaseController.toggleMobileEnabled}">#{if isMobile}&{'nonmobile'}#{/if}#{else}&{'mobile'}#{/else}</a>
     <a href="@{Info.about()}">&{'about'}</a>
-    <a href="@{Info.contact()}">&{'contact'}</a>
+    <a href="@{Info.contact()}">&{'contact'}</a><br>
+    &{'language'}:
+    <a href="@{BaseController.changeLanguage('en')}">English</a>
+    <a href="@{BaseController.changeLanguage('ja')}">Japanese</a>
     <p>&copy; 2011 &{'websiteName'}</p>
+</div>
+<!-- page/user info for Javascript -->
+<div class="hidden">
+    <div id="isloggedin">${loggedin ? 'true' : 'false'}</div>
 </div>

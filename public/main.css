@@ -49,6 +49,7 @@ a.active:hover{text-decoration:none}
 .error{background:#ffc;border-color:#ddb}
 .success{background:#def;border-color:#cde}
 .centered{margin:10px 15%;padding:15px 20px}
+.hidden{display:none}
 
 /* Generic styling for form inputs/buttons */
 .pointer{cursor:pointer}

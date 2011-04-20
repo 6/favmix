@@ -19,7 +19,7 @@ import siena.Query;
  *
  * @author Peter Graham
  */
-public class UserTopicModel extends Model{
+public class UserTopicModel extends BaseModel{
 
     /** auto-incremented unique ID for the UserTopic */
     @Id

@@ -20,9 +20,11 @@ Date: April 16
                 <div><input id="searchbar" class="smalltext" name="q" type="text" value="${searchQuery}" accesskey="s" autocomplete="off" spellcheck="false"><input id="searchsubmit" class="smallsubmit pointer" type="submit" value="&{'search'}"></div>
             </form>
             <div id="headerlinks" class="reddish right">
-                <a class="${request.controller == 'Topic' ? 'active' : ''}" href="@{Topic.defaultFilters()}">&{'home'}</a>
+                <a class="${request.controller == 'Topic' && request.actionMethod != 'browse' ? 'active' : ''}" href="@{Topic.defaultFilters()}">&{'home'}</a>
+                <a class="${request.actionMethod == 'browse' ? 'active' : ''}" href="@{Topic.browse(0)}">&{'topics'}</a>
                 #{if loggedin}
-                    <a class="${request.controller == 'Profile' ? 'active' : ''}" href="@{Profile.index(userId)}">&{'profile'}</a><a class="${request.controller == 'Account' ? 'active' : ''}" href="@{Account.settings()}">&{'settings'}</a><a id="lastheaderlink" href="@{Account.logout()}">&{'logout'}</a>
+                <!-- TODO move settings to profile -->
+                    <a class="${request.controller == 'Profile' ? 'active' : ''}" href="@{Profile.index(user.id)}">&{'profile'}</a><a class="${request.controller == 'Account' ? 'active' : ''}" href="@{Account.settings()}">&{'settings'}</a><a id="lastheaderlink" href="@{Account.logout()}">&{'logout'}</a>
                 #{/if}
                 #{else}
                     <a class="${request.actionMethod == 'login' ? ' active' : ''}" id="lastheaderlink" href="@{Account.login()}">&{'login'}</a></strong>
