@@ -3,7 +3,7 @@ Favmix
 Web app made using [Play Framework](http://www.playframework.org) and [siena](http://www.sienaproject.com).
 Tested an deployed on Google App Engine: [favmix.appspot.com](http://favmix.appspot.com)
 
-Note: this is an unfinished app. There's still a lot to do before it's fully functional.
+Note: this is an unfinished app. There's still some stuff to do before it's fully functional.
 
 To use it, edit the contents of `conf/application.conf` to include your own secret key. Also edit `app/utilities/Constants.java` to change the password salt.
 
