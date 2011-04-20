@@ -21,7 +21,8 @@ import utilities.ValidationException;
  *
  * @author Peter Graham
  */
-@AllowGuest({"login", "register", "onLoginSubmit", "onRegisterSubmit"})
+// allow guest for logout since it doesn't make sense to prompt login for this
+@AllowGuest({"login","logout", "register", "onLoginSubmit", "onRegisterSubmit"})
 @DenyUser({"login", "register", "onLoginSubmit", "onRegisterSubmit"})
 public class Account extends BaseController {
 
