@@ -66,7 +66,7 @@ home.everyone = Everyone's topics
 
 login = Login
 login.dontHaveAnAccount = Don't have an account?
-login.loginRequired = Please login to access this page.
+login.loginRequired = Please login to do this.
 login.incorrect = Incorrect email or password.
 
 register = Sign Up

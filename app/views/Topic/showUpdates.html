@@ -17,41 +17,56 @@ Date: April 16
     <ul class="selector">
          <li><a class="${order == 'recent' ? 'active':''}" href="@{Topic.showUpdates(scope,'recent',0)}">&{'msg.recent'}</a>
         <li><a class="${order == 'popular24h' ? 'active':''}" href="@{Topic.showUpdates(scope,'popular24h',0)}">&{'msg.popularToday'}</a>
-            <li><a class="${order == 'popular7d' ? 'active':''}" href="@{Topic.showUpdates(scope,'popular7d',0)}">&{'msg.popularWeek'}</a>
+        <li><a class="${order == 'popular7d' ? 'active':''}" href="@{Topic.showUpdates(scope,'popular7d',0)}">&{'msg.popularWeek'}</a>
     </ul>
     <div class="hseparator">&nbsp;</div>
     <ul class="selector">
         <li><a class="${scope == 'everyone' ? 'active':''}" href="@{Topic.showUpdates('everyone',order,0)}">&{'home.everyone'}</a>
         <li><a class="${scope == 'you' ? 'active':''}" href="@{Topic.showUpdates('you',order,0)}">&{'home.you'}</a>
     </ul>
-    #{if loggedin}
 
-           #{if topics}
-               <ol id="subscriptions" class="selector smaller">
-                     #{list items:topics, as:'topic'}
-                        <li><a class="${scope == topic.name ? 'active':''}" href="@{Topic.showUpdates(topic.name,order,0)}">${topic.name}</a>
-                    #{/list}
-                </ol>  
-         #{/if}
-#{if !isMobile} 
-<div id="subsnotif" class="round smallest">
+
+#{if loggedin}
+	#{if topics}
+		<ol id="subscriptions" class="selector smaller">
+        	#{list items:topics, as:'topic'}
+            	<li>
+					<a class="${scope == topic.name ? 'active':''}" href="@{Topic.showUpdates(topic.name,order,0)}">${topic.name}</a>
+             #{/list}
+        </ol>  
+	#{/if}
+	#{if !isMobile} 
+		<div id="subsnotif" class="round smallest">
 			#{if topics}	
-            <a href="@{Profile.index(user.id)}">&{'action.manage'} &rsaquo;</a>
+            	<a href="@{Profile.index(user.id)}">&{'action.manage'} &rsaquo;</a>
             #{/if}
             #{else}
                 &{'msg.none'}<br><a href="@{Topic.browse()}">&{'action.findTopics'} &rsaquo;</a>
             #{/else}
 		</div>
-		#{/if}
-      #{/if}
+	#{/if}
+#{/if}
 </div>
+
 #{if !loggedin && !isMobile && (scope == 'you' || scope == 'everyone')}
-<div id="pitch" class="round">
-    <div class="left"><h2 class="noJsSpacer">&{'home.titlePart1'} <br><span>&{'home.titlePart2'}</span></h2></div>
-    #{form action:@Account.onRegisterSubmit(), id: 'signup', class:'default-label-form validate-form'}
-        <h3 class="noJsSpacer">&{'register'} <span>&mdash; &{'register.pitch'}</span></h3><p><label class="default-label noJsSpacer" for="email">&{'field.email'}</label><input id="email" class="fancytext" name="email" type="text" value="" spellcheck="false"></p><div id="inbetweeninput" class="noJsSpacer">&nbsp;</div><p><label class="default-label noJsSpacer" for="password">&{'field.password'}</label><input id="password" class="fancytext" name="password" type="password"></p><input class="fancybutton shadow pointer" type="submit" value="&{'register'}">
-    #{/form}
-</div>
+	<div id="pitch" class="round">
+	    <div class="left">
+			<h2 class="noJsSpacer">&{'home.titlePart1'} <br><span>&{'home.titlePart2'}</span></h2>
+		</div>
+	    #{form action:@Account.onRegisterSubmit(), id: 'signup', class:'default-label-form validate-form'}
+	        <h3 class="noJsSpacer">&{'register'} <span>&mdash; &{'register.pitch'}</span></h3>
+			<p>
+				<label class="default-label noJsSpacer" for="email">&{'field.email'}</label>
+				<input id="email" class="fancytext not-empty" name="email" type="text" value="" spellcheck="false">
+			</p>
+			<div id="inbetweeninput" class="noJsSpacer">&nbsp;</div>
+			<p>
+				<label class="default-label noJsSpacer" for="password">&{'field.password'}</label>
+				<input id="password" class="fancytext not-empty" name="password" type="password">
+			</p>
+			<input class="fancybutton shadow pointer" type="submit" value="&{'register'}">
+	    #{/form}
+	</div>
 #{/if}
 
 #{if scope != 'you' && scope != 'everyone'}
@@ -65,15 +80,16 @@ Date: April 16
         #{/else}
     </a></h2>
 
-    #{form @onUpdateSubmit(), id:'updateform', class:'bigform'}
-        <textarea class="fancytext" name="content"#{if !loggedin} disabled#{/if}>#{if !loggedin}&{'login.loginRequired'}#{/if}#{else}${flash.content}#{/else}</textarea><br>
+    #{form @onUpdateSubmit(), id:'updateform', class:'bigform validate-form'}
+        <div>
+			<textarea class="fancytext not-empty" name="content"#{if !loggedin} disabled#{/if}>#{if !loggedin}&{'login.loginRequired'}#{/if}#{else}${flash.content}#{/else}</textarea><br>
         #{if loggedin}
             <p>Attach a Link (optional):</p>
             <input type="text" class="fancytext" name="url" value="${flash.url}"><br>
          #{/if}
-        <input class="fancybutton pointer shadow" type="submit" value="&{'action.addUpdate'}">
-        <input type="hidden" name="topicName" value="${scope}">
-        <input type="hidden" name="sortBy" value="${sortBy}">
+        	<input class="fancybutton pointer shadow" type="submit" value="&{'action.addUpdate'}">
+        	<input type="hidden" name="topicName" value="${scope}">
+        	<input type="hidden" name="sortBy" value="${sortBy}">
         </div>
     #{/form}
 #{/if}
@@ -85,7 +101,9 @@ Date: April 16
 				<a class="likeit#{if update.votedOnBy(user)} clicked#{/if}" href="@{onVoteSubmit(update.id)}">&hearts;</a>
 			</div>
 			<div class="likeright">
-				#{if update.hasUrl()}<a class="link" href="${update.url}" rel="nofollow">#{/if}${update.content}#{if update.hasUrl()}</a>#{/if}
+				#{if update.hasUrl()}
+					<a class="link" href="${update.url}" rel="nofollow">#{/if}${update.content}#{if update.hasUrl()}</a>
+				#{/if}
 				<div class="meta">${update.getHowLongAgo()}#{if scope == 'you' || scope == 'everyone'} in <a class="topic-green" href="@{Topic.showUpdates(update.getParentTopicName(),order,0)}">${update.getParentTopicName()}</a>#{/if} by <a href="@{Profile.index(update.getUserId())}">${update.getPosterName()}</a>
 				</div>
 			</div>
@@ -94,6 +112,17 @@ Date: April 16
        <li class="inherit-styles">&{'msg.noUpdates'}
     #{/else}
 </ol>
-<div id="pagination">#{if prevOffset >= 0}<a class="round" href="@{Topic.showUpdates(scope,order,prevOffset)}">&lsaquo; &{'msg.previous'}</a>#{/if}
-    #{if numUpdates+lower-1 > 0}&{'msg.viewing'} <b>${lower}-#{if numUpdates == defaultNumUpdates}${upper}#{/if}#{else}${numUpdates+lower-1}#{/else}</b>#{/if}
-    #{if numUpdates == defaultNumUpdates}<a class="round" href="@{Topic.showUpdates(scope,order,upper)}">&{'msg.next'} &rsaquo;</a>#{/if}</div>
+
+<div id="pagination">
+	#{if prevOffset >= 0}
+		<a class="round" href="@{Topic.showUpdates(scope,order,prevOffset)}">&lsaquo; &{'msg.previous'}</a>
+	#{/if}
+    #{if numUpdates+lower-1 > 0}
+		&{'msg.viewing'} <b>${lower}-
+			#{if numUpdates == defaultNumUpdates}${upper}#{/if}
+			#{else}${numUpdates+lower-1}#{/else}</b>
+	#{/if}
+    #{if numUpdates == defaultNumUpdates}
+		<a class="round" href="@{Topic.showUpdates(scope,order,upper)}">&{'msg.next'} &rsaquo;</a>
+	#{/if}
+</div>

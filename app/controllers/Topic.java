@@ -68,7 +68,7 @@ public class Topic extends BaseController {
             if(topic == null) {
                 Error.index(404, Messages.get("topic.notFound"));
             }
-            updates = getUpdateModel().getUpdates(null, topic, order, 0);
+            updates = getUpdateModel().getUpdates(null, topic, order, offset);
             renderArgs.put("isFollowing",
                 getUserTopicModel().isFollowing(getUser(), topic));
         }
@@ -190,6 +190,13 @@ public class Topic extends BaseController {
         }
         renderArgs.put("topics",topics);
         renderArgs.put("order", order);
+        int lowerBound = offset+1;
+        int upperBound = offset+Constants.TOPICS_PER_PAGE;
+        renderArgs.put("lower", lowerBound);
+        renderArgs.put("upper", upperBound);
+        renderArgs.put("prevOffset", lowerBound -1- Constants.TOPICS_PER_PAGE);
+        renderArgs.put("numUpdates",topics.size());
+        renderArgs.put("defaultNumUpdates",Constants.TOPICS_PER_PAGE);
         render();
     }
 }

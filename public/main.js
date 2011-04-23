@@ -14,26 +14,46 @@ $(document).ready(function() {
     // add the default labels to input fields
     $(".noJsSpacer").removeClass("noJsSpacer");
     $(".default-label").inFieldLabels();
-    jQuery.validator.setDefaults({
-        messages: {required:""}
-    });
-    $(".validate-form").validate({
-		rules: {
-                    email:"required",
-                    password:"required",
-                    topicName:"required"
-                }
-            });
+    
+    // validate marked forms on submit
+    $(".validate-form").submit(onSubmitValidate);
     
     // AJAX vote when you click the heart icon
     $(".likeit").click(onVoteClick);
 });
 
 /*
+Called when submitting a form to validate.
+*/
+function onSubmitValidate(event) {
+    var hasErrors = false;
+    $(this).find(".not-empty").each(function(){
+        if($.trim($(this).val()).length == 0) {
+            //element value is empty
+            $(this).css("border-color","#db8");
+            $(this).css("background","#ffc");
+            hasErrors = true;
+        }
+    });
+    if(hasErrors){
+        showError($("#emptyerror").text());
+        event.preventDefault();
+        return !1;
+    }
+}
+
+/*
+Show an error message.
+*/
+function showError(message) {
+    $("#js-flash").text(message).slideDown(200);
+}
+
+/*
 Prompts a user to login.
 */
 function promptLogin() {
-    alert("You must be logged in to perform this action.");
+    showError($("#loginrequired").text());
 }
 
 /*

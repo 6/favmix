@@ -195,6 +195,7 @@ public class BaseController extends Controller {
         initLoginArgs();
         initLoggedInUser();
         initMobile();
+        initJavaScriptErrorArgs();
         if(isLoggedIn()) {
             checkUserAccess();
             initTopicsArgs();
@@ -339,6 +340,14 @@ public class BaseController extends Controller {
      */
     private static void initUserInformationArgs(){
         renderArgs.put("user", getUser());
+    }
+
+    /**
+     * Initialize internationalized error messages for JavaScript.
+     */
+    private static void initJavaScriptErrorArgs() {
+        renderArgs.put("emptyError", Messages.get("form.emptyField"));
+        renderArgs.put("loginRequired", Messages.get("login.loginRequired"));
     }
 
     /**

@@ -8,7 +8,7 @@ Date: April 17
 #{extends 'base.html' /}
 #{set title: messages.get('topic.new') /}
 <div class="subpage">
- <br><a class="${order == 'popular'? 'active' : ''}" href="@{Topic.browse('popular', 0)}">&{'msg.popular'}</a> or <a class="${order == 'recent'? 'active' : ''}" href="@{Topic.browse('recent',0)}">&{'msg.recent'}</a><br><a href="@{Topic.create()}">&{'topic.new'} &rarr;</a><br><br>
+ <br><a class="${order == 'popular'? 'active' : ''}" href="@{browse('popular', 0)}">&{'msg.popular'}</a> or <a class="${order == 'recent'? 'active' : ''}" href="@{Topic.browse('recent',0)}">&{'msg.recent'}</a><br><a href="@{Topic.create()}">&{'topic.new'} &rarr;</a><br><br>
    <table class="full-table">
 	<tr>
 		<th>&{'msg.name'}</th>
@@ -16,9 +16,23 @@ Date: April 17
 		<th>&{'msg.created'}</th>
 	</tr>
 #{list items:topics, as:'topic'}
-    <tr class="${topic_parity}"><td><a href="@{Topic.showUpdates(topic.name,'popular24h',0)}">${topic.name}</a></td>
+    <tr class="${topic_parity}"><td><a href="@{showUpdates(topic.name,'popular24h',0)}">${topic.name}</a></td>
 	<td>${topic.getFollowerCount()}</td>
 	<td>${topic.getHowLongAgo()}</td></tr>
 #{/list}
 </table>
+<div id="pagination">
+    #{if prevOffset >= 0}
+            <a class="round" href="@{browse(order,prevOffset)}">&lsaquo; &{'msg.previous'}</a>
+    #{/if}
+    #{if numUpdates+lower-1 > 0}
+            &{'msg.viewing'} <b>${lower}-
+                #{if numUpdates == defaultNumUpdates}${upper}#{/if}
+                #{else}${numUpdates+lower-1}#{/else}</b>
+    #{/if}
+    #{if numUpdates == defaultNumUpdates}
+            <a class="round" href="@{browse(order,upper)}">&{'msg.next'} &rsaquo;</a>
+    #{/if}
+</div>
+
 </div>

@@ -67,7 +67,7 @@ home.everyone = 皆のトピック
 
 login = ログイン
 login.dontHaveAnAccount = Don't have an account?
-login.loginRequired = Please login to access this page.
+login.loginRequired = ログインしてください
 login.incorrect = Incorrect email or password.
 
 register = 新規登録

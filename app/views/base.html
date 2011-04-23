@@ -69,6 +69,7 @@ Date: April 16
 	#{if flash.error}
 	    <p class="error round">${flash.error.raw()}</p>
 	#{/if}
+	<p id="js-flash" class="error round hidden"></p>
 
 	*{ this is where subpage HTML appears }*
 	#{doLayout /}
@@ -91,6 +92,10 @@ Date: April 16
 <div class="hidden">
     <div id="isloggedin">${loggedin ? 'true' : 'false'}</div>
 	<div id="ismobile">${isMobile ? 'true' : 'false'}</div>
+	*{ internationalized error messages }*
+	<div id="emptyerror">${emptyError}</div>
+	<div id="loginrequired">${loginRequired}</div>
+</div>
 </div>
 </body>
 </html>
