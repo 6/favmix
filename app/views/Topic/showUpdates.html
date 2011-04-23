@@ -28,10 +28,10 @@ Date: April 16
 
 #{if loggedin}
 	#{if topics}
-		<ol id="subscriptions" class="selector smaller">
+		<ol id="topics" class="selector smaller">
         	#{list items:topics, as:'topic'}
             	<li>
-					<a class="${scope == topic.name ? 'active':''}" href="@{Topic.showUpdates(topic.name,order,0)}">${topic.name}</a>
+                    <a class="${scope == topic.name ? 'active':''}" href="@{Topic.showUpdates(topic.name,order,0)}">${topic.name}</a>
              #{/list}
         </ol>  
 	#{/if}
@@ -113,9 +113,10 @@ Date: April 16
     #{/else}
 </ol>
 
+<div class="clear">&nbsp;</div>
 <div id="pagination">
 	#{if prevOffset >= 0}
-		<a class="round" href="@{Topic.showUpdates(scope,order,prevOffset)}">&lsaquo; &{'msg.previous'}</a>
+		<a data-direction="reverse" class="round" href="@{Topic.showUpdates(scope,order,prevOffset)}">&lsaquo; &{'msg.previous'}</a>
 	#{/if}
     #{if numUpdates+lower-1 > 0}
 		&{'msg.viewing'} <b>${lower}-

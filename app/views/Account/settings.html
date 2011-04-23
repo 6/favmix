@@ -3,12 +3,12 @@ File: Account/settings.html
 Name: Peter Graham
 Class: CS 461
 Project 1
-Date: February 16
+Date: April 16
 -->
 #{extends 'base.html' /}
 #{set title: messages.get('settings.edit') /}
 <div class="subpage">
-    <h2><a href="@{Profile.index(user.id)}">${user.name}</a> &rarr; &{'settings.edit'}</h2>
+    <h2><a data-direction="reverse" href="@{Profile.index(user.id)}">${user.name}</a> &rarr; &{'settings.edit'}</h2>
     #{form @onSettingsSubmit(), class:'bigform validate-form'}
         <div>
         <p>

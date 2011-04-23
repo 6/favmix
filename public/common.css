@@ -9,6 +9,8 @@ ol,ul{list-style:none}
 /* Clear-fix from http://960.gs/css/master.css
  * Author: Nathan Smith */
 .clear{clear:both;display:block;overflow:hidden;visibility:hidden;width:0;height:0}
+/* bolded font */
+.bold{font-weight:700}
 /* inherit the parent background color and border */
 .inherit-styles{background:inherit !important;border:inherit !important}
 .inherit-styles:hover{background:inherit !important;border:inherit !important}
@@ -19,7 +21,7 @@ ol,ul{list-style:none}
 .likeit:focus{outline:0}
 /* full-width table for displaying tabular data */
 .full-table{width:100%;border:1px solid #ccc}
-.full-table th,.full-table td{text-align:center}
+.full-table th,.full-table td{text-align:center;padding:5px}
 .full-table th{background:#eee}
 .full-table tr.even{background:#eff}
 /* make font smaller */

@@ -17,13 +17,13 @@ Date: April 17
 <div>${profile_user.bio}</div><br>
 #{/if}
     &{'topic.following'}:
-    <ol id="subscriptions">
+    <ol id="topics">
 #{list items:topics, as:'topic'}
 <li>
 #{if isOwnProfile}
 	<a class="remove left" href="@{Topic.unFollowTopic(topic.name)}">&#215;</a>
 #{/if}
-	<a class="subscription" href="@{Topic.showUpdates(topic.name,'popular24h',0)}">${topic.name}</a>
+	<a href="@{Topic.showUpdates(topic.name,'popular24h',0)}">${topic.name}</a>
 #{/list}
 #{else}
     <li class="inherit-styles">&{'msg.none'}</p>

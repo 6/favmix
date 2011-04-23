@@ -65,16 +65,11 @@ a.active:hover{text-decoration:none}
     .selector{font-size:14px}
         .selector.smaller{font-size:13px}
         .selector li{padding:4px 0 4px 13px}
-    #filters #subscriptions li{padding:2px 0 2px 13px}
-    #subscriptions{margin-bottom:10px}
-    /* Note: text-overflow is supported by all major browsers except Firefox */
-    #subscriptions a{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#0b0}
-    #subscriptions a.active{color:#444}
     #subsnotif{padding-left:13px;color:#555}
 
 /* Main content section and pagination */
 #main{padding-top:7px;border-top:1px solid #eee}
-#pitch,#content,#pagination{margin-left:184px}
+#pitch,#content{margin-left:184px}
     #content li{border:1px solid #fff;color:#444}
     #content li:hover{background:#eefaff;border-color:#dde}
         .like{width:53px;padding-top:11px;line-height:13px;text-align:center}
@@ -87,22 +82,28 @@ a.active:hover{text-decoration:none}
             .link:visited{color:#78c}
             .meta{padding-bottom:9px;line-height:18px;font-size:13px;color:#777}
                 .meta a.topic-green{color:#0b0}
-#pagination{margin-top:10px;padding:5px 10px;font-size:13px;color:#555}
-    #pagination a{margin:0 9px;padding:4px 7px 5px;background:#def;border:1px solid #cde}
-    #pagination a:hover{background:#def;border:1px solid #9cd}
-    #pagination a:active{background:#cdf}
+
+/* pitch on home page */
 #pitch{margin-top:3px;margin-bottom:10px;padding:11px 10px 11px 25px;font-size:17px;color:#458;background:#e7f2ff url('bglightblue.png') repeat-x top left;border:2px solid #cadaea}
     #pitch h2{padding-top:2px;font-size:21px}
     #pitch h2.noJsSpacer{padding-top:20px}
     #pitch h3{margin-bottom:3px}
     #pitch h3.noJsSpacer{margin-bottom:5px}
     #pitch span{color:#78a}
+    
+/* signup form on homepage */
 #signup{margin-left:153px;padding-left:25px;border-left:2px solid #cadaea}
     #signup .fancytext{width:35%;margin-right:1%}
     #signup #inbetweeninput{display:inline;width:0;height:0}
     #signup #inbetweeninput.noJsSpacer{display:block;height:4px}
     #signup p{display:inline}
     #signup label.noJsSpacer{display:block;position:relative;float:left;width:120px;padding:8px 10px 0 0;text-align:right}
+
+/* pagination */
+#pagination{text-align:center;margin-top:10px;padding:5px 10px;font-size:13px;color:#555}
+    #pagination a{margin:0 9px;padding:4px 7px 5px;background:#def;border:1px solid #cde}
+    #pagination a:hover{background:#def;border:1px solid #9cd}
+    #pagination a:active{background:#cdf}
 
 /* Subpage specific CSS */
 .subpage{margin:3px 1%}
@@ -116,14 +117,16 @@ a.active:hover{text-decoration:none}
 .bigform label.noJsSpacer{display:block;position:relative}
 .bigform textarea{height:60px}
 
-/* Profile page */
-#subscriptions a{padding:3px 0;font-size:15px}
-    #subscriptions a.remove{margin:5px 7px 0 3px;padding:0 0 1px;line-height:11px;font-size:19px;color:#67c !important;border:1px solid #bce}
-    #subscriptions a.remove:hover{text-decoration:none;color:#fff !important;background:#f66;border-color:#d00}
-#addmore p{margin-bottom:8px}
-#addmore .smalltext{width:72%}
-#addmore .smallsubmit{margin-left:6px}
-    #browse{margin-top:4px;width:85%}
-    #browse li{padding:2px 0}
+/* topics listing */
+#topics a{padding:3px 0;font-size:15px}
+    #topics a.remove{margin:5px 7px 0 3px;padding:0 0 1px;line-height:11px;font-size:19px;color:#67c !important;border:1px solid #bce}
+    #topics a.remove:hover{text-decoration:none;color:#fff !important;background:#f66;border-color:#d00}
+#filters #topics li{padding:2px 0 2px 13px}
+    #topics{margin-bottom:10px}
+    /* Note: text-overflow is supported by all major browsers except Firefox */
+    #topics a{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#0b0}
+    #topics a.active{color:#444}
+
+/* Specific topic page */
 #updatetitle{padding-top:10px;font-weight:700;font-size:20px}
 #updatetitle a{font-weight:400}
