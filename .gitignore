@@ -3,6 +3,7 @@ nbproject
 precompiled
 tmp
 war/WEB-INF/appengine-generated
+.DS_Store
 
 # added demos with '.DEMO' extension
 app/utilities/Constants.java

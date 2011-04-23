@@ -6,31 +6,91 @@ Project 1
 Date: April 16
 -->
 <!DOCTYPE html>
+#{if isMobile}
+<html class="ui-mobile landscape min-width-320px min-width-480px min-width-768px max-width-1024px">
+#{/if}
+#{else}
 <html>
+#{/else}
     <head>
         <title>&{'websiteName'} - #{get 'title' /}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" type="text/css" href="@{'/public/common.css'}">
+        <script type="text/javascript" src="@{'/public/jquery.js'}"></script>
+
+*{ Include the correct head files }*
+#{if isMobile}
+    #{include 'includes/head.mobile.html' /}
+#{/if}
+#{else}
+    #{include 'includes/head.default.html' /}
+#{/else}
+
+*{ Allow for files to add more CSS or more JavaScript here  }*
  #{get 'moreStyles' /}
  #{get 'moreScripts' /}
+</head>
+<body>
 
-    #{if isMobile}
-        #{include 'base.mobile.html' /}
-    #{/if}
-    #{else}
-        #{include 'base.default.html' /}
-    #{/else}
-        
+<div data-role="page" data-theme="b" id="jqm-home">
+
+<div id="header">
+    <div class="wrap">
+        <h1 id="logo" class="left"><a href="@{Topic.defaultFilters()}"><img src="@{'/public/logo.png'}" alt="&{'websiteName'}"></a></h1>
+        <div id="headerright">
+			#{include 'includes/search.html' /}
+            <div id="headerlinks" class="right">
+				<a class="${request.controller == 'Topic' && request.actionMethod != 'browse' ? 'active' : ''}" href="@{Topic.defaultFilters()}">&{'home'}</a>
+                <a class="${request.actionMethod == 'browse' ? 'active' : ''}" href="@{Topic.browse(0)}">&{'topics'}</a>
+				#{if isMobile}
+				<a class="${request.controller == 'Search' ? 'active' : ''}" href="@{Search.index()}">&{'search'}</a>
+				#{/if}
+                #{if loggedin}
+                    <a class="${request.controller == 'Profile' ? 'active' : ''}" href="@{Profile.index(user.id)}">&{'profile'}</a><a id="lastheaderlink" href="@{Account.logout()}">&{'logout'}</a>
+                #{/if}
+                #{else}
+					<a class="${request.actionMethod == 'register' ? ' active' : ''}" href="@{Account.register()}">&{'register'}</a>
+                    <a class="${request.actionMethod == 'login' ? ' active' : ''}" id="lastheaderlink" href="@{Account.login()}">&{'login'}</a>
+                #{/else}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="clear">&nbsp;</div>
+
+<div id="main">
+    <div class="wrap">
+	
+	*{ display error/success 'flashed' messages here if applicable }*
+	#{if flash.success}
+	    <p class="success round">${flash.success.raw()}</p>
+	#{/if}
+	#{if flash.error}
+	    <p class="error round">${flash.error.raw()}</p>
+	#{/if}
+
+	*{ this is where subpage HTML appears }*
+	#{doLayout /}
+    </div>
+</div>
+	 
+<div class="clear">&nbsp;</div>
 
 <div id="footer" class="smaller">
-    <a href="@{BaseController.toggleMobileEnabled}">#{if isMobile}&{'nonmobile'}#{/if}#{else}&{'mobile'}#{/else}</a>
+    <p><a data-ajax="false" href="@{BaseController.toggleMobileEnabled}">#{if isMobile}&{'nonmobile'}#{/if}#{else}&{'mobile'}#{/else}</a>
     <a href="@{Info.about()}">&{'about'}</a>
-    <a href="@{Info.contact()}">&{'contact'}</a><br>
-    &{'language'}:
+    <a href="@{Info.contact()}">&{'contact'}</a></p>
+    <p>&{'language'}:
     <a href="@{BaseController.changeLanguage('en')}">English</a>
-    <a href="@{BaseController.changeLanguage('ja')}">Japanese</a>
+    <a href="@{BaseController.changeLanguage('ja')}">Japanese</a></p>
     <p>&copy; 2011 &{'websiteName'}</p>
 </div>
-<!-- page/user info for Javascript -->
+
+*{ page/user info for JavaScript }*
 <div class="hidden">
     <div id="isloggedin">${loggedin ? 'true' : 'false'}</div>
+	<div id="ismobile">${isMobile ? 'true' : 'false'}</div>
 </div>
+</body>
+</html>

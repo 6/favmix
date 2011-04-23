@@ -125,7 +125,7 @@ public class Account extends BaseController {
      * Logout and return to homepage. Delete "Remember me" cookie if it exists.
      */
     public static void logout() {
-        session.clear();
+        session.remove(Constants.SESSION_KEY);
         response.removeCookie(Constants.REMEMBER_ME);
         Topic.defaultFilters();
     }

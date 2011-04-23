@@ -39,6 +39,7 @@ public class Profile extends BaseController {
         if(user == null) {
             Error.index(404, Messages.get("profile.notFound"));
         }
+        renderArgs.put("profile_user", user);
         renderArgs.put("topics", getUserTopicModel().getTopicsByUser(user));
         render();
     }

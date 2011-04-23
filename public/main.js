@@ -3,56 +3,67 @@ File: main.js
 Name: Peter Graham
 Class: CS 461
 Project 1
-Date: February 16
+Date: April 22
 */
-/* Things to execute when DOM is ready to be manipulated. */
+
+/* 
+Initialize things to execute when DOM is ready to be manipulated.
+*/
 $(document).ready(function() {
     
+    // add the default labels to input fields
     $(".noJsSpacer").removeClass("noJsSpacer");
     $(".default-label").inFieldLabels();
-    
-    /* Default value code from:
-     * http://www.electrictoolbox.com/jquery-change-default-value-on-focus/
-     */
-    $('.default-value').each(function() {
-        var default_value = this.value;
-        $(this).focus(function() {
-            if(this.value == default_value) {
-                this.value = '';
-            }
-        });
-        $(this).blur(function() {
-            if(this.value == '') {
-                this.value = default_value;
-            }
-        });
+    jQuery.validator.setDefaults({
+        messages: {required:""}
     });
+    $(".validate-form").validate({
+		rules: {
+                    email:"required",
+                    password:"required",
+                    topicName:"required"
+                }
+            });
     
-    // get the current page type -- homeview (homepage) or subview (subpage)
-    var pageType = $("body").attr("id");
-    if(pageType == "homeview") {
-        // execute homepage-specific code
-        $(".likeit").click(function(){
-            var liContainer = $(this).parent().parent();
-            voteUp(liContainer.attr("id"));
-            return !1;
-        });
-    }
-    else {
-        // execute subpage-specific code
-    }
+    // AJAX vote when you click the heart icon
+    $(".likeit").click(onVoteClick);
 });
 
+/*
+Prompts a user to login.
+*/
 function promptLogin() {
     alert("You must be logged in to perform this action.");
 }
 
-/* Vote up the update with the given update ID */
-function voteUp(updateId) {
-    if($("#isloggedin").text() != "true") {
-        promptLogin();
-        return;
+/*
+Do a client-side check for if visitor is logged in.
+Note: never entirely rely on this. Always do a server-side check.
+@return true if visitor is logged in according to the client side.
+*/
+function isLoggedIn() {
+    return $("#isloggedin").text() == "true";
+}
+
+/*
+Checks if logged in and votes if so. Otherwise, prompts login.
+*/
+function onVoteClick(){
+    if(isLoggedIn()) {
+        var liContainer = $(this).parent().parent();
+        voteOn(liContainer.attr("id"));
     }
+    else {
+        promptLogin();
+    }
+    return !1;
+}
+
+/* 
+Vote up the update with the given update ID.
+@param updateId is the ID of the element corresponding to the vote to update
+*/
+function voteOn(updateId) {
     // the container of the voting section
     var voteContainer = $("#"+updateId).children(".like");
     
@@ -64,8 +75,7 @@ function voteUp(updateId) {
     var voteButton = voteContainer.children(".likeit");
     if(voteButton.hasClass("clicked")) {
         // undo their vote
-      var voteButton = voteContainer.children(".likeit");
-      newCount -= 1;
+        newCount -= 1;
         voteButton.removeClass("clicked");
     }
     else {

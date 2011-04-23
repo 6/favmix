@@ -141,21 +141,6 @@ public class BaseController extends Controller {
     }
 
     /**
-     * Returns the URL that has been saved through requests using the flash
-     * param cookie.
-     *
-     * @param sessionKey the session key for the flash param
-     * @return a String of the original URL, or homepage URL if no original URL
-     */
-    public static String getUrlFromSession(String sessionKey) {
-        String url = flash.get(sessionKey);
-        if(url == null) {
-            url = "/";
-        }
-        return url;
-    }
-
-    /**
      * Returns the original URL that has been saved through requests using the
      * flash param cookie.
      *
@@ -166,8 +151,8 @@ public class BaseController extends Controller {
     }
 
     /**
-     * Returns the original URL that has been saved through requests using the
-     * flash param cookie.
+     * Returns the original URL that has been saved through one or more requests
+     * using the flash param cookie.
      * 
      * @return a String of the original URL, or homepage URL if no original URL
      */
@@ -197,7 +182,7 @@ public class BaseController extends Controller {
         if(Constants.VALID_LANGUAGE_CODES.contains(languageCode)) {
             Lang.change(languageCode);
         }
-        Topic.defaultFilters();
+        redirect(getPreviousUrl());
     }
 
     /**
@@ -354,6 +339,21 @@ public class BaseController extends Controller {
      */
     private static void initUserInformationArgs(){
         renderArgs.put("user", getUser());
+    }
+
+    /**
+     * Returns the URL that has been saved through requests using the flash
+     * param cookie.
+     *
+     * @param sessionKey the session key for the flash param
+     * @return a String of the original URL, or homepage URL if no original URL
+     */
+    private static String getUrlFromSession(String sessionKey) {
+        String url = flash.get(sessionKey);
+        if(url == null) {
+            url = "/";
+        }
+        return url;
     }
 
     /**

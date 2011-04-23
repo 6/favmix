@@ -8,5 +8,17 @@ Date: April 18
 #{extends 'base.html' /}
 #{set title:messages.get('search.results') /}
 <div class="subpage">
+    #{if searchQuery}
     &{'search.none',searchQuery}
+    #{/if}
+    #{else}
+        #{if isMobile}
+             <form id="search" class="left" action="@{index()}" method="get">
+ 	<div>
+		<input id="searchbar" name="q" type="text" value="${searchQuery}" accesskey="s" autocomplete="off" spellcheck="false">
+		<input id="searchsubmit" class="pointer" type="submit" value="&{'search'}">
+	</div>
+</form>
+        #{/if}
+    #{/else}
 </div>

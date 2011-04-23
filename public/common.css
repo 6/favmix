@@ -1,0 +1,31 @@
+img{border:0}
+ol,ul{list-style:none}
+/* flash error or success messages */
+.error,.success{margin:0 20%;padding:6px;text-align:center;color:#555;border-width:1px;border-style:solid}
+.error{background:#ffc;border-color:#ddb}
+.success{background:#def;border-color:#cde}
+/* hide a tag using this */
+.hidden{display:none}
+/* Clear-fix from http://960.gs/css/master.css
+ * Author: Nathan Smith */
+.clear{clear:both;display:block;overflow:hidden;visibility:hidden;width:0;height:0}
+/* inherit the parent background color and border */
+.inherit-styles{background:inherit !important;border:inherit !important}
+.inherit-styles:hover{background:inherit !important;border:inherit !important}
+/* Bottom section of website */
+#footer{padding:22px 0 25px;text-align:center;font-size:13px}
+    #footer a{padding:5px 10px}
+    #footer p{padding:3px 0;color:#666}
+/* heart icon for voting */
+.likeit{color:#bbb !important}
+.likeit:hover{color:#9be !important;text-decoration:none}
+.likeit:active,.likeit.clicked{color:#f77 !important}
+.likeit:focus{outline:0}
+/* full-width table for displaying tabular data */
+.full-table{width:100%;border:1px solid #ccc}
+.full-table th,.full-table td{text-align:center}
+.full-table th{background:#eee}
+.full-table tr.even{background:#eff}
+/* make font smaller */
+.smaller{font-size:85%}
+.smallest{font-size:80%}

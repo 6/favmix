@@ -8,20 +8,25 @@ Date: April 17
 #{extends 'base.html' /}
 #{set title:user.name /}
 <div class="subpage">
-    <h2>${user.name}
+    <h2>${profile_user.name}
       #{if isOwnProfile}
-        <a class="leftpad smallest" href="@{edit()}">&{'profile.edit'} &rarr;</a>
+      <span class="smallest"><a class="leftpad" href="@{edit()}">&{'profile.edit'}</a> or <a href="@{Account.settings()}">&{'settings.edit'}</a></span>
       #{/if}
     </h2>
-    <div class="">${user.bio}</div>
+#{if profile_user.bio}    
+<div>${profile_user.bio}</div><br>
+#{/if}
     &{'topic.following'}:
     <ol id="subscriptions">
-        #{list items:topics, as:'topic'}
-            <li><a class="remove left" href="@{Topic.unFollowTopic(topic.name)}">&#215;</a><a class="subscription" href="@{Topic.showUpdates(topic.name,'popular24h',0)}">${topic.name}</a>
-        #{/list}
-        #{else}
-            <p class="greyish">&{'msg.none'}</p>
-        #{/else}
-    </ol>
-    <a href="@{Topic.create()}">&{'topic.new'} &rarr;</a>
+#{list items:topics, as:'topic'}
+<li>
+#{if isOwnProfile}
+	<a class="remove left" href="@{Topic.unFollowTopic(topic.name)}">&#215;</a>
+#{/if}
+	<a class="subscription" href="@{Topic.showUpdates(topic.name,'popular24h',0)}">${topic.name}</a>
+#{/list}
+#{else}
+    <li class="inherit-styles">&{'msg.none'}</p>
+#{/else}
+</ol>
 </div>

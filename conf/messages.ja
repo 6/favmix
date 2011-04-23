@@ -18,28 +18,30 @@ language = 言語
 
 # generic messages
 msg.none = You aren't following any topics yet.
-msg.defaultUserName = Anonymous
-msg.edit = edit
-msg.save = Save
+msg.defaultUserName = 名無し
+msg.save = 保存する
 msg.popular = 人気
-msg.popularToday = 人気のニュース（今日）
-msg.popularWeek = 人気のニュース（今週）
-msg.recent = 最近のニュース
+msg.popularToday = 人気（今日）
+msg.popularWeek = 人気（今週）
+msg.recent = 最近
 msg.previous = 前へ
 msg.next = 次ぎへ
-msg.viewing = Viewing
+msg.viewing = 表示
 msg.404head = Not found
 msg.404 = The page you are requesting cannot be found.
-msg.noUpdates = No updates found.
+msg.noUpdates = アップデートを見つかれませんでした。
+msg.name = 名前
+msg.followers = フォロワー数
+msg.created = 時間
 
 # generic fields
 field.email = メールアドレス
 field.password = パスワード
-field.oldPassword = Old Password
-field.newPassword = New Password
+field.oldPassword = 古いパスワード
+field.newPassword = 新しいパスワード
 field.remember = 保存する
-field.name = Your Name
-field.bio = Short Bio
+field.name = 名前
+field.bio = 伝記
 
 # generic form flashes
 form.emptyField = Please fill out all fields.
@@ -53,7 +55,7 @@ action.manage = Manage your topics
 action.findTopics = Find topics to follow
 action.follow = フォロー
 action.unFollow = Unfollow
-action.saved = Your changes have been saved.
+action.saved = 保存されました
 action.create = Create
 action.addUpdate = Add Discussion
 
@@ -68,25 +70,26 @@ login.dontHaveAnAccount = Don't have an account?
 login.loginRequired = Please login to access this page.
 login.incorrect = Incorrect email or password.
 
-register = アカウント作成
+register = 新規登録
 register.pitch = 好きなトピックをフォローしよう！
 register.emailUsed = <b>%s</b> already has an account. Try a different e-mail address.
 
 profile = プロフィール
-profile.edit = Edit your profile
-profile.backTo = Back to profile
+profile.edit = プロフィール変更
+profile.backTo = プロフィールへ戻る
 profile.notFound = User not found.
 
 search.results = Search results
 search.none = No results for <b>%s</b>.
+search.above = Enter a search above.
 
 settings = 設定
-settings.edit = Edit your settings
+settings.edit = 設定変更
 
-topic.new = Create a new topic
-topic.name = Enter a topic name
-topic.exists = A topic with that name already exists.
-topic.following = Following
+topic.new = 新しいトピックを作る
+topic.name = トピックの名前
+topic.exists = その名前はもう使われています
+topic.following = フォローしているトピック
 topic.updateAdded = Your discussion has been added.
 topic.created = Your topic has been created.
 topic.notFound = Topic not found.
