@@ -1,0 +1,21 @@
+h2{text-align:center}
+
+.selector{text-align:center;padding:5px 0;font-size:13px}
+.selector li{display:inline}
+.hseparator{display:none}
+
+/* common anchor styles*/
+#headerlinks a,.selector a{text-decoration:none;padding:6px 8px}
+.selector a.active,#headerlinks a.active{color:#444;background:#fff !important;border:2px solid #bbb}
+ 
+#jqm-home{background:#fff}
+
+#headerlinks{padding:25px 0;text-align:center;font-size:14px}
+#logo{text-align:center;margin:5px 0}
+
+#content li{margin:18px 0}
+#content .like{display:inline;padding-right:8px}
+#content .like a{text-decoration:none}
+#content .votecount{display:inline;font-weight:700;font-size:14px;color:#444;padding-right:3px}
+#content .likeright{display:inline;font-size:16px}
+#content .meta{display:block;color:#444;font-size:13px}

@@ -56,10 +56,11 @@ public class VoteModel extends BaseModel{
     }
 
     /**
-     * Create a new vote for the given update.
+     * Create a new vote for the given update, or delete the vote if it already
+     * exists.
      *
      * @param update the update to vote on
-     * @param creator the user who creates this
+     * @param creator the user who creates this vote
      */
     public void createVote(UpdateModel update, UserModel creator) {
         if(update != null) {

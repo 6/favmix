@@ -10,15 +10,15 @@ Date: April 16
 <div class="subpage">
     <div class="round centered bigborder">
     <h2>&{'register'}<span> &mdash; &{'register.pitch'}</span></h2>
-    #{form @onRegisterSubmit(), class:'bigform default-label-form'}
+    #{form @onRegisterSubmit(), class:'bigform default-label-form validate-form'}
         <div>
         <p>
             <label class="default-label noJsSpacer" for="email">&{'field.email'}</label>
-            <input class="fancytext" id="email" name="email" type="text" spellcheck="false" value="${flash['email']}">
+            <input class="fancytext not-empty" id="email" name="email" type="text" spellcheck="false" value="${flash['email']}">
         </p>
         <p>
             <label class="default-label noJsSpacer" for="password">&{'field.password'}</label>
-            <input class="fancytext" id="password" name="password" type="password">
+            <input class="fancytext not-empty" id="password" name="password" type="password">
         </p>
         <input class="fancybutton pointer shadow" type="submit" value="&{'register'}">
         </div>

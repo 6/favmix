@@ -3,12 +3,12 @@ File: Profile/edit.html
 Name: Peter Graham
 Class: CS 461
 Project 1
-Date: February 16
+Date: April 16
 -->
 #{extends 'base.html' /}
 #{set title: messages.get('profile.edit') /}
 <div class="subpage">
-    <h2><a href="@{index(user.id)}">${user.name}</a> &rarr; &{'profile.edit'}</h2>
+    <h2><a data-direction="reverse" href="@{index(user.id)}">${user.name}</a> &rarr; &{'profile.edit'}</h2>
      #{form @onEditSubmit(), class:'bigform'}
         <div>
         <p>
@@ -21,6 +21,5 @@ Date: February 16
         </p>
         <input class="fancybutton pointer shadow" type="submit" value="&{'msg.save'}">
         </div>
-    #{/form}<br>
-     <a href="@{index(user.id)}">&larr; &{'profile.backTo'}</a>
+    #{/form}
 </div>

@@ -1,0 +1,15 @@
+<!--
+File: includes/search.html
+Name: Peter Graham
+Class: CS 461
+Project 1
+Date: April 16
+-->
+#{if !isMobile}
+<form id="search" class="left" action="@{Search.index()}" method="get">
+ 	<div>
+		<input id="searchbar" name="q" type="text" value="${searchQuery}" accesskey="s" autocomplete="off" spellcheck="false">
+		<input id="searchsubmit" class="pointer" type="submit" value="&{'search'}">
+	</div>
+</form>
+#{/if}

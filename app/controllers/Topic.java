@@ -7,6 +7,8 @@
  */
 package controllers;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import models.TopicModel;
 import models.UpdateModel;
@@ -68,12 +70,20 @@ public class Topic extends BaseController {
             if(topic == null) {
                 Error.index(404, Messages.get("topic.notFound"));
             }
-            updates = getUpdateModel().getUpdates(null, topic, order, 0);
+            updates = getUpdateModel().getUpdates(null, topic, order, offset);
             renderArgs.put("isFollowing",
                 getUserTopicModel().isFollowing(getUser(), topic));
         }
         renderArgs.put("updates", updates);
         renderArgs.put("scope",scope);
+        String decodedScope = null;
+        try {
+            decodedScope = URLDecoder.decode(scope, "UTF-8");
+        }
+        catch(UnsupportedEncodingException e) {
+            decodedScope = scope;
+        }
+        renderArgs.put("scopeDecoded", decodedScope);
         renderArgs.put("order",order);
         int lowerBound = offset+1;
         int upperBound = offset+Constants.UPDATES_PER_PAGE;
@@ -190,6 +200,13 @@ public class Topic extends BaseController {
         }
         renderArgs.put("topics",topics);
         renderArgs.put("order", order);
+        int lowerBound = offset+1;
+        int upperBound = offset+Constants.TOPICS_PER_PAGE;
+        renderArgs.put("lower", lowerBound);
+        renderArgs.put("upper", upperBound);
+        renderArgs.put("prevOffset", lowerBound -1- Constants.TOPICS_PER_PAGE);
+        renderArgs.put("numUpdates",topics.size());
+        renderArgs.put("defaultNumUpdates",Constants.TOPICS_PER_PAGE);
         render();
     }
 }

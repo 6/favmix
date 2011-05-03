@@ -183,6 +183,9 @@ public class UpdateModel extends BaseModel{
      */
     public List<UpdateModel> findAfterByTopics(Date afterDate,
             List<Long> topicIds){
+        if(topicIds.isEmpty()){
+            return new ArrayList<UpdateModel>();
+        }
         return all().filter("topicId IN", topicIds)
                 .filter("created>", afterDate).fetch();
     }
@@ -392,6 +395,26 @@ public class UpdateModel extends BaseModel{
      */
     public Date getDateCreated() {
         return this.created;
+    }
+
+    /**
+     * Returns the ID of the user that posted this update.
+     *
+     * @return the ID of the user that posted this update. 
+     */
+    public Long getUserId() {
+        return this.userId;
+    }
+
+    /**
+     * Returns the name of the user that posted this update.
+     * 
+     * @return the name of the user that posted this update.
+     */
+    public String getPosterName() {
+        UserModel userModel = new UserModel();
+        UserModel poster = userModel.findById(this.getUserId());
+        return poster.getName();
     }
 
 

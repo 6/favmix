@@ -1,0 +1,132 @@
+/*
+File: main.css
+Name: Peter Graham
+Class: CS 461
+Project 1
+Date: April 22
+*/
+/* Reset browser defaults and apply some default styling to tags */
+html,body,div,p,form,input,textarea,button,ol,ul,li,h1,h2,h3{margin:0;padding:0;font:normal normal 400 100% arial,helvetica,sans-serif}
+body{min-width:870px}
+a{text-decoration:none;color:#02c}
+a:hover{text-decoration:underline}
+
+/* Reusable classes */
+/* float tags left or right */
+.left{float:left}
+.right{float:right}
+/* wrap a tag to a maximum width, center it, and give it some default padding */
+.wrap{max-width:1000px;margin:0 auto;padding:0 15px 0 10px}
+/* horizontal separator */
+.hseparator{height:1px;margin:10px;background:#cde}
+.bigborder{border:5px solid #bbb}
+/* give a tag some padding on the left */
+.leftpad{padding-left:20px}
+/* active links are bold */
+a.active{font-weight:700;color:#444}
+a.active:hover{text-decoration:none}
+/* center align text */
+.center-align{text-align:center}
+.left-align{text-align:left}
+/* center a tag with some padding and margin */
+.centered{margin:10px 15%;padding:15px 20px}
+/* CSS3-specific styling */
+.round{border-radius:10px;-moz-border-radius:10px}
+.shadow{box-shadow:0 1px 1px #aaa;-moz-box-shadow:0 1px 1px #aaa;-webkit-box-shadow:0 1px 1px #aaa}
+
+/* Generic styling for form inputs/buttons */
+/* give a tag the pointer cursor */
+.pointer{cursor:pointer}
+/* give an text input a default value */
+.default-label{position:absolute;top:0;left:0;cursor:text;font-size:15px;color:#999}
+.default-label.small{font-size:13px}
+.default-label-form p{position:relative}
+.fancytext{height:28px;padding:0 4px;font-size:15px;border:1px solid #aaa}
+.fancybutton{color:#fff;padding:6px 13px;font-size:14px;font-weight:700;background:#78e url('bgmidblue.png') repeat-x top left;border:1px solid #25a}
+    .fancybutton:hover{border-color:#039}
+    .fancybutton:active{background:#47d}
+
+/* Top section of website */
+#header{height:54px;background:#fff url('headershadow.png') repeat-x top left;border-bottom:1px solid #ccc}
+    #logo{width:175px;padding:8px 0 0 10px;line-height:42px;font-size:36px}
+    #logo a{color:#000}
+    #headerright{margin-left:185px}
+        #search{width:41%;margin-top:15px}
+            #searchbar{width:70%;max-width:350px;height:17px;padding:3px;vertical-align:middle;font-size:13px;border:1px solid #69b;border-bottom:1px solid #cde}
+            #searchsubmit{margin:0 4px;height:25px;padding:0 5px;vertical-align:middle;font-size:13px;background:#e9e9e9 url('bglightgrey.png') repeat-x top left;border:1px solid #aaa;border-radius:3px;-moz-border-radius:3px}
+            #searchsubmit:hover{border-color:#888}
+            #searchsubmit:active{background:#ddd}
+        #headerlinks{width:59%;line-height:54px;text-align:right;font-size:15px}
+            #headerlinks a,#headerlinks b{padding:1px 13px;border-right:1px solid #ddd}
+            #headerlinks a#lastheaderlink,#headerlinks b#lastheaderlink{border-right:0}
+
+/* Filters to help sort and organize content */
+#filters{width:170px;padding-top:7px}
+    .selector{font-size:14px}
+        .selector.smaller{font-size:13px}
+        .selector li{padding:4px 0 4px 13px}
+    #subsnotif{padding-left:13px;color:#555}
+
+/* Main content section and pagination */
+#main{padding-top:7px;border-top:1px solid #eee}
+#pitch,#content{margin-left:184px}
+    #content li{border:1px solid #fff;color:#444}
+    #content li:hover{background:#eefaff;border-color:#dde}
+        .like{width:53px;padding-top:11px;line-height:13px;text-align:center}
+            .votecount{margin-bottom:3px;font-weight:700;font-size:13px;color:#666}
+            .likeit{padding:10px 10px 4px;font-size:21px;font-family:helvetica,tahoma,sans}
+        .likeright{margin-left:53px;padding-top:10px}
+            .link{font-size:16px}
+            .link:active{color:#e44}
+            .link:focus{outline:none}
+            .link:visited{color:#78c}
+            .meta{padding-bottom:9px;line-height:18px;font-size:13px;color:#777}
+                .meta a.topic-green{color:#0b0}
+
+/* pitch on home page */
+#pitch{margin-top:3px;margin-bottom:10px;padding:11px 10px 11px 25px;font-size:17px;color:#458;background:#e7f2ff url('bglightblue.png') repeat-x top left;border:2px solid #cadaea}
+    #pitch h2{padding-top:2px;font-size:21px}
+    #pitch h2.noJsSpacer{padding-top:20px}
+    #pitch h3{margin-bottom:3px}
+    #pitch h3.noJsSpacer{margin-bottom:5px}
+    #pitch span{color:#78a}
+    
+/* signup form on homepage */
+#signup{margin-left:153px;padding-left:25px;border-left:2px solid #cadaea}
+    #signup .fancytext{width:34%;margin-right:1%}
+    #signup #inbetweeninput{display:inline;width:0;height:0}
+    #signup #inbetweeninput.noJsSpacer{display:block;height:4px}
+    #signup p{display:inline}
+    #signup label.noJsSpacer{display:block;position:relative;float:left;width:120px;padding:8px 10px 0 0;text-align:right}
+
+/* pagination */
+#pagination{text-align:center;margin-top:10px;padding:5px 10px;font-size:13px;color:#555}
+    #pagination a{margin:0 9px;padding:4px 7px 5px;background:#def;border:1px solid #cde}
+    #pagination a:hover{background:#def;border:1px solid #9cd}
+    #pagination a:active{background:#cdf}
+
+/* Subpage specific CSS */
+.subpage{margin:3px 1%}
+.subpage h2{margin-bottom:8px;padding:5px 0 2px 2px;font-size:20px;color:#222;border-bottom:1px solid #bbb}
+    .subpage h2 span{color:#777}
+.subpage h3{margin-bottom:2px;font-size:16px}
+.section{margin-bottom:20px}
+.centered h2{border-bottom:0}
+.bigform{margin:10px}
+.bigform .fancytext{width:350px;margin-bottom:10px}
+.bigform label.noJsSpacer{display:block;position:relative}
+.bigform textarea{height:60px}
+
+/* topics listing */
+#topics a{padding:3px 0;font-size:15px}
+    #topics a.remove{margin:5px 7px 0 3px;padding:0 0 1px;line-height:11px;font-size:19px;color:#67c !important;border:1px solid #bce}
+    #topics a.remove:hover{text-decoration:none;color:#fff !important;background:#f66;border-color:#d00}
+#filters #topics li{padding:2px 0 2px 13px}
+    #topics{margin-bottom:10px}
+    /* Note: text-overflow is supported by all major browsers except Firefox */
+    #topics a{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;color:#0b0}
+    #topics a.active{color:#444}
+
+/* Specific topic page */
+#updatetitle{padding-top:10px;font-weight:700;font-size:20px}
+#updatetitle a{font-weight:400}

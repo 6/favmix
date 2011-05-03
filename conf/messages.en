@@ -18,7 +18,6 @@ language = Language
 # generic messages
 msg.none = You aren't following any topics yet.
 msg.defaultUserName = Anonymous
-msg.edit = edit
 msg.save = Save
 msg.popular = Popular
 msg.popularToday = Popular Today
@@ -30,6 +29,9 @@ msg.viewing = Viewing
 msg.404head = Not found
 msg.404 = The page you are requesting cannot be found.
 msg.noUpdates = No updates found.
+msg.name = Name
+msg.followers = Followers
+msg.created = Created
 
 # generic fields
 field.email = Email Address
@@ -64,7 +66,7 @@ home.everyone = Everyone's topics
 
 login = Login
 login.dontHaveAnAccount = Don't have an account?
-login.loginRequired = Please login to access this page.
+login.loginRequired = Please login to do this.
 login.incorrect = Incorrect email or password.
 
 register = Sign Up
@@ -78,6 +80,7 @@ profile.notFound = User not found.
 
 search.results = Search results
 search.none = No results for <b>%s</b>.
+search.above = Enter a search above.
 
 settings = Settings
 settings.edit = Edit your settings
