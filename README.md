@@ -10,3 +10,4 @@ Controllers are located in the `app/controllers` directory, and the associated v
 TODO
 ----
 * Better search
+* More complete internationalization
