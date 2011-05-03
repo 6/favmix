@@ -93,7 +93,7 @@ a.active:hover{text-decoration:none}
     
 /* signup form on homepage */
 #signup{margin-left:153px;padding-left:25px;border-left:2px solid #cadaea}
-    #signup .fancytext{width:35%;margin-right:1%}
+    #signup .fancytext{width:34%;margin-right:1%}
     #signup #inbetweeninput{display:inline;width:0;height:0}
     #signup #inbetweeninput.noJsSpacer{display:block;height:4px}
     #signup p{display:inline}

@@ -21,9 +21,9 @@ Date: April 17
 #{list items:topics, as:'topic'}
 <li>
 #{if isOwnProfile}
-	<a class="remove left" href="@{Topic.unFollowTopic(topic.name)}">&#215;</a>
+	<a class="remove left" href="@{Topic.unFollowTopic(topic.getNameEncoded())}">&#215;</a>
 #{/if}
-	<a href="@{Topic.showUpdates(topic.name,'popular24h',0)}">${topic.name}</a>
+	<a href="@{Topic.showUpdates(topic.getNameEncoded(),'popular24h',0)}">${topic.name}</a>
 #{/list}
 #{else}
     <li class="inherit-styles">&{'msg.none'}</p>

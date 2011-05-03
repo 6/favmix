@@ -17,7 +17,7 @@ Date: April 17
 		<th>&{'msg.created'}</th>
 	</tr>
 #{list items:topics, as:'topic'}
-    <tr class="${topic_parity}"><td><a href="@{showUpdates(topic.name,'popular24h',0)}">${topic.name}</a></td>
+    <tr class="${topic_parity}"><td><a href="@{showUpdates(topic.getNameEncoded(),'popular24h',0)}">${topic.name}</a></td>
 	<td>${topic.getFollowerCount()}</td>
 	<td>${topic.getHowLongAgo()}</td></tr>
 #{/list}

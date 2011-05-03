@@ -7,6 +7,8 @@
  */
 package controllers;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import models.TopicModel;
 import models.UpdateModel;
@@ -74,6 +76,14 @@ public class Topic extends BaseController {
         }
         renderArgs.put("updates", updates);
         renderArgs.put("scope",scope);
+        String decodedScope = null;
+        try {
+            decodedScope = URLDecoder.decode(scope, "UTF-8");
+        }
+        catch(UnsupportedEncodingException e) {
+            decodedScope = scope;
+        }
+        renderArgs.put("scopeDecoded", decodedScope);
         renderArgs.put("order",order);
         int lowerBound = offset+1;
         int upperBound = offset+Constants.UPDATES_PER_PAGE;

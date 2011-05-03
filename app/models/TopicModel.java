@@ -7,12 +7,17 @@
  */
 package models;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import play.i18n.Messages;
 import siena.Id;
 import siena.Model;
@@ -75,7 +80,15 @@ public class TopicModel extends BaseModel{
      *      name exists
      */
     public TopicModel findByName(String topicName) {
-        return all().filter("name", topicName).get();
+        // make sure to decode URL
+        URLDecoder decoder = new URLDecoder();
+        try {
+            String decodedName = decoder.decode(topicName, "UTF-8");
+            return all().filter("name", decodedName).get();
+        }
+        catch(UnsupportedEncodingException e) {
+            return null;
+        }
     }
 
     /**
@@ -178,6 +191,19 @@ public class TopicModel extends BaseModel{
      */
     public String getName() {
         return this.name;
+    }
+
+    /**
+     * Gets the URL encoded version of the topic name.
+     *
+     * @return String of the URL encoded version of the topic name
+     */
+    public String getNameEncoded() {
+        try {
+            return URLEncoder.encode(this.getName(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
     }
 
     /**

@@ -31,7 +31,7 @@ Date: April 16
 		<ol id="topics" class="selector smaller">
         	#{list items:topics, as:'topic'}
             	<li>
-                    <a class="${scope == topic.name ? 'active':''}" href="@{Topic.showUpdates(topic.name,order,0)}">${topic.name}</a>
+                    <a class="${scope == topic.getNameEncoded() ? 'active':''}" href="@{Topic.showUpdates(topic.getNameEncoded(),order,0)}">${topic.name}</a>
              #{/list}
         </ol>  
 	#{/if}
@@ -71,7 +71,7 @@ Date: April 16
 
 #{if scope != 'you' && scope != 'everyone'}
  *{ viewing a topic so display topic name and update submission form }*
-    <h2 id="updatetitle">${scope} <a class="leftpad smallest"
+    <h2 id="updatetitle">${scopeDecoded} <a class="leftpad smallest"
         #{if isFollowing}
             href="@{Topic.unFollowTopic(scope)}">&{'action.unFollow'}
         #{/if}
