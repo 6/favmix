@@ -9,12 +9,8 @@ package models;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import play.i18n.Messages;
@@ -25,6 +21,7 @@ import siena.Query;
 import utilities.Constants;
 import utilities.ValidationException;
 import utilities.Validator;
+import utilities.SimpleHTMLParser;
 
 /**
  * Model for accessing and modifying topic/user updates.
@@ -101,10 +98,12 @@ public class UpdateModel extends BaseModel{
             // "" gets converted to null
             url = null;
         }
+        String entityString = SimpleHTMLParser.convertToEntities(content);
+        String finalContent = SimpleHTMLParser.closeAllTags(entityString);
         TopicModel topicModel = new TopicModel();
         if(topicModel.topicExists(topicName)) {
             UpdateModel update = new UpdateModel(creator,
-                    topicModel.findByName(topicName), content, url);
+                    topicModel.findByName(topicName), finalContent, url);
             update.insert();
             // insert a vote automatically for user--seems like a good default
             VoteModel voteModel = new VoteModel();

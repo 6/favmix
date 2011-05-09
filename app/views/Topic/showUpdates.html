@@ -121,7 +121,7 @@ Date: April 16
 			</div>
 			<div class="likeright">
 				#{if update.hasUrl()}
-					<a class="link" href="${update.url}" rel="nofollow">#{/if}${update.content}#{if update.hasUrl()}</a>
+					<a class="link" href="${update.url}" rel="nofollow">#{/if}${update.content.raw()}#{if update.hasUrl()}</a>
 				#{/if}
 				<div class="meta">
                                     ${update.getHowLongAgo()}#{if scope == 'you' || scope == 'everyone'} in <a class="topic-green" href="@{Topic.showUpdates(update.getParentTopicName(),order,0)}">${update.getParentTopicName()}</a>#{/if}
