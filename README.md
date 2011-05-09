@@ -18,11 +18,15 @@ Change the `war/WEB-INF/appengine-web.xml` file to match your application ID and
 Creating a WAR file
 -------------------
 Convert your application to a WAR file using the following command in the parent directory of the application folder:
+
     play war favmix/ -o favmix-war
+
 This will create a new directory `favmix-war` that you can now deploy to App Engine.
 
 Deploy
 ------
 Run the following command to deploy the WAR file to App Engine:
+
     appcfg update favmix-war
+
 You will be prompted to enter the e-mail and password of the account you used to sign up for App Engine.
