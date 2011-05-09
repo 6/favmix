@@ -330,7 +330,7 @@ public class BaseController extends Controller {
         List<TopicModel> topics = getUserTopicModel().getTopicsByUser(
                 getUser());
         renderArgs.put("topics", false);
-        if(topics != null) {
+        if(topics != null && !topics.isEmpty()) {
             renderArgs.put("topics", topics);
         }
     }
@@ -366,10 +366,13 @@ public class BaseController extends Controller {
     }
 
     /**
-     * Store the current URL in case we need it for the next request.
+     * Store the current URL in case we need it for the next request. However,
+     * don't store AJAX requests.
      */
     @After
-    private static void storeCurrentUrl() {
-        flash.put(Constants.PREVIOUS_URL, getCurrentUrl());
+    private static void storeCurrentUrlIfNotAjax() {
+        if(!params._contains("ajax")) {
+            flash.put(Constants.PREVIOUS_URL, getCurrentUrl());
+        }
     }
 }

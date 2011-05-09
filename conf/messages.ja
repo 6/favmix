@@ -5,7 +5,7 @@
 # Date: February 16
 # NOTE: This is an incomplete translation and is for demonstration purposes only
 
-websiteName = Website
+websiteName = Blend
 home = トップ
 search = 検索
 topics = トピック
@@ -71,8 +71,10 @@ login.loginRequired = ログインしてください
 login.incorrect = Incorrect email or password.
 
 register = 新規登録
+register.button = 新規登録
 register.pitch = 好きなトピックをフォローしよう！
 register.emailUsed = <b>%s</b> already has an account. Try a different e-mail address.
+register.success = Thanks! Your account has been registered and you are now logged in.
 
 profile = プロフィール
 profile.edit = プロフィール変更
@@ -93,6 +95,7 @@ topic.following = フォローしているトピック
 topic.updateAdded = Your discussion has been added.
 topic.created = Your topic has been created.
 topic.notFound = Topic not found.
+topic.invalidTitle = Topic title can only contain A-Z, 0-9, hyphens, and underscores.
 
 time = %s%s前
 time.now = 今

@@ -91,6 +91,7 @@ public class Account extends BaseController {
             getUserModel().createUser(email, password);
             UserModel user = getUserModel().findByEmail(email);
             session.put(Constants.SESSION_KEY, user.getId());
+            flash.success(Messages.get("register.success"));
             Topic.defaultFilters();
         }
         catch(ValidationException e) {

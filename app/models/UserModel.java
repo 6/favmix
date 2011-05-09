@@ -208,9 +208,12 @@ public class UserModel extends BaseModel{
      * @param topic the Topic to follow
      */
     public void followTopic(TopicModel topic) {
-        UserTopicModel userTopic = new UserTopicModel(this.getId(),
+        UserTopicModel userTopicModel = new UserTopicModel();
+        if(!userTopicModel.isFollowing(this, topic)) {
+            UserTopicModel userTopic = new UserTopicModel(this.getId(),
                 topic.getId());
-        userTopic.insert();
+            userTopic.insert();
+        }
     }
 
     /**

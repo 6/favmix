@@ -24,9 +24,14 @@ ol,ul{list-style:none}
 .full-table th,.full-table td{text-align:center;padding:5px}
 .full-table th{background:#eee}
 .full-table tr.even{background:#eff}
-/* make font smaller */
+/* make font smaller or larger */
 .smaller{font-size:85%}
 .smallest{font-size:80%}
+.larger{font-size:115%}
+.largest{font-size:120%}
+/* remove underline from anchor tags */
+a.no-underline{text-decoration:none}
+a:hover.no-underline{text-decoration:none}
 /* Bottom section of website */
 #footer{padding:22px 0 25px;text-align:center;font-size:13px}
     #footer a{padding:5px 10px}

@@ -9,7 +9,7 @@ Date: April 17
 #{set title: messages.get('topic.new') /}
 <div class="subpage">
  <br><a class="${order == 'popular'? 'active' : ''}" href="@{browse('popular', 0)}">&{'msg.popular'}</a> or <a class="${order == 'recent'? 'active' : ''}" href="@{Topic.browse('recent',0)}">&{'msg.recent'}</a>
-<br><a data-role="button" class="bold" href="@{Topic.create()}">&{'topic.new'} &rarr;</a><br><br>
+<br><br><a data-role="button" class="fancybutton bold no-underline" href="@{Topic.create()}">&{'topic.new'} &rarr;</a><br><br>
    <table class="full-table">
 	<tr>
 		<th>&{'msg.name'}</th>

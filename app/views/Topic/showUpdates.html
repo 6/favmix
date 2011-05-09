@@ -64,11 +64,11 @@ Date: April 16
 				<label class="default-label noJsSpacer" for="password">&{'field.password'}</label>
 				<input id="password" class="fancytext not-empty" name="password" type="password">
 			</p>
-			<input class="fancybutton shadow pointer" type="submit" value="&{'register'}">
+			<input class="fancybutton shadow pointer" type="submit" value="&{'register.button'}">
 	    #{/form}
 	</div>
 #{/if}
-
+<div id="content">
 #{if scope != 'you' && scope != 'everyone'}
  *{ viewing a topic so display topic name and update submission form }*
     <h2 id="updatetitle">${scopeDecoded} <a class="leftpad smallest"
@@ -93,7 +93,26 @@ Date: April 16
         </div>
     #{/form}
 #{/if}
-<ol id="content">
+
+    #{if !updates}
+        #{if (scope == 'you' && !topics) }
+            *{ Show a welcome message }*
+            <div id="welcome-message-wrap">
+            <div id="welcome-message" class="subpage round largest">
+                <h1>Welcome!</h1>
+                Your news will be personalized based on the topics you follow.<br><br>
+                <div id="welcome-message-call-to-action" class="center-align centered round">
+                    Find topics to follow:<br>
+                    <a href="@{Topic.browse()}">Browse topics</a>&nbsp; or &nbsp;<a href="@{Search.index()}">Search for topics</a>
+                    </div>
+                </div>
+            </div>
+        #{/if}
+        #{else}
+    <div class="subpage centered bigborder round largest center-align">&{'msg.noUpdates'}</div>
+        #{/else}
+    #{/if}
+<ol>
     #{list items:updates, as:'update'}
         <li id="u${update.id}" class="round">
 			<div class="left like">
@@ -104,14 +123,19 @@ Date: April 16
 				#{if update.hasUrl()}
 					<a class="link" href="${update.url}" rel="nofollow">#{/if}${update.content}#{if update.hasUrl()}</a>
 				#{/if}
-				<div class="meta">${update.getHowLongAgo()}#{if scope == 'you' || scope == 'everyone'} in <a class="topic-green" href="@{Topic.showUpdates(update.getParentTopicName(),order,0)}">${update.getParentTopicName()}</a>#{/if} by <a href="@{Profile.index(update.getUserId())}">${update.getPosterName()}</a>
+				<div class="meta">
+                                    ${update.getHowLongAgo()}#{if scope == 'you' || scope == 'everyone'} in <a class="topic-green" href="@{Topic.showUpdates(update.getParentTopicName(),order,0)}">${update.getParentTopicName()}</a>#{/if}
+                                    by <a href="@{Profile.index(update.getUserId())}">${update.getPosterName()}</a>
+                                    #{if loggedin}
+                                        #{if update.getUserId() == user.getId()}
+                                        &mdash; <a href="@{removeUpdate(update.getId())}">remove</a>
+                                        #{/if}
+                                    #{/if}
 				</div>
 			</div>
     #{/list}
-    #{else}
-       <li class="inherit-styles">&{'msg.noUpdates'}
-    #{/else}
 </ol>
+</div>
 
 <div class="clear">&nbsp;</div>
 <div id="pagination">

@@ -148,6 +148,18 @@ public class VoteModel extends BaseModel{
     }
 
     /**
+     * Delete all votes associated with a given update.
+     *
+     * @param update the update to delete all votes of
+     */
+    public void deleteByUpdate(UpdateModel update) {
+        List<VoteModel> votes = this.findByUpdate(update);
+        for(VoteModel vote : votes) {
+            vote.delete();
+        }
+    }
+
+    /**
      * Returns unique ID of the vote.
      *
      * @return the unique id of the vote

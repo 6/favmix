@@ -113,6 +113,22 @@ public class UpdateModel extends BaseModel{
     }
 
     /**
+     * Remove an update with the given ID and creator if such an update exists.
+     * Also remove all votes associated with the given update.
+     *
+     * @param updateId the ID of the update to remove
+     * @param creator the user who created the update
+     */
+    public void removeUpdate(Long updateId, UserModel creator) {
+        UpdateModel update = this.findById(updateId);
+        if(update != null && update.getUserId() == creator.getId()) {
+            VoteModel voteModel = new VoteModel();
+            voteModel.deleteByUpdate(update);
+            update.delete();
+        }
+    }
+
+    /**
      * Find a update associated with the given unique topic ID.
      *
      * @param updateId the unique ID of the topic
@@ -133,6 +149,9 @@ public class UpdateModel extends BaseModel{
      */
     public List<UpdateModel> findNewestByTopics(List<Long> topicIds,
             int howMany, int offset) {
+        if(topicIds.isEmpty()) {
+            return new ArrayList<UpdateModel>();
+        }
         return all().filter("topicId IN", topicIds).order("-created")
                 .fetch(howMany, offset);
     }

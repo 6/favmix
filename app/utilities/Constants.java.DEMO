@@ -42,6 +42,9 @@ public class Constants {
     /** name of the original URL flash param */
     public static final String ORIGINAL_URL = "originalurl";
 
+    /** name of the previous URL flash param */
+    public static final String PREVIOUS_URL = "previousurl";
+
     /** the default ordering of content */
     public static final String DEFAULT_ORDER = "popular24h";
 
@@ -49,9 +52,17 @@ public class Constants {
     public static final List<String> VALID_ORDERS = Arrays.asList(
         "popular24h","popular7d", "recent");
 
+    /** list of valid ISO language codes for the interface */
+    public static final List<String> VALID_LANGUAGE_CODES = Arrays.asList(
+        "en","ja");
+
     /** Mobile user-agent substrings for identifying major mobile browsers */
     public static final List<String> MOBILE_USER_AGENTS = Arrays.asList(
             "Android","BlackBerry","iPhone","iPod","Windows Phone");
+
+    /** List of reserved topic names */
+    public static final List<String> RESERVED_TOPIC_NAMES = Arrays.asList(
+            "you","everyone");
 
     /** Regular expression for basic (not perfect) e-mail matching */
     public static final Pattern REGEX_EMAIL = Pattern.compile("^[A-Z0-9._%+-]+"
@@ -61,6 +72,13 @@ public class Constants {
     public static final Pattern REGEX_URL = Pattern.compile("^https?://[^ ]+$",
             Pattern.CASE_INSENSITIVE);
 
+    /** Regular expression for validating topic names */
+     public static final Pattern REGEX_TOPIC_TITLE = Pattern.compile(
+             "^[A-Z0-9_-]+$", Pattern.CASE_INSENSITIVE);
+
     /** number of updates to show per page */
     public static final int UPDATES_PER_PAGE = 10;
+
+    /** number of topics to show per page */
+    public static final int TOPICS_PER_PAGE = 10;
 }

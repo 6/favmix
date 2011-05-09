@@ -7,11 +7,14 @@
  */
 package controllers;
 
+import utilities.AllowGuest;
+
 /**
  * Handles HTTP errors.
  *
  * @author Peter Graham
  */
+@AllowGuest({"index"})
 public class Error extends BaseController {
 
     /**

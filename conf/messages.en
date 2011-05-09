@@ -4,7 +4,7 @@
 # Project 1
 # Date: February 16
 
-websiteName = Website
+websiteName = Blend
 home = Home
 search = Search
 topics = Topics
@@ -28,7 +28,7 @@ msg.next = Next page
 msg.viewing = Viewing
 msg.404head = Not found
 msg.404 = The page you are requesting cannot be found.
-msg.noUpdates = No updates found.
+msg.noUpdates = No discussions found.
 msg.name = Name
 msg.followers = Followers
 msg.created = Created
@@ -61,7 +61,7 @@ action.addUpdate = Add Discussion
 home.title = All your news in one place
 home.titlePart1 = All your news
 home.titlePart2 = in one place.
-home.you = Your topics
+home.you = Topics you follow
 home.everyone = Everyone's topics
 
 login = Login
@@ -70,8 +70,10 @@ login.loginRequired = Please login to do this.
 login.incorrect = Incorrect email or password.
 
 register = Sign Up
-register.pitch = <!--(Start personalizing|Customize) your news.-->Start <!--adding-->following your favorite topics!
+register.button = Register
+register.pitch = Read and discuss the news on your interests!<!--Start following your favorite topics!--><!--(Start personalizing|Customize) your news.--><!--adding-->
 register.emailUsed = <b>%s</b> already has an account. Try a different e-mail address.
+register.success = Thanks! Your account has been registered and you are now logged in.
 
 profile = Profile
 profile.edit = Edit your profile
@@ -89,9 +91,10 @@ topic.new = Create a new topic
 topic.name = Enter a topic name
 topic.exists = A topic with that name already exists.
 topic.following = Following
-topic.updateAdded = Your update has been added.
+topic.updateAdded = Your discussion has been added.
 topic.created = Your topic has been created.
 topic.notFound = Topic not found.
+topic.invalidTitle = Topic title can only contain A-Z, 0-9, hyphens, and underscores.
 
 time = %s %s ago
 time.now = just now

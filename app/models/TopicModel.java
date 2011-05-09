@@ -16,8 +16,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import play.i18n.Messages;
 import siena.Id;
 import siena.Model;
@@ -112,6 +110,9 @@ public class TopicModel extends BaseModel{
             throws ValidationException {
         if(Validator.isEmpty(topicName)) {
             throw new ValidationException(Messages.get("form.emptyField"));
+        }
+        if(!Validator.isValidTopicTitle(topicName)) {
+            throw new ValidationException(Messages.get("topic.invalidTitle"));
         }
         if(Constants.RESERVED_TOPIC_NAMES.contains(topicName)) {
             throw new ValidationException(Messages.get("topic.exists"));

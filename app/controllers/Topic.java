@@ -11,6 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.List;
 import models.TopicModel;
+import play.libs.WS;
 import models.UpdateModel;
 import play.i18n.Messages;
 import utilities.AllowGuest;
@@ -112,7 +113,8 @@ public class Topic extends BaseController {
             getTopicModel().createTopic(topicName, getUser());
             flash.success(Messages.get("topic.created"));
             // redirect to the newly created topic
-            showUpdates(topicName, "recent", 0);
+            WS webService = new WS();
+            showUpdates(webService.encode(topicName), "recent", 0);
         }
         catch(ValidationException e) {
             flash.error(e.getMessage());
@@ -142,6 +144,16 @@ public class Topic extends BaseController {
             params.flash();
             redirect(getPreviousUrl());
         }
+    }
+
+    /**
+     * Remove an update with the given update ID.
+     *
+     * @param updateId the ID of the update to remove.
+     */
+    public static void removeUpdate(Long updateId) {
+        getUpdateModel().removeUpdate(updateId, getUser());
+        redirect(getPreviousUrl());
     }
 
     /**
