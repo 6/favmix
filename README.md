@@ -27,6 +27,6 @@ Deploy
 ------
 Run the following command to deploy the WAR file to App Engine:
 
-    appcfg update favmix-war
+    appengine-java-sdk/bin/appcfg.sh update favmix-war
 
 You will be prompted to enter the e-mail and password of the account you used to sign up for App Engine.
